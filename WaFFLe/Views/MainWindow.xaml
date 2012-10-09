@@ -5,9 +5,7 @@
        Title="WaFFL" Height="900" Width="1200">
     <Window.CommandBindings>
         <CommandBinding Command="local:ApplicationCommands.Refresh" CanExecute="CanExecuteRefreshCommand" Executed="RefreshCommandExecuted" />
-        <!--
         <CommandBinding Command="local:ApplicationCommands.GoTo" CanExecute="CanExecuteGoToCommand" Executed="GoToCommandExecuted" />
-        -->
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="local:ApplicationCommands.Refresh" Key="F5" Modifiers=""  />
@@ -146,7 +144,7 @@
             </Border>
         </Grid>
         
-        <TabControl Padding="0" Grid.Row="1">
+        <TabControl x:Name="TabControl" Padding="0" Grid.Row="1">
             <TabItem>
                 <TabItem.Header>
                     <Grid>

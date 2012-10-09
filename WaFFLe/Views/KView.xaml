@@ -11,7 +11,7 @@
         <Grid Grid.Row="0">
             <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor." Foreground="DarkGray"  Margin="20,35,0,0" />
         </Grid>
-        <DataGrid ItemsSource="{Binding}" Grid.Row="1">
+        <DataGrid x:Name="dg" ItemsSource="{Binding}" Grid.Row="1">
             <DataGrid.DataContext>
                 <CollectionViewSource Source="{Binding Kickers}">
                     <CollectionViewSource.SortDescriptions>

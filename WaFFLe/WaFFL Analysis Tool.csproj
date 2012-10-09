@@ -82,6 +82,7 @@
     <Compile Include="Views\DSTView.xaml.cs">
       <DependentUpon>DSTView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ISelectable.cs" />
     <Compile Include="Views\ViewModels\Item.cs" />
     <Compile Include="Views\ViewModels\K.cs" />
     <Compile Include="Views\ViewModels\QB.cs" />

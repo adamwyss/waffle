@@ -11,7 +11,7 @@ namespace WaFFL.Evaluation
     /// <summary>
     /// Interaction logic for RBView.xaml
     /// </summary>
-    public partial class RBView : UserControl
+    public partial class RBView : UserControl, ISelectable
     {
         bool registered = false;
 
@@ -59,5 +59,10 @@ namespace WaFFL.Evaluation
         }
 
         public ObservableCollection<RB> Runningbacks { get; private set; }
+
+        public Item SelectedItem
+        {
+            get { return this.dg.SelectedItem as Item; }
+        }
     }
 }

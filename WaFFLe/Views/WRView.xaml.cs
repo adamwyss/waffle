@@ -11,7 +11,7 @@ namespace WaFFL.Evaluation
     /// <summary>
     /// Interaction logic for WRView.xaml
     /// </summary>
-    public partial class WRView : UserControl
+    public partial class WRView : UserControl, ISelectable
     {
         bool registered = false;
 
@@ -59,5 +59,10 @@ namespace WaFFL.Evaluation
         }
 
         public ObservableCollection<WR> WideReceivers { get; private set; }
+
+        public Item SelectedItem
+        {
+            get { return this.dg.SelectedItem as Item; }
+        }
     }
 }

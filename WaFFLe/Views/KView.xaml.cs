@@ -11,7 +11,7 @@ namespace WaFFL.Evaluation
     /// <summary>
     /// Interaction logic for KView.xaml
     /// </summary>
-    public partial class KView : UserControl
+    public partial class KView : UserControl, ISelectable
     {
         bool registered = false;
 
@@ -59,5 +59,10 @@ namespace WaFFL.Evaluation
         }
 
         public ObservableCollection<K> Kickers { get; private set; }
+
+        public Item SelectedItem
+        {
+            get { return this.dg.SelectedItem as Item; }
+        }
     }
 }

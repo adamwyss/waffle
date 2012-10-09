@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Data;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace WaFFL.Evaluation
 {
@@ -201,6 +202,32 @@ namespace WaFFL.Evaluation
         private void CanExecuteRefreshCommand(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !this.IsRefreshingData;
+        }
+
+        /// <summary />
+        private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            ISelectable control = (ISelectable)((ContentControl)this.TabControl.SelectedItem).Content;
+            if (control != null)
+            {
+                Item item = control.SelectedItem;
+                int espn_id = item.PlayerData.ESPN_Identifier;
+                string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
+
+                // tell the explorer to 
+                Process.Start(url);
+            }
+        }
+
+        /// <summary />
+        private void CanExecuteGoToCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (this.TabControl != null)
+            {
+
+                ISelectable control = ((ContentControl)this.TabControl.SelectedItem).Content as ISelectable;
+                e.CanExecute = control != null && control.SelectedItem != null;
+            }
         }
     }
 }

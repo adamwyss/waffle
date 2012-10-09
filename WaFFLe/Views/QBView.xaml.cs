@@ -14,7 +14,7 @@ namespace WaFFL.Evaluation
     /// <summary>
     /// Interaction logic for QBView.xaml
     /// </summary>
-    public partial class QBView : UserControl
+    public partial class QBView : UserControl, ISelectable
     {
         bool registered = false;
 
@@ -64,23 +64,9 @@ namespace WaFFL.Evaluation
         public ObservableCollection<QB> Quarterbacks { get; private set; }
 
 
-        /// <summary />
-        private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        public Item SelectedItem
         {
-            Item item = (Item)e.Parameter;
-            int espn_id = item.PlayerData.ESPN_Identifier;
-            string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
-
-            // tell the explorer to 
-            Process.Start(url);
+            get { return this.dg.SelectedItem as Item; }
         }
-
-        /// <summary />
-        private void CanExecuteGoToCommand(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = e.Parameter is Item;
-            e.CanExecute = true;
-        }
-
     }
 }

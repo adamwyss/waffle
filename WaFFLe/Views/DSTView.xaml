@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="WaFFL.Evaluation.DSTView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:local="clr-namespace:WaFFL.Evaluation">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor." Foreground="DarkGray"  Margin="20,35,0,0" />
+        </Grid>
+        <DataGrid ItemsSource="{Binding}" Grid.Row="1">
+            <DataGrid.DataContext>
+                <CollectionViewSource Source="{Binding DefenseSpecialTeams}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription PropertyName="EstimatedPoints" Direction="Descending" />
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </DataGrid.DataContext>
+            <DataGrid.Columns>
+                <local:DataGridWaFFLRosterColumn />
+                <DataGridTextColumn Header="Defense Name" Binding="{Binding TeamName}" />
+                <DataGridTextColumn Header="Est Pts" Binding="{Binding EstimatedPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Sacks" Binding="{Binding Sacks}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Interceptions" Binding="{Binding Interceptions}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Fumbles" Binding="{Binding Fumbles}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

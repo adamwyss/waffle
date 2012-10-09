@@ -1,0 +1,32 @@
+﻿ARI<>Arizona
+ATL<>Atlanta
+BAL<>Baltimore
+BUF<>Buffalo
+CAR<>Carolina
+CIN<>Cincinnati
+CHI<>Chicago
+CLE<>Cleveland
+DAL<>Dallas
+DEN<>Denver
+DET<>Detroit
+GB<>Green Bay
+HOU<>Houston
+IND<>Indianapolis
+JAC<>Jacksonville
+KC<>Kansas City
+MIA<>Miami
+MIN<>Minnesota
+NE<>New England
+NO<>New Orleans
+NYG<>NY Giants
+NYJ<>NY Jets
+OAK<>Oakland
+PHI<>Philadelphia
+PIT<>Pittsburgh
+SD<>San Diego
+SEA<>Seattle
+SF<>San Francisco
+STL<>St. Louis
+TB<>Tampa Bay
+TEN<>Tennessee
+WSH<>Washington

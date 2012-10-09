@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="WaFFL.Evaluation.RBView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:local="clr-namespace:WaFFL.Evaluation">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor." Foreground="DarkGray"  Margin="20,35,0,0" />
+        </Grid>
+        <DataGrid ItemsSource="{Binding}" Grid.Row="1">
+            <DataGrid.DataContext>
+                <CollectionViewSource Source="{Binding Runningbacks}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription PropertyName="PointsOverReplacement3G" Direction="Descending" />
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </DataGrid.DataContext>
+            <DataGrid.Columns>
+                <local:DataGridWaFFLRosterColumn />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
+
+                <DataGridTextColumn Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+
+                <DataGridTextColumn Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+
+                <local:DataGridWaFFLWeekByWeekColumn Header="Scores" Width="700" CanUserResize="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

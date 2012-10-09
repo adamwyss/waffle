@@ -1,0 +1,14 @@
+﻿<DataGridTemplateColumn x:Class="WaFFL.Evaluation.DataGridWaFFLWeekByWeekColumn"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:local="clr-namespace:WaFFL.Evaluation"
+                        CanUserSort="False"
+                        CanUserResize="False">
+    <DataGridTemplateColumn.CellTemplate>
+        <DataTemplate>
+            <Grid>
+                <TextBlock Text="{Binding WeekByWeekScores}" Margin="10,0,0,0" />
+            </Grid>
+        </DataTemplate>
+    </DataGridTemplateColumn.CellTemplate>
+</DataGridTemplateColumn>

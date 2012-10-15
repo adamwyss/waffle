@@ -70,6 +70,16 @@ namespace WaFFL.Evaluation
                         { "Philip", "Phillip" },
                         { "LaDainian", "Ladanian" },
                         { "Malcom", "Malcolm" },
+                        { "Matthew", "Matt" },
+                        { "Griffin", "Griffen" },
+                        { "Stevan", "Steven" },
+                        { "Leshoure", "LaShoure" },
+                        { "Bolden", "Boldin" },
+                        { "Mathews", "Matthews" },
+                        { "Isaac", "Issac" },
+                        { "A.J.", "AJ" },
+                        { "Zuerlein", "Zuerlien" },
+                        { "Stephen", "Stephan" },
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

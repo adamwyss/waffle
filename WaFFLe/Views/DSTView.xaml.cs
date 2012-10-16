@@ -5,6 +5,9 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Collections;
+using System.ComponentModel;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace WaFFL.Evaluation
 {
@@ -65,7 +68,7 @@ namespace WaFFL.Evaluation
         public ObservableCollection<Item_DST> DefenseSpecialTeams { get; private set; }
     }
 
-    public class Item_DST
+    public class Item_DST : ViewModelBase
     {
         private NFLTeam model;
         private string displayName;
@@ -74,11 +77,26 @@ namespace WaFFL.Evaluation
         {
             this.model = dst;
             this.displayName = DataConverter.ConvertToCode(this.model.TeamCode);
+
+            Messenger.Default.Register<MarkedPlayerChanged>(this,
+                (m) =>
+                {
+                    if (m.Name == this.displayName)
+                    {
+                        this.RaisePropertyChanged("IsHighlighted");
+                    }
+                });
         }
 
         public bool IsAvailable
         {
             get { return WaFFLRoster.IsActive(this.displayName); }
+        }
+
+        /// <summary />
+        public bool IsHighlighted
+        {
+            get { return MarkedPlayers.IsMarked(this.displayName); }
         }
 
         public string TeamName

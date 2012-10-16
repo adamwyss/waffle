@@ -6,9 +6,11 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:ApplicationCommands.Refresh" CanExecute="CanExecuteRefreshCommand" Executed="RefreshCommandExecuted" />
         <CommandBinding Command="local:ApplicationCommands.GoTo" CanExecute="CanExecuteGoToCommand" Executed="GoToCommandExecuted" />
+        <CommandBinding Command="local:ApplicationCommands.Flag" CanExecute="CanExecuteFlagCommand" Executed="FlagCommandExecuted" />
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Command="local:ApplicationCommands.Refresh" Key="F5" Modifiers=""  />
+        <KeyBinding Command="local:ApplicationCommands.Refresh" Key="F5" Modifiers="" />
+        <KeyBinding Command="local:ApplicationCommands.Refresh" Key="F9" Modifiers="" />
     </Window.InputBindings>
     <Window.Resources>
 
@@ -136,6 +138,34 @@
                                     <TextBlock Text="{Binding CurrentSeason.ReplacementValue.DST, FallbackValue=0}" />
                                 </StackPanel>
                             </StackPanel>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" MinHeight="16" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Background="#A8BCD1" BorderThickness="1"  Height="75" Width="3" VerticalAlignment="Center" Grid.Column="1" Grid.RowSpan="2">
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#F5F9FD" Offset="0" />
+                                        <GradientStop Color="#EDF1F5" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                            </Border>
+                            <TextBlock Margin="4,0,4,1" MaxHeight="15" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#738399" FontSize="11" Text="Player" Grid.Row="1" />
+                            <StackPanel Orientation="Vertical" Margin="5,2,5,0" VerticalAlignment="Top">
+                                <Button Command="local:ApplicationCommands.Flag" Height="22" Margin="0,0,0,1">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Views/Assets/remember16.png" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="1" />
+                                        <TextBlock Text="Remember" TextAlignment="Center" TextWrapping="Wrap" LineHeight="13" LineStackingStrategy="BlockLineHeight" VerticalAlignment="Center" Margin="2,3,2,0" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
                         </Grid>
                     </StackPanel>
 

@@ -20,5 +20,11 @@ namespace WaFFL.Evaluation
             "GoTo",
             "GoToCommand",
             typeof(ApplicationCommands));
+
+        /// <summary />
+        public readonly static RoutedUICommand Flag = new RoutedUICommand(
+            "Flag",
+            "FlagCommand",
+            typeof(ApplicationCommands));
     }
 }

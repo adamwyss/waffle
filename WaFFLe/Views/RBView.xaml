@@ -19,16 +19,25 @@
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
             </DataGrid.DataContext>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <local:DataGridWaFFLRosterColumn />
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
+                <local:DataGridWaFFLTextColumn  Header="Name" Binding="{Binding Name}" />
+                <local:DataGridWaFFLTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
 
-                <DataGridTextColumn Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
 
-                <DataGridTextColumn Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
 
                 <local:DataGridWaFFLWeekByWeekColumn Header="Scores" Width="700" CanUserResize="True" />
             </DataGrid.Columns>

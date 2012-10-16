@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using System.Windows.Data;
 using System.Diagnostics;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace WaFFL.Evaluation
 {
@@ -50,7 +51,7 @@ namespace WaFFL.Evaluation
 
         /// <summary />
         private FanastySeason season;
-
+        
         /// <summary />
         private Collection<Action<FanastySeason>> subscribers = new Collection<Action<FanastySeason>>();
 
@@ -180,6 +181,16 @@ namespace WaFFL.Evaluation
             {
                 this.CurrentSeason = this.season;
             }
+
+
+            List<string> markedPlayers = null;
+            success = MarkedPlayerPersister.TryLoadPlayers(out markedPlayers);
+            if (!success)
+            {
+                markedPlayers = new List<string>();
+            }
+            MarkedPlayers.Players = markedPlayers;
+
         }
 
         /// <summary />
@@ -189,6 +200,7 @@ namespace WaFFL.Evaluation
             // to disk, so we don't have to requery the server the
             // next time we open.
             WaFFLPersister.SaveSeason(this.season);
+            MarkedPlayerPersister.SavePlayers(MarkedPlayers.Players);
         }
 
         /// <summary />
@@ -227,6 +239,38 @@ namespace WaFFL.Evaluation
 
                 ISelectable control = ((ContentControl)this.TabControl.SelectedItem).Content as ISelectable;
                 e.CanExecute = control != null && control.SelectedItem != null;
+            }
+        }
+
+        /// <summary />
+        private void FlagCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            ISelectable control = this.TabControl.SelectedContent as ISelectable;
+            if (control != null)
+            {
+                Item item = control.SelectedItem;
+                MarkedPlayers.Evaluate(item.PlayerData.Name);
+            }
+            else
+            {
+                DSTView dstView = this.TabControl.SelectedContent as DSTView;
+                if (dstView != null)
+                {
+                    Item_DST item = dstView.dg.SelectedItem as Item_DST;
+                    MarkedPlayers.Evaluate(item.TeamName);
+                }
+            }
+        }
+
+        /// <summary />
+        private void CanExecuteFlagCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (this.TabControl != null)
+            {
+                ISelectable control = this.TabControl.SelectedContent as ISelectable;
+                DSTView dstView = this.TabControl.SelectedContent as DSTView;
+                e.CanExecute = (control != null && control.SelectedItem != null) ||
+                               (dstView != null && dstView.dg.SelectedItem != null);
             }
         }
     }

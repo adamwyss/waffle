@@ -42,6 +42,10 @@
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=4.0.23.35518, Culture=neutral, PublicKeyToken=3e875cdb3903c512, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -70,9 +74,14 @@
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\LeaderExtensions.cs" />
     <Compile Include="Parsers\DataConverter.cs" />
+    <Compile Include="Parsers\MarkedPlayers.cs" />
     <Compile Include="Parsers\NFLEntityParser.cs" />
     <Compile Include="Views\Components\ApplicationCommands.cs" />
-    <Compile Include="Views\Components\SeasonPersister.cs" />
+    <Compile Include="Views\Components\WaFFLPersister.cs" />
+    <Compile Include="Views\Components\MarkedPlayerPersister.cs" />
+    <Compile Include="Views\Controls\DataGridWaFFLTextColumn.xaml.cs">
+      <DependentUpon>DataGridWaFFLTextColumn.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\DataGridWaFFLWeekByWeekColumn.xaml.cs">
       <DependentUpon>DataGridWaFFLWeekByWeekColumn.xaml</DependentUpon>
     </Compile>
@@ -101,6 +110,10 @@
       <DependentUpon>KView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\VisibilityConverter.cs" />
+    <Page Include="Views\Controls\DataGridWaFFLTextColumn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\DataGridWaFFLWeekByWeekColumn.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -181,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\remember16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

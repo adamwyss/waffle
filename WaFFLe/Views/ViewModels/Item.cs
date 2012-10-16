@@ -1,16 +1,27 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace WaFFL.Evaluation
 {
     /// <summary />
     [DebuggerDisplay("{PlayerData}")]
-    public abstract class Item
+    public abstract class Item : ViewModelBase
     {
         /// <summary />
         public Item(NFLPlayer p)
         {
             this.PlayerData = p;
+
+            Messenger.Default.Register<MarkedPlayerChanged>(this,
+                (m) =>
+                {
+                    if (m.Name == this.PlayerData.Name)
+                    {
+                        this.RaisePropertyChanged("IsHighlighted");
+                    }
+                });
         }
 
         /// <summary />
@@ -20,6 +31,12 @@ namespace WaFFL.Evaluation
         public bool IsAvailable
         {
             get { return WaFFLRoster.IsActive(this.PlayerData.Name); }
+        }
+
+        /// <summary />
+        public bool IsHighlighted
+        {
+            get { return MarkedPlayers.IsMarked(this.PlayerData.Name); }
         }
 
         /// <summary />

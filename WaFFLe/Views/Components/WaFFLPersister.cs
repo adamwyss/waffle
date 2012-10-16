@@ -43,27 +43,34 @@ namespace WaFFL.Evaluation
             if (Directory.Exists(folderpath))
             {
                 string filepath = Path.Combine(folderpath, DataFile);
-                using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                try
                 {
-                    IFormatter formatter = new BinaryFormatter();
-                    try
+                    using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     {
-                        data = (FanastySeason)formatter.Deserialize(stream);
-                        return true;
-                    }
-                    catch (SerializationException)
-                    {
-                        // we failed to deserialize the data.  We will assume it is
-                        // corrupt and delete the storage file and rebuild it.
+                        IFormatter formatter = new BinaryFormatter();
                         try
                         {
-                            File.Delete(filepath);
+                            data = (FanastySeason)formatter.Deserialize(stream);
+                            return true;
                         }
-                        catch (IOException)
+                        catch (SerializationException)
                         {
-                            // we failed to delete the file, nothing else to do.
+                            // we failed to deserialize the data.  We will assume it is
+                            // corrupt and delete the storage file and rebuild it.
+                            try
+                            {
+                                File.Delete(filepath);
+                            }
+                            catch (IOException)
+                            {
+                                // we failed to delete the file, nothing else to do.
+                            }
                         }
                     }
+                }
+                catch (FileNotFoundException)
+                {
+                    // nothign was found, we will return false
                 }
             }
 

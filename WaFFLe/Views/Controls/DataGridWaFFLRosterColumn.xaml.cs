@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace WaFFL.Evaluation
 {
@@ -14,6 +15,7 @@ namespace WaFFL.Evaluation
             this.InitializeComponent();
         }
 
+        /// <summary />
         public override object OnCopyingCellClipboardContent(object item)
         {
             Type itemType = item.GetType();

@@ -579,7 +579,7 @@ namespace WaFFL.Evaluation
                             r.TD = int.Parse(values[17].Value);
                             player.GameLog.Add(game);
                         }
-                        else if (values.Length == 15 && (player.Position == FanastyPosition.RB || player.Position == FanastyPosition.WR))
+                        else if (values.Length == 15 && player.Position == FanastyPosition.RB)
                         {
                             Game game = new Game();
                             game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
@@ -597,6 +597,27 @@ namespace WaFFL.Evaluation
                             Fumbles f = game.Fumbles = new Fumbles();
                             f.FUM = int.Parse(values[13].Value);
                             f.LOST = int.Parse(values[14].Value);
+                            player.GameLog.Add(game);
+                        }
+                        else if (values.Length == 16 && player.Position == FanastyPosition.WR)
+                        {
+                            Game game = new Game();
+                            game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
+                            game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
+                            Receiving c = game.Receiving = new Receiving();
+                            c.REC = int.Parse(values[3].Value);
+                            c.YDS = int.Parse(values[5].Value);
+                            c.LONG = int.Parse(values[7].Value);
+                            c.TD = int.Parse(values[8].Value);
+                            Rushing r = game.Rushing = new Rushing();
+                            r.CAR = int.Parse(values[9].Value);
+                            r.YDS = int.Parse(values[10].Value);
+                            r.LONG = int.Parse(values[12].Value);
+                            r.TD = int.Parse(values[13].Value);
+
+                            Fumbles f = game.Fumbles = new Fumbles();
+                            f.FUM = int.Parse(values[14].Value);
+                            f.LOST = int.Parse(values[15].Value);
                             player.GameLog.Add(game);
                         }
                         else if (values.Length == 15 && player.Position == FanastyPosition.K)

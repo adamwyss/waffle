@@ -295,7 +295,7 @@ namespace WaFFL.Evaluation
                         week = 10;
                         break;
                     case "Thu 11/15":
-                    case "Sun 11/28":
+                    case "Sun 11/18":
                     case "Mon 11/19":
                         week = 11;
                         break;

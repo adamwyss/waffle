@@ -80,7 +80,10 @@ namespace WaFFL.Evaluation
                         { "A.J.", "AJ" },
                         { "Zuerlein", "Zuerlien" },
                         { "Stephen", "Stephan" },
-                        { "Darrius Heyward-Bey", "Darius Hayward-Bey" }
+                        { "Darrius Heyward-Bey", "Darius Hayward-Bey" },
+                        { "Torrey", "Torrie" },
+                        { "C.J.", "CJ" },
+                        { "Joique", "Joqui" },
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

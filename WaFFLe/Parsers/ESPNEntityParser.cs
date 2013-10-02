@@ -632,6 +632,7 @@ namespace WaFFL.Evaluation
                             int misses = int.Parse(temp[1]) - int.Parse(values[3].Value) - int.Parse(values[4].Value) - int.Parse(values[5].Value)
                                         - int.Parse(values[6].Value) - int.Parse(values[7].Value);
 
+                            // ESPN no longer records misses for fieldgoals, so we will just estimate them at 35 yards
 
                             k.FGM_01to19 = int.Parse(values[3].Value);
                             k.FGA_01to19 = int.Parse(values[3].Value);
@@ -649,26 +650,6 @@ namespace WaFFL.Evaluation
 
                             k.FGM_50plus = int.Parse(values[7].Value);
                             k.FGA_50plus = int.Parse(values[7].Value);
-
-                            //string[] temp = values[3].Value.Split(new string[] { "/" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                            //k.FGM_01to19 = int.Parse(temp[0]);
-                            //k.FGA_01to19 = int.Parse(temp[1]);
-
-                            //temp = values[4].Value.Split(new string[] { "/" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                            //k.FGM_20to29 = int.Parse(temp[0]);
-                            //k.FGA_20to29 = int.Parse(temp[1]);
-
-                            //temp = values[5].Value.Split(new string[] { "/" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                            //k.FGM_30to39 = int.Parse(temp[0]);
-                            //k.FGA_30to39 = int.Parse(temp[1]);
-
-                            //temp = values[6].Value.Split(new string[] { "/" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                            //k.FGM_40to49 = int.Parse(temp[0]);
-                            //k.FGA_40to49 = int.Parse(temp[1]);
-
-                            //temp = values[7].Value.Split(new string[] { "/" }, 2, StringSplitOptions.RemoveEmptyEntries);
-                            //k.FGM_50plus = int.Parse(temp[0]);
-                            //k.FGA_50plus = int.Parse(temp[1]);
 
                             k.XPM = int.Parse(values[12].Value);
                             k.XPA = int.Parse(values[13].Value);

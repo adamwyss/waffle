@@ -12,7 +12,7 @@ DET<>Detroit
 GB<>Green Bay
 HOU<>Houston
 IND<>Indianapolis
-JAC<>Jacksonville
+JAX<>Jacksonville
 KC<>Kansas City
 MIA<>Miami
 MIN<>Minnesota

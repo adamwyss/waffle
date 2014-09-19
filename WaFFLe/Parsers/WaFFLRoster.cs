@@ -68,7 +68,6 @@ namespace WaFFL.Evaluation
                 string[,] corrections = new string[,]
                     {
                         { "Philip", "Phillip" },
-                        { "LaDainian", "Ladanian" },
                         { "Malcom", "Malcolm" },
                         { "Matthew", "Matt" },
                         { "Griffin", "Griffen" },
@@ -81,12 +80,14 @@ namespace WaFFL.Evaluation
                         { "Zuerlein", "Zuerlien" },
                         { "Stephen", "Stephan" },
                         { "Darrius Heyward-Bey", "Darius Hayward-Bey" },
-                        { "Torrey", "Torrie" },
                         { "C.J.", "CJ" },
-                        { "Joique", "Joqui" },
                         { "Jeffery", "Jeffrey" },
                         { "Blackmon", "Blackman" },
                         { "Eric", "Erik" },
+                        { "Le'Veon Bell", "LeVeon Bell" },
+                        { "Shane Vereen", "Shane Vareen" },
+                        { "Steve Smith Sr.", "Steve Smith" },
+                        { "Cordarrelle Patterson", "Cordarelle Patterson" }
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

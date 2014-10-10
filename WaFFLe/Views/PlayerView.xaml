@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="WaFFL.Evaluation.PlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:local="clr-namespace:WaFFL.Evaluation">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <ToggleButton Content="Quarterbacks" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="12,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="QBFilter" />
+            <ToggleButton Content="Runningbacks" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="174,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="RBFilter" />
+            <ToggleButton Content="Wide Receivers" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="336,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="WRFilter" />
+            <ToggleButton Content="Kickers" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="498,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="KFilter" />
+            <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="12" />
+        </Grid>
+        <DataGrid x:Name="dg" ItemsSource="{Binding}" Grid.Row="1">
+            <DataGrid.DataContext>
+                <CollectionViewSource Source="{Binding Players}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription PropertyName="PointsOverReplacement3G" Direction="Descending" />
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </DataGrid.DataContext>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <local:DataGridWaFFLRosterColumn />
+                <local:DataGridWaFFLTextColumn  Header="Pos" Binding="{Binding Position}" Foreground="DarkGray" />
+                <local:DataGridWaFFLTextColumn  Header="Name" Binding="{Binding Name}" />
+                <local:DataGridWaFFLTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
+                <local:DataGridWaFFLTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <local:DataGridWaFFLWeekByWeekColumn Header="Scores" Width="*" CanUserResize="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

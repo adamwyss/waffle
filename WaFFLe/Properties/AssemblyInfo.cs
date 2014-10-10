@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("WaFFL Analysis Tool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("WaFFL")]
 [assembly: AssemblyProduct("WaFFL Analysis Tool")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCopyright("Copyright © WaFFL 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -67,6 +67,7 @@ namespace WaFFL.Evaluation
                 // correct common miss spellings
                 string[,] corrections = new string[,]
                     {
+                    //  { "ESPN", "WaFFL" },
                         { "Philip", "Phillip" },
                         { "Malcom", "Malcolm" },
                         { "Matthew", "Matt" },
@@ -87,7 +88,8 @@ namespace WaFFL.Evaluation
                         { "Le'Veon Bell", "LeVeon Bell" },
                         { "Shane Vereen", "Shane Vareen" },
                         { "Steve Smith Sr.", "Steve Smith" },
-                        { "Cordarrelle Patterson", "Cordarelle Patterson" }
+                        { "Cordarrelle Patterson", "Cordarelle Patterson" },
+                        { "T.Y. Hilton", "TY Hilton" }
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

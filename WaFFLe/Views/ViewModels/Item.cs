@@ -45,6 +45,20 @@ namespace WaFFL.Evaluation
             get { return this.PlayerData.Name; }
         }
 
+        public string Position
+        {
+            get
+            {
+                FanastyPosition position = this.PlayerData.Position;
+                if (position != FanastyPosition.UNKNOWN)
+                {
+                    return position.ToString();
+                }
+
+                return "n/a";
+            }
+        }
+
         /// <summary />
         public string Team
         {

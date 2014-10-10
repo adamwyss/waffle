@@ -1,6 +1,7 @@
 ﻿<Window x:Class="WaFFL.Evaluation.MainWindow"
        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:settings="clr-namespace:WaFFL.Evaluation.Properties"
        xmlns:local="clr-namespace:WaFFL.Evaluation"
        Title="WaFFL" Height="900" Width="1200">
     <Window.CommandBindings>
@@ -192,6 +193,15 @@
             <TabItem>
                 <TabItem.Header>
                     <Grid>
+                        <TextBlock Text="All Players" />
+                    </Grid>
+                </TabItem.Header>
+                <local:PlayerView />
+            </TabItem>
+<!--
+            <TabItem>
+                <TabItem.Header>
+                    <Grid>
                         <TextBlock Text="Quarterbacks" />
                     </Grid>
                 </TabItem.Header>
@@ -221,6 +231,7 @@
                 </TabItem.Header>
                 <local:KView />
             </TabItem>
+-->
             <TabItem>
                 <TabItem.Header>
                     <Grid>

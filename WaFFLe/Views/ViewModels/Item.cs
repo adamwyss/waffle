@@ -84,7 +84,7 @@ namespace WaFFL.Evaluation
                 foreach (Game g in this.PlayerData.GameLog)
                 {
                     int points = g.GetFanastyPoints();
-                    sb.Append(string.Format("{0}::", g.Week));
+                    sb.Append(string.Format("({0}) ", g.Week));
                     sb.Append(points);
                     sb.Append(", ");
                 }

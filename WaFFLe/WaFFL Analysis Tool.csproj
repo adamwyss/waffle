@@ -104,18 +104,6 @@
     <Compile Include="Views\ViewModels\QB.cs" />
     <Compile Include="Views\ViewModels\RB.cs" />
     <Compile Include="Views\ViewModels\WR.cs" />
-    <Compile Include="Views\WRView.xaml.cs">
-      <DependentUpon>WRView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RBView.xaml.cs">
-      <DependentUpon>RBView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\QBView.xaml.cs">
-      <DependentUpon>QBView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\KView.xaml.cs">
-      <DependentUpon>KView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\VisibilityConverter.cs" />
     <Page Include="Views\Controls\DataGridWaFFLTextColumn.xaml">
       <SubType>Designer</SubType>
@@ -136,22 +124,6 @@
     <Page Include="Views\PlayerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\WRView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\RBView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\QBView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\KView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

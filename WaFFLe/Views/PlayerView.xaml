@@ -37,7 +37,23 @@
                 <local:DataGridWaFFLTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
                 <local:DataGridWaFFLTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
                 <local:DataGridWaFFLTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLWeekByWeekColumn Header="Scores" Width="*" CanUserResize="True" />
+                <local:DataGridWaFFLTextColumn  Header="W1" Width="40" Binding="{Binding Week1Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week1ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W2" Width="40" Binding="{Binding Week2Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week2ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W3" Width="40" Binding="{Binding Week3Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week3ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W4" Width="40" Binding="{Binding Week4Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week4ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W5" Width="40" Binding="{Binding Week5Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week5ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W6" Width="40" Binding="{Binding Week6Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week6ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W7" Width="40" Binding="{Binding Week7Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week7ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W8" Width="40" Binding="{Binding Week8Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week8ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W9" Width="40" Binding="{Binding Week9Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week9ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W10" Width="40" Binding="{Binding Week10Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week10ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W11" Width="40" Binding="{Binding Week11Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week11ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W12" Width="40" Binding="{Binding Week12Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week12ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W13" Width="40" Binding="{Binding Week13Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week13ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W14" Width="40" Binding="{Binding Week14Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week14ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W15" Width="40" Binding="{Binding Week15Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week15ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W16" Width="40" Binding="{Binding Week16Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week16ScoreSortable" />
+                <local:DataGridWaFFLTextColumn  Header="W17" Width="40" Binding="{Binding Week17Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week17ScoreSortable" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -8,6 +8,11 @@
         <Style x:Key="RightAlignTextStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="TextAlignment" Value="Right" />
         </Style>
+        
+        <Style x:Key="WeekByWeekScoreStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Foreground" Value="DarkGray" />
+        </Style>
 
     </Application.Resources>
 </Application>

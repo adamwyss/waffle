@@ -89,7 +89,8 @@ namespace WaFFL.Evaluation
                         { "Shane Vereen", "Shane Vareen" },
                         { "Steve Smith Sr.", "Steve Smith" },
                         { "Cordarrelle Patterson", "Cordarelle Patterson" },
-                        { "T.Y. Hilton", "TY Hilton" }
+                        { "T.Y. Hilton", "TY Hilton" },
+                        { "Branden Oliver", "Brandon Oliver" }
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

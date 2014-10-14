@@ -1,4 +1,4 @@
-﻿<Window x:Class="WaFFL.Evaluation.MainWindow"
+﻿<RibbonWindow x:Class="WaFFL.Evaluation.MainWindow"
        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:settings="clr-namespace:WaFFL.Evaluation.Properties"
@@ -55,7 +55,43 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Background="#DFE9F5" Grid.Row="0">
+        <Ribbon Grid.Row="0">
+            <RibbonTab Header="Home">
+                <RibbonGroup Header="ESPN">
+                    <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.Refresh" />
+                    <RibbonButton Label="View" LargeImageSource="/Views/Assets/espn32.png" Command="local:ApplicationCommands.GoTo" />
+                </RibbonGroup>
+                <RibbonGroup Header="Replacement Value">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,2,5,0" TextBlock.FontSize="10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="QB:" Margin="12,0,5,0" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.QB, FallbackValue=0}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="RB:" Margin="13,0,5,0" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.RB, FallbackValue=0}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="WR:" Margin="10,0,5,0" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.WR, FallbackValue=0}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="K:" Margin="19,0,5,0" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.K, FallbackValue=0}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="D/ST:" Margin="3,0,5,0" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.DST, FallbackValue=0}" />
+                        </StackPanel>
+                    </StackPanel>
+                </RibbonGroup>
+                <RibbonGroup Header="Player">
+                    <RibbonButton Label="Remember" SmallImageSource="/Views/Assets/remember16.png" Command="local:ApplicationCommands.Flag" />
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+        
+        <Grid Background="#DFE9F5" Grid.Row="0" Visibility="Hidden">
             <Grid.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="MinWidth" Value="44" />
@@ -265,4 +301,4 @@
         </Grid>
         
     </Grid>
-</Window>
+</RibbonWindow>

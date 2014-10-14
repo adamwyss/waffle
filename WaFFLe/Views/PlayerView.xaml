@@ -5,14 +5,10 @@
              xmlns:local="clr-namespace:WaFFL.Evaluation">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <ToggleButton Content="Quarterbacks" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="12,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="QBFilter" />
-            <ToggleButton Content="Runningbacks" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="174,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="RBFilter" />
-            <ToggleButton Content="Wide Receivers" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="336,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="WRFilter" />
-            <ToggleButton Content="Kickers" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" Margin="498,12,12,12" IsChecked="True" Click="WhenFilterTogglesClicked" x:Name="KFilter" />
             <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Margin="12" />
         </Grid>
         <DataGrid x:Name="dg" ItemsSource="{Binding}" Grid.Row="1">

@@ -56,6 +56,16 @@
         </Grid.RowDefinitions>
 
         <Ribbon Grid.Row="0">
+            <Ribbon.ContextualTabGroups>
+                <RibbonContextualTabGroup x:Name="playerSearchTools" Header="Search Tools" Background="Orange" Visibility="Visible" />
+            </Ribbon.ContextualTabGroups>
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu>
+                    <RibbonApplicationMenu.FooterPaneContent>
+                        <RibbonButton Label="Exit" Click="WhenExitClicked" />
+                    </RibbonApplicationMenu.FooterPaneContent>
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
                 <RibbonGroup Header="ESPN">
                     <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.Refresh" />
@@ -89,26 +99,40 @@
                     <RibbonButton Label="Remember" SmallImageSource="/Views/Assets/remember16.png" Command="local:ApplicationCommands.Flag" />
                 </RibbonGroup>
             </RibbonTab>
+            <RibbonTab Header="View">
+                <RibbonGroup Header="Data">
+                    <RibbonControlGroup>
+                        <RibbonRadioButton Label="Players" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="True" Checked="WhenPlayerViewChecked" Unchecked="WhenPlayerViewUnchecked" />
+                        <RibbonRadioButton Label="Defense" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />
+                    </RibbonControlGroup>
+                </RibbonGroup>
+            </RibbonTab>
+            <RibbonTab Header="Search" ContextualTabGroupHeader="Search Tools">
+                <RibbonGroup Header="Scope">
+                    <RibbonControlGroup>
+                        <RibbonToggleButton Label="QB" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="{Binding IsScopeQB, ElementName=playerView}" />
+                        <RibbonToggleButton Label="RB" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeRB, ElementName=playerView}" />
+                        <RibbonToggleButton Label="WR" LargeImageSource="/Views/Assets/wr-32.png" SmallImageSource="/Views/Assets/wr-16.png" IsChecked="{Binding IsScopeWR, ElementName=playerView}" />
+                        <RibbonToggleButton Label="K" LargeImageSource="/Views/Assets/k-32.png" SmallImageSource="/Views/Assets/k-16.png" IsChecked="{Binding IsScopeK, ElementName=playerView}" />
+                    </RibbonControlGroup>                    
+                </RibbonGroup>
+                <RibbonGroup Header="Refine">
+                    <RibbonToggleButton Label="Available" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="{Binding IsScopeAvailable, ElementName=playerView}" />
+                    <RibbonToggleButton Label="Marked" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeHighlighted, ElementName=playerView}" />
+                </RibbonGroup>
+                <RibbonGroup Header="Options">
+                    
+                </RibbonGroup>
+                <RibbonGroup Header="Close">
+                    <RibbonButton />
+                </RibbonGroup>
+            </RibbonTab>
         </Ribbon>
 
-        <TabControl x:Name="TabControl" Padding="0" Grid.Row="1">
-            <TabItem>
-                <TabItem.Header>
-                    <Grid>
-                        <TextBlock Text="All Players" />
-                    </Grid>
-                </TabItem.Header>
-                <local:PlayerView />
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <Grid>
-                        <TextBlock Text="Defense / Special Teams" />
-                    </Grid>
-                </TabItem.Header>
-                <local:DSTView />
-            </TabItem>
-        </TabControl>
+        <Grid  Grid.Row="1">
+            <local:PlayerView x:Name="playerView" />
+            <local:DSTView x:Name="defenseView" Visibility="Collapsed" />
+        </Grid>
 
         <Grid Background="Transparent" Cursor="Wait" Grid.RowSpan="2">
             <Grid.Visibility>

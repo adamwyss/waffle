@@ -219,59 +219,89 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            ISelectable control = (ISelectable)((ContentControl)this.TabControl.SelectedItem).Content;
-            if (control != null)
-            {
-                Item item = control.SelectedItem;
-                int espn_id = item.PlayerData.ESPN_Identifier;
-                string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
+            Item item = this.playerView.SelectedItem;
+            int espn_id = item.PlayerData.ESPN_Identifier;
+            string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
 
-                // tell the explorer to 
-                Process.Start(url);
-            }
+            // tell the explorer to 
+            Process.Start(url);
         }
 
         /// <summary />
         private void CanExecuteGoToCommand(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (this.TabControl != null)
-            {
-
-                ISelectable control = ((ContentControl)this.TabControl.SelectedItem).Content as ISelectable;
-                e.CanExecute = control != null && control.SelectedItem != null;
-            }
+            e.CanExecute =  this.playerView != null && this.playerView.SelectedItem != null;
         }
 
         /// <summary />
         private void FlagCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            ISelectable control = this.TabControl.SelectedContent as ISelectable;
-            if (control != null)
+            if (this.playerView != null && this.playerView.Visibility == System.Windows.Visibility.Visible)
             {
-                Item item = control.SelectedItem;
+                Item item = this.playerView.SelectedItem;
                 MarkedPlayers.Evaluate(item.PlayerData.Name);
             }
-            else
+            else if (this.defenseView != null && this.defenseView.Visibility == System.Windows.Visibility.Visible)
             {
-                DSTView dstView = this.TabControl.SelectedContent as DSTView;
-                if (dstView != null)
-                {
-                    Item_DST item = dstView.dg.SelectedItem as Item_DST;
-                    MarkedPlayers.Evaluate(item.TeamName);
-                }
+                Item_DST item = this.defenseView.dg.SelectedItem as Item_DST;
+                MarkedPlayers.Evaluate(item.TeamName);
             }
         }
 
         /// <summary />
         private void CanExecuteFlagCommand(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (this.TabControl != null)
+            if (this.playerView != null && this.playerView.Visibility == System.Windows.Visibility.Visible)
             {
-                ISelectable control = this.TabControl.SelectedContent as ISelectable;
-                DSTView dstView = this.TabControl.SelectedContent as DSTView;
-                e.CanExecute = (control != null && control.SelectedItem != null) ||
-                               (dstView != null && dstView.dg.SelectedItem != null);
+                e.CanExecute = this.playerView.SelectedItem != null;
             }
+            else if (this.defenseView != null && this.defenseView.Visibility == System.Windows.Visibility.Visible)
+            {
+                e.CanExecute = this.defenseView.dg.SelectedItem != null;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void WhenExitClicked(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void WhenPlayerViewChecked(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            this.playerView.Visibility = System.Windows.Visibility.Visible;
+            this.playerSearchTools.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void WhenPlayerViewUnchecked(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            this.playerView.Visibility = System.Windows.Visibility.Collapsed;
+            this.playerSearchTools.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void WhenDSTViewChecked(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+            
+            this.defenseView.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void WhenDSTViewUnchecked(object sender, RoutedEventArgs e)
+        {
+            if (!this.IsLoaded)
+                return;
+
+            this.defenseView.Visibility = System.Windows.Visibility.Collapsed;
         }
     }
 }

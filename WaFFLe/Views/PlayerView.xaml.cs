@@ -1,13 +1,10 @@
-﻿using System.Windows.Controls;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Media;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections;
-using System.Windows.Input;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace WaFFL.Evaluation
 {
@@ -22,6 +19,42 @@ namespace WaFFL.Evaluation
             typeof(string),
             typeof(PlayerView),
             new PropertyMetadata(null, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeQBProperty = DependencyProperty.Register(
+            "IsScopeQB",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(true, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeRBProperty = DependencyProperty.Register(
+            "IsScopeRB",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(true, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeWRProperty = DependencyProperty.Register(
+            "IsScopeWR",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(true, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeKProperty = DependencyProperty.Register(
+            "IsScopeK",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(true, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeAvailableProperty = DependencyProperty.Register(
+            "IsScopeAvailable",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(false, WhenFilterPropertyChanged));
+
+        public static readonly DependencyProperty IsScopeHighlightedProperty = DependencyProperty.Register(
+            "IsScopeHighlighted",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(false, WhenFilterPropertyChanged));
 
         private static void WhenFilterPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -67,6 +100,62 @@ namespace WaFFL.Evaluation
                 };
         }
 
+        public ObservableCollection<Item> Players { get; private set; }
+
+        /// <summary />
+        public string Filter
+        {
+            get { return (string)this.GetValue(FilterProperty); }
+            set { this.SetValue(FilterProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeQB
+        {
+            get { return (bool)this.GetValue(IsScopeQBProperty); }
+            set { this.SetValue(IsScopeQBProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeRB
+        {
+            get { return (bool)this.GetValue(IsScopeRBProperty); }
+            set { this.SetValue(IsScopeRBProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeWR
+        {
+            get { return (bool)this.GetValue(IsScopeWRProperty); }
+            set { this.SetValue(IsScopeWRProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeK
+        {
+            get { return (bool)this.GetValue(IsScopeKProperty); }
+            set { this.SetValue(IsScopeKProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeAvailable
+        {
+            get { return (bool)this.GetValue(IsScopeAvailableProperty); }
+            set { this.SetValue(IsScopeAvailableProperty, value); }
+        }
+
+        /// <summary />
+        public bool IsScopeHighlighted
+        {
+            get { return (bool)this.GetValue(IsScopeHighlightedProperty); }
+            set { this.SetValue(IsScopeHighlightedProperty, value); }
+        }
+
+        public Item SelectedItem
+        {
+            get { return this.dg.SelectedItem as Item; }
+        }
+
         private void Refresh(IEnumerable<QB> qbs, IEnumerable<RB> rbs, IEnumerable<WR> wrs, IEnumerable<K> ks)
         {
             this.allPlayers = new List<Item>();
@@ -93,18 +182,32 @@ namespace WaFFL.Evaluation
             switch (player.PlayerData.Position)
             {
                 case FanastyPosition.QB:
-                    if (this.QBFilter.IsChecked == false) return false;
+                    if (!this.IsScopeQB) return false;
                     break;
                 case FanastyPosition.RB:
-                    if (this.RBFilter.IsChecked == false) return false;
+                    if (!this.IsScopeRB) return false;
                     break;
                 case FanastyPosition.WR:
-                    if (this.WRFilter.IsChecked == false) return false;
+                    if (!this.IsScopeWR) return false;
                     break;
                 case FanastyPosition.K:
-                    if (this.KFilter.IsChecked == false) return false;
+                    if (!this.IsScopeK) return false;
                     break;
             }
+
+            bool a = true;
+            bool h = true;
+            if (this.IsScopeAvailable && player.IsAvailable)
+                a = false;
+            if (this.IsScopeHighlighted && !player.IsHighlighted)
+                h = false;
+
+            if (!a && !this.IsScopeHighlighted)
+                return false;
+            else if (!h && !this.IsScopeAvailable)
+                return false;
+            else if (!a && !h)
+                return false;
 
             if (this.Filter == null)
             {
@@ -147,25 +250,6 @@ namespace WaFFL.Evaluation
                     this.allPlayers.Add(k);
                 }
             }
-        }
-
-        public ObservableCollection<Item> Players { get; private set; }
-
-        /// <summary />
-        public string Filter
-        {
-            get { return (string)this.GetValue(FilterProperty); }
-            set { this.SetValue(FilterProperty, value); }
-        }
-
-        public Item SelectedItem
-        {
-            get { return this.dg.SelectedItem as Item; }
-        }
-
-        private void WhenFilterTogglesClicked(object sender, RoutedEventArgs e)
-        {
-            this.ApplyFilter();
         }
     }
 }

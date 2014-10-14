@@ -5,11 +5,10 @@
              xmlns:local="clr-namespace:WaFFL.Evaluation">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="55" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor." Foreground="DarkGray"  Margin="20,35,0,0" />
         </Grid>
         <DataGrid x:Name="dg" ItemsSource="{Binding}" Grid.Row="1">
             <DataGrid.DataContext>

@@ -20,6 +20,8 @@ namespace WaFFL.Evaluation
             // calculate points for fumble recoveries
             points += td.REC * 25;
 
+            td.TD_FUM += td.TD_FUM * 25;
+
             // calculate points for sacks
             points += td.SACK * 10;
 

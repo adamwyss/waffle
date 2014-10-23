@@ -124,7 +124,7 @@
                     
                 </RibbonGroup>
                 <RibbonGroup Header="Close">
-                    <RibbonButton />
+                    <RibbonButton Label="Remember" SmallImageSource="/Views/Assets/remember16.png" Command="local:ApplicationCommands.Flag" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

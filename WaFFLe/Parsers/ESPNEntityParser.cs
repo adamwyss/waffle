@@ -233,7 +233,7 @@ namespace WaFFL.Evaluation
             NFLPlayer player = this.ExtractPlayerInfo(values[1]);
             this.AssignTeam(player, values[2].Value);
 
-            this.OVERTHETOP(player);
+            this.ParseGameLog(player);
         }
 
         /// <summary />
@@ -242,7 +242,7 @@ namespace WaFFL.Evaluation
             NFLPlayer player = this.ExtractPlayerInfo(values[1]);
             this.AssignTeam(player, values[2].Value);
 
-            this.OVERTHETOP(player);
+            this.ParseGameLog(player);
         }
 
         /// <summary />
@@ -251,7 +251,7 @@ namespace WaFFL.Evaluation
             NFLPlayer player = this.ExtractPlayerInfo(values[1]);
             this.AssignTeam(player, values[2].Value);
 
-            this.OVERTHETOP(player);
+            this.ParseGameLog(player);
         }
 
         /// <summary />
@@ -260,7 +260,7 @@ namespace WaFFL.Evaluation
             NFLPlayer player = this.ExtractPlayerInfo(values[1]);
             this.AssignTeam(player, values[2].Value);
 
-            this.OVERTHETOP(player);
+            this.ParseGameLog(player);
         }
 
         /// <summary />
@@ -512,7 +512,7 @@ namespace WaFFL.Evaluation
             }
         }
 
-        private void OVERTHETOP(NFLPlayer player)
+        private void ParseGameLog(NFLPlayer player)
         {
             if (player.GameLog.Count > 0)
             {
@@ -560,11 +560,16 @@ namespace WaFFL.Evaluation
                             game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
                             player.GameLog.Add(game);
                         }
+                        else if (values.Length > 2 && this.context.IsBadTeamCode(values[1].Value))
+                        {
+                            // some games, like all star games are listed in the player gamelog.
+                            continue;
+                        }
                         else if (values.Length == 18 && player.Position == FanastyPosition.QB)
                         {
                             Game game = new Game();
                             game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
-                            game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
+                            game.Opponent = this.context.GetTeam(values[1].Value);
                             Passing p = game.Passing = new Passing();
                             p.CMP = int.Parse(values[3].Value);
                             p.ATT = int.Parse(values[4].Value);
@@ -583,7 +588,7 @@ namespace WaFFL.Evaluation
                         {
                             Game game = new Game();
                             game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
-                            game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
+                            game.Opponent = this.context.GetTeam(values[1].Value);
                             Rushing r = game.Rushing = new Rushing();
                             r.CAR = int.Parse(values[3].Value);
                             r.YDS = int.Parse(values[4].Value);
@@ -603,7 +608,7 @@ namespace WaFFL.Evaluation
                         {
                             Game game = new Game();
                             game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
-                            game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
+                            game.Opponent = this.context.GetTeam(values[1].Value);
                             Receiving c = game.Receiving = new Receiving();
                             c.REC = int.Parse(values[3].Value);
                             c.YDS = int.Parse(values[5].Value);
@@ -624,7 +629,7 @@ namespace WaFFL.Evaluation
                         {
                             Game game = new Game();
                             game.Week = this.context.GetWeek(values[0].Value, this.context.Year);
-                            game.Opponent = this.context.GetTeam(values[1].Value.TrimStart('@'));
+                            game.Opponent = this.context.GetTeam(values[1].Value);
 
                             Kicking k = game.Kicking = new Kicking();
                             k.LONG = int.Parse(values[11].Value);

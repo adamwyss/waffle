@@ -45,8 +45,20 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
+        public bool IsBadTeamCode(string code)
+        {
+            code = code.TrimStart('@');
+            code = code.TrimStart('v', 's');
+            code = code.TrimStart();
+            code = code.TrimEnd();
+
+            return code == "IRV" || code == "CTR";
+        }
+
+        /// <summary />
         public NFLTeam GetTeam(string code)
         {
+            code = code.TrimStart('@');
             code = code.TrimStart('v', 's');
             code = code.TrimStart();
             code = code.TrimEnd();
@@ -331,11 +343,105 @@ namespace WaFFL.Evaluation
                         break;
                     case "Thu 12/18":
                     case "Sat 12/20":
-                    case "Sat 12/21":
+                    case "Sun 12/21":
                     case "Mon 12/22":
                         week = 16;
                         break;
                     case "Sun 12/28":
+                        week = 17;
+                        break;
+                    default:
+                        week = 0;
+                        break;
+                }
+            }
+            else if (year == 2015)
+            {
+                switch (date)
+                {
+                    case "Thu 9/10":
+                    case "Sun 9/13":
+                    case "Mon 9/14":
+                        week = 1;
+                        break;
+                    case "Thu 9/17":
+                    case "Sun 9/20":
+                    case "Mon 9/21":
+                        week = 2;
+                        break;
+                    case "Thu 9/24":
+                    case "Sun 9/27":
+                    case "Mon 9/28":
+                        week = 3;
+                        break;
+                    case "Thu 10/1":
+                    case "Sun 10/4":
+                    case "Mon 10/5":
+                        week = 4;
+                        break;
+                    case "Thu 10/8":
+                    case "Sun 10/11":
+                    case "Mon 10/12":
+                        week = 5;
+                        break;
+                    case "Thu 10/15":
+                    case "Sun 10/18":
+                    case "Mon 10/19":
+                        week = 6;
+                        break;
+                    case "Thu 10/22":
+                    case "Sun 10/25":
+                    case "Mon 10/26":
+                        week = 7;
+                        break;
+                    case "Thu 10/29":
+                    case "Sun 11/1":
+                    case "Mon 11/2":
+                        week = 8;
+                        break;
+                    case "Thu 11/5":
+                    case "Sun 11/8":
+                    case "Mon 11/9":
+                        week = 9;
+                        break;
+                    case "Thu 11/12":
+                    case "Sun 11/15":
+                    case "Mon 11/16":
+                        week = 10;
+                        break;
+                    case "Thu 11/19":
+                    case "Sun 11/22":
+                    case "Mon 11/23":
+                        week = 11;
+                        break;
+                    case "Thu 11/26":
+                    case "Sun 11/29":
+                    case "Mon 11/30":
+                        week = 12;
+                        break;
+                    case "Thu 12/3":
+                    case "Sun 12/6":
+                    case "Mon 12/7":
+                        week = 13;
+                        break;
+                    case "Thu 12/10":
+                    case "Sun 12/13":
+                    case "Mon 12/14":
+                        week = 14;
+                        break;
+                    case "Thu 12/17":
+                    case "Sat 12/19":
+                    case "Sun 12/20":
+                    case "Mon 12/21":
+                        week = 15;
+                        break;
+                    case "Thu 12/24":
+                    case "Sat 12/26":
+                    case "Sun 12/27":
+                    case "Mon 12/28":
+                        week = 16;
+                        break;
+                    case "Sun 1/3":
                         week = 17;
                         break;
                     default:

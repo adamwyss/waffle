@@ -26,6 +26,7 @@ namespace WaFFL.Evaluation
                 return index[city];
             }
 
+            return "";
             throw new InvalidOperationException();
         }
 

@@ -52,7 +52,7 @@ namespace WaFFL.Evaluation
             code = code.TrimStart();
             code = code.TrimEnd();
 
-            return code == "IRV" || code == "CTR";
+            return code == "IRV" || code == "CTR" || string.IsNullOrEmpty(code);
         }
 
         /// <summary />

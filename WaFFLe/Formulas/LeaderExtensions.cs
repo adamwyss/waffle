@@ -7,6 +7,8 @@ namespace WaFFL.Evaluation
         /// <summary />
         public static int Estimate_Points(this ESPNDefenseLeaders td)
         {
+            if (td == null) return 0;
+
             int points = 0;
 
             //calculate points for interceptions

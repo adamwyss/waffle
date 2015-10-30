@@ -90,7 +90,11 @@ namespace WaFFL.Evaluation
                         { "Steve Smith Sr.", "Steve Smith" },
                         { "Cordarrelle Patterson", "Cordarelle Patterson" },
                         { "T.Y. Hilton", "TY Hilton" },
-                        { "Branden Oliver", "Brandon Oliver" }
+                        { "Branden Oliver", "Brandon Oliver" },
+                        { "Jordan Matthews", "Jordan Mathews" },
+                        { "Odell Beckham Jr.", "O'Dell Beckham Jr" },
+                        { "Austin Seferian-Jenkins", "Austin Safarian-Jenkens" },
+                        { "Julian Edelman", "Julien Edelman" },
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

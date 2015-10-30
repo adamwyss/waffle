@@ -305,6 +305,7 @@ namespace WaFFL.Evaluation
                 {
                     string data = lines[i + 5].TrimStart('\t') + lines[i + 6].TrimStart('\t') + lines[i + 7].TrimStart('\t');
                     data = data.Replace("&nbsp;", string.Empty);
+                    data = data.Replace("</a></td></tr></tr><tr class=", "</a></td></tr><tr class=");
                     parsedValue = XElement.Parse(data);
 
                     // get past the stuff we just parsed

@@ -167,8 +167,8 @@ namespace WaFFL.Evaluation
 
                 // calculate 20 points for each extra point made and 
                 // subtract 20 points for each point missed
-                points += k.XPM * 20;
-                points -= (k.XPA - k.XPM) * 20;
+                points += k.XPM * 33;
+                points -= (k.XPA - k.XPM) * 33;
             }
 
             return points;

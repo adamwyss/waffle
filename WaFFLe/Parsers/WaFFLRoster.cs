@@ -95,6 +95,7 @@ namespace WaFFL.Evaluation
                         { "Odell Beckham Jr.", "O'Dell Beckham Jr" },
                         { "Austin Seferian-Jenkins", "Austin Safarian-Jenkens" },
                         { "Julian Edelman", "Julien Edelman" },
+                        { "Michael Floyd", "Michael Foyd" },
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

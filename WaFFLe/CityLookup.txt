@@ -27,6 +27,7 @@ SD<>San Diego
 SEA<>Seattle
 SF<>San Francisco
 STL<>St. Louis
+LA<>Los Angeles
 TB<>Tampa Bay
 TEN<>Tennessee
 WSH<>Washington

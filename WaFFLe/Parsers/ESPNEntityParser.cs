@@ -184,6 +184,11 @@ namespace WaFFL.Evaluation
         {
             do
             {
+                if (uri.StartsWith("//"))
+                {
+                    uri = "http:" + uri;
+                }
+
                 string xhtml = this.httpClient.DownloadString(uri);
 
                 IEnumerable<XElement> dataRows = this.ExtractRawPlayerStats(xhtml, out uri);

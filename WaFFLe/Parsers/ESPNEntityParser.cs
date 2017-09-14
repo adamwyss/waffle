@@ -272,6 +272,7 @@ namespace WaFFL.Evaluation
         private void ParseDefenseLeaderItem(XElement[] values, object state)
         {
             NFLTeam team = this.ExtractTeamInfo(values[1]);
+            NFLPlayer player = this.ExtractDefensivePlayerInfo(team);
 
             this.ThrowIfNotNull(team.ESPNTeamDefense);
             ESPNDefenseLeaders td = team.ESPNTeamDefense = new ESPNDefenseLeaders();
@@ -452,6 +453,40 @@ namespace WaFFL.Evaluation
             else if (player.Position != position)
             {
                 throw new InvalidOperationException();
+            }
+
+            return player;
+        }
+
+        /// <summary />
+        private NFLPlayer ExtractDefensivePlayerInfo(NFLTeam team)
+        {
+            var id = team.TeamCode.GetHashCode() * -1;
+            NFLPlayer player = this.context.GetPlayer(id);
+
+            string name = DataConverter.ConvertToName(team.TeamCode);
+            if (string.IsNullOrEmpty(player.Name))
+            {
+                player.Name = name;
+            }
+            else if (player.Name != name)
+            {
+                throw new InvalidOperationException();
+            }
+
+            FanastyPosition position = FanastyPosition.DST;
+            if (player.Position == FanastyPosition.UNKNOWN)
+            {
+                player.Position = position;
+            }
+            else if (player.Position != position)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (player.Team == null)
+            {
+                player.Team = team;
             }
 
             return player;

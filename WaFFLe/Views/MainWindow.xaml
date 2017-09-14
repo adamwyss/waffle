@@ -114,6 +114,7 @@
                         <RibbonToggleButton Label="RB" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeRB, ElementName=playerView}" />
                         <RibbonToggleButton Label="WR" LargeImageSource="/Views/Assets/wr-32.png" SmallImageSource="/Views/Assets/wr-16.png" IsChecked="{Binding IsScopeWR, ElementName=playerView}" />
                         <RibbonToggleButton Label="K" LargeImageSource="/Views/Assets/k-32.png" SmallImageSource="/Views/Assets/k-16.png" IsChecked="{Binding IsScopeK, ElementName=playerView}" />
+                        <RibbonToggleButton Label="DST" LargeImageSource="/Views/Assets/dst-32.png" SmallImageSource="/Views/Assets/dst-16.png" IsChecked="{Binding IsScopeDST, ElementName=playerView}" />
                     </RibbonControlGroup>                    
                 </RibbonGroup>
                 <RibbonGroup Header="Refine">

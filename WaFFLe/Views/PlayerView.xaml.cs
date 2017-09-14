@@ -44,6 +44,12 @@ namespace WaFFL.Evaluation
             typeof(PlayerView),
             new PropertyMetadata(true, WhenFilterPropertyChanged));
 
+        public static readonly DependencyProperty IsScopeDSTProperty = DependencyProperty.Register(
+            "IsScopeDST",
+            typeof(bool),
+            typeof(PlayerView),
+            new PropertyMetadata(true, WhenFilterPropertyChanged));
+
         public static readonly DependencyProperty IsScopeAvailableProperty = DependencyProperty.Register(
             "IsScopeAvailable",
             typeof(bool),
@@ -86,11 +92,12 @@ namespace WaFFL.Evaluation
                                     delegate(FanastySeason season)
                                     {
                                         this.Dispatcher.BeginInvoke(
-                                            new Action<IEnumerable<QB>, IEnumerable<RB>, IEnumerable<WR>, IEnumerable<K>>(this.Refresh), 
+                                            new Action<IEnumerable<QB>, IEnumerable<RB>, IEnumerable<WR>, IEnumerable<K>, IEnumerable<DST>>(this.Refresh), 
                                             QB.ConvertAndInitialize(season),
                                             RB.ConvertAndInitialize(season),
                                             WR.ConvertAndInitialize(season),
-                                            K.ConvertAndInitialize(season));
+                                            K.ConvertAndInitialize(season),
+                                            DST.ConvertAndInitialize(season));
                                     });
                                 this.registered = true;
                                 break;
@@ -138,6 +145,13 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
+        public bool IsScopeDST
+        {
+            get { return (bool)this.GetValue(IsScopeDSTProperty); }
+            set { this.SetValue(IsScopeDSTProperty, value); }
+        }
+
+        /// <summary />
         public bool IsScopeAvailable
         {
             get { return (bool)this.GetValue(IsScopeAvailableProperty); }
@@ -156,13 +170,14 @@ namespace WaFFL.Evaluation
             get { return this.dg.SelectedItem as Item; }
         }
 
-        private void Refresh(IEnumerable<QB> qbs, IEnumerable<RB> rbs, IEnumerable<WR> wrs, IEnumerable<K> ks)
+        private void Refresh(IEnumerable<QB> qbs, IEnumerable<RB> rbs, IEnumerable<WR> wrs, IEnumerable<K> ks, IEnumerable<DST> dsts)
         {
             this.allPlayers = new List<Item>();
             this.Load(qbs);
             this.Load(rbs);
             this.Load(wrs);
             this.Load(ks);
+            this.Load(dsts);
             this.ApplyFilter();
         }
 
@@ -170,8 +185,15 @@ namespace WaFFL.Evaluation
         {
             IEnumerable<Item> filteredList = this.allPlayers.Where(IsNotFiltered);
 
-            this.Players.Clear();
-            foreach (Item player in filteredList)
+            var remove = this.Players.Except(filteredList).ToArray();
+            var add = filteredList.Except(this.Players).ToArray();
+
+            foreach (Item player in remove)
+            {
+                this.Players.Remove(player);
+            }
+
+            foreach (Item player in add)
             {
                 this.Players.Add(player);
             }
@@ -192,6 +214,9 @@ namespace WaFFL.Evaluation
                     break;
                 case FanastyPosition.K:
                     if (!this.IsScopeK) return false;
+                    break;
+                case FanastyPosition.DST:
+                    if (!this.IsScopeDST) return false;
                     break;
             }
 
@@ -217,38 +242,11 @@ namespace WaFFL.Evaluation
             return player.Name.IndexOf(Filter, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 
-        private void Load(IEnumerable<QB> quarterbacks)
+        private void Load<T>(IEnumerable<T> players) where T : Item
         {
-            foreach (Item qb in quarterbacks)
+            foreach (T player in players)
             {
-                this.allPlayers.Add(qb);
-            }
-        }
-
-        private void Load(IEnumerable<RB> runningbacks)
-        {
-            foreach (RB rb in runningbacks)
-            {
-                this.allPlayers.Add(rb);
-            }
-        }
-
-        private void Load(IEnumerable<WR> widereceivers)
-        {
-            foreach (WR qb in widereceivers)
-            {
-                this.allPlayers.Add(qb);
-            }
-        }
-
-        private void Load(IEnumerable<K> kickers)
-        {
-            lock (((ICollection)this.Players).SyncRoot)
-            {
-                foreach (K k in kickers)
-                {
-                    this.allPlayers.Add(k);
-                }
+                this.allPlayers.Add(player);
             }
         }
     }

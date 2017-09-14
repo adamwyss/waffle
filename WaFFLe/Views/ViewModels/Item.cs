@@ -103,267 +103,172 @@ namespace WaFFL.Evaluation
 
         public string Week1Score
         {
-            get
-            {
-                return GetScoreForWeek(1);
-            }
+            get { return GetScoreForWeek(1); }
         }
 
         public int Week1ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(1);
-            }
+            get { return GetScoreForWeekSortable(1); }
         }
 
         public string Week2Score
         {
-            get
-            {
-                return GetScoreForWeek(2);
-            }
+            get { return GetScoreForWeek(2); }
         }
 
         public int Week2ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(2);
-            }
+            get { return GetScoreForWeekSortable(2); }
         }
+
         public string Week3Score
         {
-            get
-            {
-                return GetScoreForWeek(3);
-            }
+            get { return GetScoreForWeek(3); }
         }
 
         public int Week3ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(3);
-            }
+            get { return GetScoreForWeekSortable(3); }
         }
 
         public string Week4Score
         {
-            get
-            {
-                return GetScoreForWeek(4);
-            }
+            get { return GetScoreForWeek(4); }
         }
 
         public int Week4ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(4);
-            }
+            get { return GetScoreForWeekSortable(4); }
         }
 
         public string Week5Score
         {
-            get
-            {
-                return GetScoreForWeek(5);
-            }
+            get { return GetScoreForWeek(5); }
         }
 
         public int Week5ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(5);
-            }
+            get { return GetScoreForWeekSortable(5); }
         }
+
         public string Week6Score
         {
-            get
-            {
-                return GetScoreForWeek(6);
-            }
+            get { return GetScoreForWeek(6); }
         }
 
         public int Week6ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(6);
-            }
+            get { return GetScoreForWeekSortable(6); }
         }
+
         public string Week7Score
         {
-            get
-            {
-                return GetScoreForWeek(7);
-            }
+            get { return GetScoreForWeek(7); }
         }
 
         public int Week7ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(7);
-            }
+            get { return GetScoreForWeekSortable(7); }
         }
 
         public string Week8Score
         {
-            get
-            {
-                return GetScoreForWeek(8);
-            }
+            get { return GetScoreForWeek(8); }
         }
 
         public int Week8ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(8);
-            }
+            get { return GetScoreForWeekSortable(8); }
         }
 
         public string Week9Score
         {
-            get
-            {
-                return GetScoreForWeek(9);
-            }
+            get { return GetScoreForWeek(9); }
         }
 
         public int Week9ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(9);
-            }
+            get { return GetScoreForWeekSortable(9); }
         }
 
         public string Week10Score
         {
-            get
-            {
-                return GetScoreForWeek(10);
-            }
+            get { return GetScoreForWeek(10); }
         }
 
         public int Week10ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(10);
-            }
+            get { return GetScoreForWeekSortable(10); }
         }
 
         public string Week11Score
         {
-            get
-            {
-                return GetScoreForWeek(11);
-            }
+            get { return GetScoreForWeek(11); }
         }
 
         public int Week11ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(11);
-            }
+            get { return GetScoreForWeekSortable(11); }
         }
 
         public string Week12Score
         {
-            get
-            {
-                return GetScoreForWeek(12);
-            }
+            get { return GetScoreForWeek(12); }
         }
 
         public int Week12ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(12);
-            }
+            get { return GetScoreForWeekSortable(12); }
         }
+
         public string Week13Score
         {
-            get
-            {
-                return GetScoreForWeek(13);
-            }
+            get { return GetScoreForWeek(13); }
         }
 
         public int Week13ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(13);
-            }
+            get { return GetScoreForWeekSortable(13); }
         }
+
         public string Week14Score
         {
-            get
-            {
-                return GetScoreForWeek(14);
-            }
+            get { return GetScoreForWeek(14); }
         }
 
         public int Week14ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(14);
-            }
+            get { return GetScoreForWeekSortable(14); }
         }
+
         public string Week15Score
         {
-            get
-            {
-                return GetScoreForWeek(15);
-            }
+            get { return GetScoreForWeek(15); }
         }
 
         public int Week15ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(15);
-            }
+            get { return GetScoreForWeekSortable(15); }
         }
 
         public string Week16Score
         {
-            get
-            {
-                return GetScoreForWeek(16);
-            }
+            get { return GetScoreForWeek(16); }
         }
 
         public int Week16ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(16);
-            }
+            get { return GetScoreForWeekSortable(16); }
         }
+
         public string Week17Score
         {
-            get
-            {
-                return GetScoreForWeek(17);
-            }
+            get { return GetScoreForWeek(17); }
         }
 
         public int Week17ScoreSortable
         {
-            get
-            {
-                return GetScoreForWeekSortable(17);
-            }
+            get { return GetScoreForWeekSortable(17); }
         }
     }
 }

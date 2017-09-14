@@ -31,3 +31,5 @@ LA<>Los Angeles
 TB<>Tampa Bay
 TEN<>Tennessee
 WSH<>Washington
+LAR<>LA Rams
+LAC<>LA Chargers

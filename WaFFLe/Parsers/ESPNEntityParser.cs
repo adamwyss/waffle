@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WaFFL.Evaluation
 {
@@ -545,6 +545,7 @@ namespace WaFFL.Evaluation
                     string statLine = tempStr.Substring(start, (end + 8 - start));
 
                     statLine = statLine.Replace("\"title=\"", "\" title=\"");
+                    statLine = Regex.Replace(statLine, "<a href=\"[^\"]*\"></li>", "</li>");
 
                     XElement parsedValue = XElement.Parse(statLine);
 

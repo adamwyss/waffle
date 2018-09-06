@@ -174,101 +174,194 @@ namespace WaFFL.Evaluation
                         break;
                 }
             }
-         else if (year == 2017)
-         {
-            switch (date)
-            {
-               case "Thu 9/7":
-               case "Sun 9/10":
-               case "Mon 9/11":
-                  week = 1;
-                  break;
-               case "Thu 9/14":
-               case "Sun 9/17":
-               case "Mon 9/18":
-                  week = 2;
-                  break;
-               case "Thu 9/21":
-               case "Sun 9/24":
-               case "Mon 9/25":
-                  week = 3;
-                  break;
-               case "Thu 9/28":
-               case "Sun 10/1":
-               case "Mon 10/2":
-                  week = 4;
-                  break;
-               case "Thu 10/5":
-               case "Sun 10/8":
-               case "Mon 10/9":
-                  week = 5;
-                  break;
-               case "Thu 10/11":
-               case "Sun 10/15":
-               case "Mon 10/16":
-                  week = 6;
-                  break;
-               case "Thu 10/19":
-               case "Sun 10/22":
-               case "Mon 10/23":
-                  week = 7;
-                  break;
-               case "Thu 10/26":
-               case "Sun 10/29":
-               case "Mon 10/30":
-                  week = 8;
-                  break;
-               case "Thu 11/2":
-               case "Sun 11/5":
-               case "Mon 11/6":
-                  week = 9;
-                  break;
-               case "Thu 11/9":
-               case "Sun 11/12":
-               case "Mon 11/13":
-                  week = 10;
-                  break;
-               case "Thu 11/16":
-               case "Sun 11/19":
-               case "Mon 11/20":
-                  week = 11;
-                  break;
-               case "Thu 11/23":
-               case "Sun 11/26":
-               case "Mon 11/27":
-                  week = 12;
-                  break;
-               case "Thu 11/30":
-               case "Sun 12/3":
-               case "Mon 12/4":
-                  week = 13;
-                  break;
-               case "Thu 12/7":
-               case "Sun 12/10":
-               case "Mon 12/11":
-                  week = 14;
-                  break;
-               case "Thu 12/14":
-               case "Sat 12/16":
-               case "Sun 12/17":
-               case "Mon 12/18":
-                  week = 15;
-                  break;
-               case "Sat 12/23":
-               case "Sun 12/24":
-               case "Mon 12/25":
-                  week = 16;
-                  break;
-               case "Sun 12/31":
-                  week = 17;
-                  break;
-               default:
-                  week = 0;
-                  break;
-            }
-         }
+             else if (year == 2017)
+             {
+                switch (date)
+                {
+                   case "Thu 9/7":
+                   case "Sun 9/10":
+                   case "Mon 9/11":
+                      week = 1;
+                      break;
+                   case "Thu 9/14":
+                   case "Sun 9/17":
+                   case "Mon 9/18":
+                      week = 2;
+                      break;
+                   case "Thu 9/21":
+                   case "Sun 9/24":
+                   case "Mon 9/25":
+                      week = 3;
+                      break;
+                   case "Thu 9/28":
+                   case "Sun 10/1":
+                   case "Mon 10/2":
+                      week = 4;
+                      break;
+                   case "Thu 10/5":
+                   case "Sun 10/8":
+                   case "Mon 10/9":
+                      week = 5;
+                      break;
+                   case "Thu 10/11":
+                   case "Sun 10/15":
+                   case "Mon 10/16":
+                      week = 6;
+                      break;
+                   case "Thu 10/19":
+                   case "Sun 10/22":
+                   case "Mon 10/23":
+                      week = 7;
+                      break;
+                   case "Thu 10/26":
+                   case "Sun 10/29":
+                   case "Mon 10/30":
+                      week = 8;
+                      break;
+                   case "Thu 11/2":
+                   case "Sun 11/5":
+                   case "Mon 11/6":
+                      week = 9;
+                      break;
+                   case "Thu 11/9":
+                   case "Sun 11/12":
+                   case "Mon 11/13":
+                      week = 10;
+                      break;
+                   case "Thu 11/16":
+                   case "Sun 11/19":
+                   case "Mon 11/20":
+                      week = 11;
+                      break;
+                   case "Thu 11/23":
+                   case "Sun 11/26":
+                   case "Mon 11/27":
+                      week = 12;
+                      break;
+                   case "Thu 11/30":
+                   case "Sun 12/3":
+                   case "Mon 12/4":
+                      week = 13;
+                      break;
+                   case "Thu 12/7":
+                   case "Sun 12/10":
+                   case "Mon 12/11":
+                      week = 14;
+                      break;
+                   case "Thu 12/14":
+                   case "Sat 12/16":
+                   case "Sun 12/17":
+                   case "Mon 12/18":
+                      week = 15;
+                      break;
+                   case "Sat 12/23":
+                   case "Sun 12/24":
+                   case "Mon 12/25":
+                      week = 16;
+                      break;
+                   case "Sun 12/31":
+                      week = 17;
+                      break;
+                   default:
+                      week = 0;
+                      break;
+                }
+             }
 
-         return week;
+            else if (year == 2018)
+            {
+                switch (date)
+                {
+                    case "Thu 9/6":
+                    case "Sun 9/9":
+                    case "Mon 9/10":
+                        week = 1;
+                        break;
+                    case "Thu 9/13":
+                    case "Sun 9/16":
+                    case "Mon 9/17":
+                        week = 2;
+                        break;
+                    case "Thu 9/20":
+                    case "Sun 9/23":
+                    case "Mon 9/24":
+                        week = 3;
+                        break;
+                    case "Thu 9/27":
+                    case "Sun 9/30":
+                    case "Mon 10/1":
+                        week = 4;
+                        break;
+                    case "Thu 10/4":
+                    case "Sun 10/7":
+                    case "Mon 10/8":
+                        week = 5;
+                        break;
+                    case "Thu 10/11":
+                    case "Sun 10/14":
+                    case "Mon 10/15":
+                        week = 6;
+                        break;
+                    case "Thu 10/18":
+                    case "Sun 10/21":
+                    case "Mon 10/22":
+                        week = 7;
+                        break;
+                    case "Thu 10/24":
+                    case "Sun 10/28":
+                    case "Mon 10/29":
+                        week = 8;
+                        break;
+                    case "Thu 11/1":
+                    case "Sun 11/4":
+                    case "Mon 11/5":
+                        week = 9;
+                        break;
+                    case "Thu 11/8":
+                    case "Sun 11/11":
+                    case "Mon 11/12":
+                        week = 10;
+                        break;
+                    case "Thu 11/15":
+                    case "Sun 11/18":
+                    case "Mon 11/19":
+                        week = 11;
+                        break;
+                    case "Thu 11/22":
+                    case "Sun 11/25":
+                    case "Mon 11/26":
+                        week = 12;
+                        break;
+                    case "Thu 11/29":
+                    case "Sun 12/2":
+                    case "Mon 12/3":
+                        week = 13;
+                        break;
+                    case "Thu 12/6":
+                    case "Sun 12/9":
+                    case "Mon 12/10":
+                        week = 14;
+                        break;
+                    case "Thu 12/13":
+                    case "Sat 12/15":
+                    case "Sun 12/16":
+                    case "Mon 12/17":
+                        week = 15;
+                        break;
+                    case "Sun 12/23":
+                    case "Mon 12/24":
+                        week = 16;
+                        break;
+                    case "Sun 12/30":
+                        week = 17;
+                        break;
+                    default:
+                        week = 0;
+                        break;
+                }
+            }
+
+            return week;
         }
 
         /// <summary />

@@ -143,10 +143,24 @@ namespace WaFFL.Evaluation
                         select p;
 
                 PositionBaseline baseline = this.context.ReplacementValue = new PositionBaseline();
-                baseline.QB = qb.ElementAt(22).Average;
-                baseline.RB = rb.ElementAt(48).Average;
-                baseline.WR = wr.ElementAt(48).Average;
-                baseline.K = k.ElementAt(21).Average;
+
+                // to calculate the replacement point value, we stack rank the players, then
+                // pick the player at the postion that a replacment could be easily gotten off of wavers.
+
+                // example:  16 QB roster spots + 16 Flex positions, but assume only 6 of them are filled with QB's
+                // example:  3 RB roster spots * 16 teams, assume very few (0) flex positions will contain a RB.
+
+                int qbReplacePos = Math.Min(22, qb.Count() - 1);
+                baseline.QB = qb.ElementAt(qbReplacePos).Average;
+
+                int rbReplacePos = Math.Min(48, rb.Count() - 1);
+                baseline.RB = rb.ElementAt(rbReplacePos).Average;
+
+                int wrReplacePos = Math.Min(48, wr.Count() - 1);
+                baseline.WR = wr.ElementAt(wrReplacePos).Average;
+
+                int kReplacePos = Math.Min(21, k.Count() - 1);
+                baseline.K = k.ElementAt(kReplacePos).Average;
 
             }
 
@@ -175,7 +189,8 @@ namespace WaFFL.Evaluation
 
                 PositionBaseline baseline = this.context.ReplacementValue;
 
-                baseline.DST = tally[21].Average;
+                int dstReplacePos = Math.Min(21, tally.Count() - 1);
+                baseline.DST = tally[dstReplacePos].Average;
             }
         }
 

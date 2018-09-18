@@ -98,6 +98,11 @@ namespace WaFFL.Evaluation
                         { "Michael Floyd", "Michael Foyd" },
                         { "Brandon LaFell", "Brando LaFell" },
                         { "T.J. Yeldon", "TJ Yeldon" },
+                        // 2018
+                        { "Saquon Barkley", "Saquon Barclay" },
+                        { "Todd Gurley II", "Todd Gurley" },
+                        { "James Conner", "James Connor" },
+
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

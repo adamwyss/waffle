@@ -102,6 +102,9 @@ namespace WaFFL.Evaluation
                         { "Saquon Barkley", "Saquon Barclay" },
                         { "Todd Gurley II", "Todd Gurley" },
                         { "James Conner", "James Connor" },
+                        { "Phillip Lindsay", "Philip Lindsay" },
+                        { "Will Fuller V", "Will Fuller" },
+                        { "Patrick Mahomes", "Pat Mahomes" },
 
                     };
 

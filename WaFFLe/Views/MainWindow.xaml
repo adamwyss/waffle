@@ -71,61 +71,55 @@
                     <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.Refresh" />
                     <RibbonButton Label="View" LargeImageSource="/Views/Assets/espn32.png" Command="local:ApplicationCommands.GoTo" />
                 </RibbonGroup>
-                <RibbonGroup Header="Replacement Value">
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,2,5,0" TextBlock.FontSize="10">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="QB:" Margin="12,0,5,0" />
-                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.QB, FallbackValue=0}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="RB:" Margin="13,0,5,0" />
-                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.RB, FallbackValue=0}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="WR:" Margin="10,0,5,0" />
-                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.WR, FallbackValue=0}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="K:" Margin="19,0,5,0" />
-                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.K, FallbackValue=0}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="D/ST:" Margin="3,0,5,0" />
-                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.DST, FallbackValue=0}" />
-                        </StackPanel>
-                    </StackPanel>
-                </RibbonGroup>
                 <RibbonGroup Header="Player">
                     <RibbonButton Label="Remember" SmallImageSource="/Views/Assets/remember16.png" Command="local:ApplicationCommands.Flag" />
                 </RibbonGroup>
-            </RibbonTab>
-            <RibbonTab Header="View">
-                <RibbonGroup Header="Data">
-                    <RibbonControlGroup>
-                        <RibbonRadioButton Label="Players" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="True" Checked="WhenPlayerViewChecked" Unchecked="WhenPlayerViewUnchecked" />
-                        <RibbonRadioButton Label="Defense" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />
-                    </RibbonControlGroup>
-                </RibbonGroup>
-            </RibbonTab>
-            <RibbonTab Header="Search" ContextualTabGroupHeader="Search Tools">
-                <RibbonGroup Header="Scope">
-                    <RibbonControlGroup>
+                <RibbonGroup Header="Filter">
+                    <RibbonControlGroup Margin="0,0,5,0">
                         <RibbonToggleButton Label="QB" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="{Binding IsScopeQB, ElementName=playerView}" />
                         <RibbonToggleButton Label="RB" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeRB, ElementName=playerView}" />
                         <RibbonToggleButton Label="WR" LargeImageSource="/Views/Assets/wr-32.png" SmallImageSource="/Views/Assets/wr-16.png" IsChecked="{Binding IsScopeWR, ElementName=playerView}" />
                         <RibbonToggleButton Label="K" LargeImageSource="/Views/Assets/k-32.png" SmallImageSource="/Views/Assets/k-16.png" IsChecked="{Binding IsScopeK, ElementName=playerView}" />
                         <RibbonToggleButton Label="DST" LargeImageSource="/Views/Assets/dst-32.png" SmallImageSource="/Views/Assets/dst-16.png" IsChecked="{Binding IsScopeDST, ElementName=playerView}" />
-                    </RibbonControlGroup>                    
-                </RibbonGroup>
-                <RibbonGroup Header="Refine">
+                    </RibbonControlGroup>
                     <RibbonToggleButton Label="Available" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="{Binding IsScopeAvailable, ElementName=playerView}" />
                     <RibbonToggleButton Label="Marked" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeHighlighted, ElementName=playerView}" />
                 </RibbonGroup>
-                <RibbonGroup Header="Options">
-                    
+                <RibbonGroup Header="Replacement Value">
+                    <StackPanel Orientation="Horizontal" TextBlock.FontSize="10">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,2,5,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="QB:" Margin="12,0,5,0" />
+                                <TextBlock Text="{Binding CurrentSeason.ReplacementValue.QB, FallbackValue=0}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="RB:" Margin="13,0,5,0" />
+                                <TextBlock Text="{Binding CurrentSeason.ReplacementValue.RB, FallbackValue=0}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="WR:" Margin="10,0,5,0" />
+                                <TextBlock Text="{Binding CurrentSeason.ReplacementValue.WR, FallbackValue=0}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="K:" Margin="19,0,5,0" />
+                                <TextBlock Text="{Binding CurrentSeason.ReplacementValue.K, FallbackValue=0}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="D/ST:" Margin="3,0,5,0" />
+                                <TextBlock Text="{Binding CurrentSeason.ReplacementValue.DST, FallbackValue=0}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Team:" Margin="13,0,5,0" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding CurrentSeason.ReplacementValue.Team, FallbackValue=0}" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </StackPanel>
                 </RibbonGroup>
-                <RibbonGroup Header="Close">
-                    <RibbonButton Label="Remember" SmallImageSource="/Views/Assets/remember16.png" Command="local:ApplicationCommands.Flag" />
+                <RibbonGroup Header="View">
+                    <RibbonControlGroup>
+                        <RibbonRadioButton Label="Players" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="True" Checked="WhenPlayerViewChecked" Unchecked="WhenPlayerViewUnchecked" />
+                        <RibbonRadioButton Label="Defense" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />
+                    </RibbonControlGroup>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

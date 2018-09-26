@@ -23,5 +23,13 @@ namespace WaFFL.Evaluation
 
         /// <summary />
         public int DST { get; set; }
+
+        public int Team
+        {
+            get
+            {
+                return this.QB + this.RB + this.WR * 2 + (this.RB > this.WR ? this.RB : this.WR) + this.K + this.DST;
+            }
+        }
     }
 }

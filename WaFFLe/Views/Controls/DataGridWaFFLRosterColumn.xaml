@@ -7,7 +7,7 @@
     <DataGridTemplateColumn.CellTemplate>
         <DataTemplate>
             <Grid>
-                <TextBlock Text="✓" TextAlignment="Center" FontWeight="Normal">
+                <TextBlock Text="♦" TextAlignment="Center" FontWeight="Normal">
                     <TextBlock.Visibility>
                         <Binding Path="IsAvailable">
                             <Binding.Converter>

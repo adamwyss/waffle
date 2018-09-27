@@ -29,11 +29,11 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <local:DataGridWaFFLRosterColumn />
-                <local:DataGridWaFFLTextColumn  Header="Defense Name" Binding="{Binding TeamName}" />
-                <local:DataGridWaFFLTextColumn  Header="Est Pts" Binding="{Binding EstimatedPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="Sacks" Binding="{Binding Sacks}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="Interceptions" Binding="{Binding Interceptions}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="Fumbles" Binding="{Binding Fumbles}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Defense Name" Binding="{Binding TeamName}" />
+                <DataGridTextColumn Header="Est Pts" Binding="{Binding EstimatedPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Sacks" Binding="{Binding Sacks}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Interceptions" Binding="{Binding Interceptions}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn Header="Fumbles" Binding="{Binding Fumbles}" ElementStyle="{StaticResource RightAlignTextStyle}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -77,18 +77,13 @@
     <Compile Include="Entities\NFLTeam.cs" />
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\LeaderExtensions.cs" />
+    <Compile Include="Parsers\ByeWeeks.cs" />
     <Compile Include="Parsers\DataConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
     <Compile Include="Parsers\NFLEntityParser.cs" />
     <Compile Include="Views\Components\ApplicationCommands.cs" />
     <Compile Include="Views\Components\WaFFLPersister.cs" />
     <Compile Include="Views\Components\MarkedPlayerPersister.cs" />
-    <Compile Include="Views\Controls\DataGridWaFFLTextColumn.xaml.cs">
-      <DependentUpon>DataGridWaFFLTextColumn.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\DataGridWaFFLWeekByWeekColumn.xaml.cs">
-      <DependentUpon>DataGridWaFFLWeekByWeekColumn.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\DataGridWaFFLRosterColumn.xaml.cs">
       <DependentUpon>DataGridWaFFLRosterColumn.xaml</DependentUpon>
     </Compile>
@@ -106,14 +101,6 @@
     <Compile Include="Views\ViewModels\DST.cs" />
     <Compile Include="Views\ViewModels\WR.cs" />
     <Compile Include="Views\Controls\VisibilityConverter.cs" />
-    <Page Include="Views\Controls\DataGridWaFFLTextColumn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\DataGridWaFFLWeekByWeekColumn.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Controls\DataGridWaFFLRosterColumn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -202,7 +189,7 @@
     <Resource Include="Views\Assets\dst-32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ByeWeeks.txt" />
+    <EmbeddedResource Include="ByeWeeks.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Assets\espn16.png" />

@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text;
-using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using WaFFL.Evaluation.Parsers;
 
 namespace WaFFL.Evaluation
 {
@@ -101,6 +100,11 @@ namespace WaFFL.Evaluation
             return 0;
         }
 
+        private bool IsByeWeek(int week)
+        {
+            return ByeWeeks.IsByeWeek(Team, week);
+        }
+
         public string Week1Score
         {
             get { return GetScoreForWeek(1); }
@@ -109,6 +113,11 @@ namespace WaFFL.Evaluation
         public int Week1ScoreSortable
         {
             get { return GetScoreForWeekSortable(1); }
+        }
+
+        public bool IsWeek1Bye
+        {
+            get { return IsByeWeek(1); }
         }
 
         public string Week2Score
@@ -121,6 +130,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(2); }
         }
 
+        public bool IsWeek2Bye
+        {
+            get { return IsByeWeek(2); }
+        }
+
         public string Week3Score
         {
             get { return GetScoreForWeek(3); }
@@ -129,6 +143,11 @@ namespace WaFFL.Evaluation
         public int Week3ScoreSortable
         {
             get { return GetScoreForWeekSortable(3); }
+        }
+
+        public bool IsWeek3Bye
+        {
+            get { return IsByeWeek(3); }
         }
 
         public string Week4Score
@@ -141,6 +160,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(4); }
         }
 
+        public bool IsWeek4Bye
+        {
+            get { return IsByeWeek(4); }
+        }
+
         public string Week5Score
         {
             get { return GetScoreForWeek(5); }
@@ -149,6 +173,11 @@ namespace WaFFL.Evaluation
         public int Week5ScoreSortable
         {
             get { return GetScoreForWeekSortable(5); }
+        }
+
+        public bool IsWeek5Bye
+        {
+            get { return IsByeWeek(5); }
         }
 
         public string Week6Score
@@ -161,6 +190,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(6); }
         }
 
+        public bool IsWeek6Bye
+        {
+            get { return IsByeWeek(6); }
+        }
+
         public string Week7Score
         {
             get { return GetScoreForWeek(7); }
@@ -169,6 +203,11 @@ namespace WaFFL.Evaluation
         public int Week7ScoreSortable
         {
             get { return GetScoreForWeekSortable(7); }
+        }
+
+        public bool IsWeek7Bye
+        {
+            get { return IsByeWeek(7); }
         }
 
         public string Week8Score
@@ -181,6 +220,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(8); }
         }
 
+        public bool IsWeek8Bye
+        {
+            get { return IsByeWeek(8); }
+        }
+
         public string Week9Score
         {
             get { return GetScoreForWeek(9); }
@@ -189,6 +233,11 @@ namespace WaFFL.Evaluation
         public int Week9ScoreSortable
         {
             get { return GetScoreForWeekSortable(9); }
+        }
+
+        public bool IsWeek9Bye
+        {
+            get { return IsByeWeek(9); }
         }
 
         public string Week10Score
@@ -201,6 +250,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(10); }
         }
 
+        public bool IsWeek10Bye
+        {
+            get { return IsByeWeek(10); }
+        }
+
         public string Week11Score
         {
             get { return GetScoreForWeek(11); }
@@ -209,6 +263,11 @@ namespace WaFFL.Evaluation
         public int Week11ScoreSortable
         {
             get { return GetScoreForWeekSortable(11); }
+        }
+
+        public bool IsWeek11Bye
+        {
+            get { return IsByeWeek(11); }
         }
 
         public string Week12Score
@@ -221,6 +280,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(12); }
         }
 
+        public bool IsWeek12Bye
+        {
+            get { return IsByeWeek(12); }
+        }
+
         public string Week13Score
         {
             get { return GetScoreForWeek(13); }
@@ -229,6 +293,11 @@ namespace WaFFL.Evaluation
         public int Week13ScoreSortable
         {
             get { return GetScoreForWeekSortable(13); }
+        }
+
+        public bool IsWeek13Bye
+        {
+            get { return IsByeWeek(13); }
         }
 
         public string Week14Score
@@ -241,6 +310,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(14); }
         }
 
+        public bool IsWeek14Bye
+        {
+            get { return IsByeWeek(14); }
+        }
+
         public string Week15Score
         {
             get { return GetScoreForWeek(15); }
@@ -249,6 +323,11 @@ namespace WaFFL.Evaluation
         public int Week15ScoreSortable
         {
             get { return GetScoreForWeekSortable(15); }
+        }
+
+        public bool IsWeek15Bye
+        {
+            get { return IsByeWeek(15); }
         }
 
         public string Week16Score
@@ -261,6 +340,11 @@ namespace WaFFL.Evaluation
             get { return GetScoreForWeekSortable(16); }
         }
 
+        public bool IsWeek16Bye
+        {
+            get { return IsByeWeek(16); }
+        }
+
         public string Week17Score
         {
             get { return GetScoreForWeek(17); }
@@ -269,6 +353,11 @@ namespace WaFFL.Evaluation
         public int Week17ScoreSortable
         {
             get { return GetScoreForWeekSortable(17); }
+        }
+        
+        public bool IsWeek17Bye
+        {
+            get { return IsByeWeek(17); }
         }
     }
 }

@@ -3,6 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:local="clr-namespace:WaFFL.Evaluation">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="WeekByWeekByeBrush" Color="LightSalmon" />
+        <Style x:Key="WeekByWeekScoreStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Foreground" Value="DarkGray" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -30,30 +37,201 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <local:DataGridWaFFLRosterColumn />
-                <local:DataGridWaFFLTextColumn  Header="Pos" Binding="{Binding Position}" Foreground="DarkGray" />
-                <local:DataGridWaFFLTextColumn  Header="Name" Binding="{Binding Name}" />
-                <local:DataGridWaFFLTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
-                <local:DataGridWaFFLTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <local:DataGridWaFFLTextColumn  Header="W1" Width="40" Binding="{Binding Week1Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week1ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W2" Width="40" Binding="{Binding Week2Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week2ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W3" Width="40" Binding="{Binding Week3Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week3ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W4" Width="40" Binding="{Binding Week4Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week4ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W5" Width="40" Binding="{Binding Week5Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week5ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W6" Width="40" Binding="{Binding Week6Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week6ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W7" Width="40" Binding="{Binding Week7Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week7ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W8" Width="40" Binding="{Binding Week8Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week8ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W9" Width="40" Binding="{Binding Week9Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week9ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W10" Width="40" Binding="{Binding Week10Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week10ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W11" Width="40" Binding="{Binding Week11Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week11ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W12" Width="40" Binding="{Binding Week12Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week12ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W13" Width="40" Binding="{Binding Week13Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week13ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W14" Width="40" Binding="{Binding Week14Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week14ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W15" Width="40" Binding="{Binding Week15Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week15ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W16" Width="40" Binding="{Binding Week16Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week16ScoreSortable" />
-                <local:DataGridWaFFLTextColumn  Header="W17" Width="40" Binding="{Binding Week17Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week17ScoreSortable" />
+                <DataGridTextColumn  Header="Pos" Binding="{Binding Position}" Foreground="DarkGray" />
+                <DataGridTextColumn  Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
+                <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <!-- WEEK BY WEEK SCORES -->
+                <DataGridTextColumn  Header="W1" Width="40" Binding="{Binding Week1Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week1ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek1Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W2" Width="40" Binding="{Binding Week2Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week2ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek2Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W3" Width="40" Binding="{Binding Week3Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week3ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek3Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W4" Width="40" Binding="{Binding Week4Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week4ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek4Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W5" Width="40" Binding="{Binding Week5Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week5ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek5Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W6" Width="40" Binding="{Binding Week6Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week6ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek6Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W7" Width="40" Binding="{Binding Week7Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week7ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek7Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W8" Width="40" Binding="{Binding Week8Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week8ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek8Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W9" Width="40" Binding="{Binding Week9Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week9ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek9Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W10" Width="40" Binding="{Binding Week10Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week10ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek10Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W11" Width="40" Binding="{Binding Week11Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week11ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek11Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W12" Width="40" Binding="{Binding Week12Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week12ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek12Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W13" Width="40" Binding="{Binding Week13Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week13ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek13Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W14" Width="40" Binding="{Binding Week14Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week14ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek14Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W15" Width="40" Binding="{Binding Week15Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week15ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek15Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="W16" Width="40" Binding="{Binding Week16Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week16ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek16Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="W17" Width="40" Binding="{Binding Week17Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week17ScoreSortable">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWeek17Bye}" Value="true">
+                                    <Setter Property="Background" Value="{StaticResource WeekByWeekByeBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

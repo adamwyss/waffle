@@ -4,7 +4,7 @@
              xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:local="clr-namespace:WaFFL.Evaluation">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="WeekByWeekByeBrush" Color="LightSalmon" />
+        <SolidColorBrush x:Key="WeekByWeekByeBrush" Color="Orange" />
         <Style x:Key="WeekByWeekScoreStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Foreground" Value="DarkGray" />
@@ -38,7 +38,25 @@
             <DataGrid.Columns>
                 <local:DataGridWaFFLRosterColumn />
                 <DataGridTextColumn  Header="Pos" Binding="{Binding Position}" Foreground="DarkGray" />
-                <DataGridTextColumn  Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn  Header="Name" Binding="{Binding Name}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush>
+                                                <GradientStop Color="GreenYellow" Offset="0.0" />
+                                                <GradientStop Color="Yellow" Offset="0.5" />
+                                                <GradientStop Color="Transparent" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
                 <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
                 <DataGridTextColumn  Header="POR-3G" Width="60" Binding="{Binding PointsOverReplacement3G}" ElementStyle="{StaticResource RightAlignTextStyle}" />

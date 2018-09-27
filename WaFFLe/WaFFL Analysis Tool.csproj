@@ -201,6 +201,24 @@
   <ItemGroup>
     <Resource Include="Views\Assets\dst-32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ByeWeeks.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\espn16.png" />
+    <Resource Include="Views\Assets\players-16.png" />
+    <Resource Include="Views\Assets\players-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\available-32.png" />
+    <Resource Include="Views\Assets\import16.png" />
+    <Resource Include="Views\Assets\remember32.png" />
+    <Resource Include="Views\Assets\saved-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\available-16.png" />
+    <Resource Include="Views\Assets\saved-16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

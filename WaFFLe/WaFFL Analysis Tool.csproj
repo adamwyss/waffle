@@ -77,6 +77,7 @@
     <Compile Include="Entities\NFLTeam.cs" />
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\LeaderExtensions.cs" />
+    <Compile Include="Formulas\MathExtensions.cs" />
     <Compile Include="Parsers\ByeWeeks.cs" />
     <Compile Include="Parsers\DataConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
@@ -96,6 +97,7 @@
     </Compile>
     <Compile Include="Views\ViewModels\Item.cs" />
     <Compile Include="Views\ViewModels\K.cs" />
+    <Compile Include="Views\ViewModels\PlayerLoader.cs" />
     <Compile Include="Views\ViewModels\QB.cs" />
     <Compile Include="Views\ViewModels\RB.cs" />
     <Compile Include="Views\ViewModels\DST.cs" />

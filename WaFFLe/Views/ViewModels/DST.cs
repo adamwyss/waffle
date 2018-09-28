@@ -14,18 +14,6 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public int PointsOverReplacement { get; private set; }
-
-        /// <summary />
-        public int PointsOverReplacement3G { get; private set; }
-
-        /// <summary />
-        public int FanastyPoints { get; private set; }
-
-        /// <summary />
-        public int TotalBonuses { get; private set; }
-
-        /// <summary />
         public static IEnumerable<DST> ConvertAndInitialize(FanastySeason season)
         {
             Collection<DST> results = new Collection<DST>();
@@ -46,7 +34,7 @@ namespace WaFFL.Evaluation
                     double x = 1.0;
                     if (games == 1) x = 0.333;
                     if (games == 2) x = 0.666;
-                    dst.PointsOverReplacement3G = (int)Math.Round(dst.PointsOverReplacement * x, 0);
+                    dst.WeightedPointsOverReplacement = (int)Math.Round(dst.PointsOverReplacement * x, 0);
                 }
 
                 dst.FanastyPoints = points;

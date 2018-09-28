@@ -52,6 +52,15 @@ namespace WaFFL.Evaluation
             return points;
         }
 
+        public static List<double> FanastyPointsPerGame(this NFLPlayer p)
+        {
+            List<double> gameScores = p.GameLog
+                                       .Select(g => g.GetFanastyPoints())
+                                       .Select(Convert.ToDouble)
+                                       .ToList();
+            return gameScores;
+        }
+
         /// <summary />
         public static int TotalBonuses(this NFLPlayer player)
         {

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using WaFFL.Evaluation.Parsers;
@@ -73,6 +74,27 @@ namespace WaFFL.Evaluation
                 return "n/a";
             }
         }
+
+        /// <summary />
+        public int PointsOverReplacement { get; set; }
+
+        /// <summary />
+        public int WeightedPointsOverReplacement { get; set; }
+
+        /// <summary />
+        public int FanastyPoints { get; set; }
+
+        /// <summary />
+        public int TotalBonuses { get; set; }
+
+        /// <summary />
+        public int Mean { get; set; }
+
+        /// <summary />
+        public int StandardDeviation { get; set; }
+
+        /// <summary />
+        public int CoefficientOfVariation { get; set; }
 
         private string GetScoreForWeek(int week)
         {
@@ -359,5 +381,11 @@ namespace WaFFL.Evaluation
         {
             get { return IsByeWeek(17); }
         }
+
+        public static void Initialize(NFLPlayer player, Item viewModel)
+        {
+
+        }
+
     }
 }

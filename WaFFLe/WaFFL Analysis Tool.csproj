@@ -95,13 +95,8 @@
     <Compile Include="Views\PlayerView.xaml.cs">
       <DependentUpon>PlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewModels\Item.cs" />
-    <Compile Include="Views\ViewModels\K.cs" />
+    <Compile Include="Views\ViewModels\PlayerViewModel.cs" />
     <Compile Include="Views\ViewModels\PlayerLoader.cs" />
-    <Compile Include="Views\ViewModels\QB.cs" />
-    <Compile Include="Views\ViewModels\RB.cs" />
-    <Compile Include="Views\ViewModels\DST.cs" />
-    <Compile Include="Views\ViewModels\WR.cs" />
     <Compile Include="Views\Controls\VisibilityConverter.cs" />
     <Page Include="Views\Controls\DataGridWaFFLRosterColumn.xaml">
       <SubType>Designer</SubType>

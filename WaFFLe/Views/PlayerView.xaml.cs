@@ -71,11 +71,11 @@ namespace WaFFL.Evaluation
 
         bool registered = false;
 
-        List<Item> allPlayers;
+        List<PlayerViewModel> allPlayers;
 
         public PlayerView()
         {
-            this.Players = new ObservableCollection<Item>();
+            this.Players = new ObservableCollection<PlayerViewModel>();
 
             this.InitializeComponent();
             this.DataContext = this;
@@ -92,19 +92,11 @@ namespace WaFFL.Evaluation
                                 window.RegisterForSeasonChanges(
                                     delegate(FanastySeason season)
                                     {
-                                        var qb = new PlayerLoader<QB>(FanastyPosition.QB, season.ReplacementValue.QB, p => new QB(p));
-                                        var rb = new PlayerLoader<RB>(FanastyPosition.RB, season.ReplacementValue.RB, p => new RB(p));
-                                        var wr = new PlayerLoader<WR>(FanastyPosition.WR, season.ReplacementValue.WR, p => new WR(p));
-                                        var k = new PlayerLoader<K>(FanastyPosition.K, season.ReplacementValue.K, p => new K(p));
-                                        var dst = new PlayerLoader<DST>(FanastyPosition.DST, season.ReplacementValue.DST, p => new DST(p));
+                                        var players = new PlayerLoader(season);
 
                                         this.Dispatcher.BeginInvoke(
-                                            new Action<IEnumerable<QB>, IEnumerable<RB>, IEnumerable<WR>, IEnumerable<K>, IEnumerable<DST>>(this.Refresh), 
-                                            qb.GetViewModels(season),
-                                            rb.GetViewModels(season),
-                                            wr.GetViewModels(season),
-                                            k.GetViewModels(season),
-                                            DST.ConvertAndInitialize(season));
+                                            new Action<IEnumerable<PlayerViewModel>>(this.Refresh),
+                                            players.GetViewModels());
                                     });
                                 this.registered = true;
                                 break;
@@ -114,7 +106,7 @@ namespace WaFFL.Evaluation
                 };
         }
 
-        public ObservableCollection<Item> Players { get; private set; }
+        public ObservableCollection<PlayerViewModel> Players { get; private set; }
 
         /// <summary />
         public string Filter
@@ -172,41 +164,36 @@ namespace WaFFL.Evaluation
             set { this.SetValue(IsScopeHighlightedProperty, value); }
         }
         
-        public Item SelectedItem
+        public PlayerViewModel SelectedItem
         {
-            get { return this.dg.SelectedItem as Item; }
+            get { return this.dg.SelectedItem as PlayerViewModel; }
         }
 
-        private void Refresh(IEnumerable<QB> qbs, IEnumerable<RB> rbs, IEnumerable<WR> wrs, IEnumerable<K> ks, IEnumerable<DST> dsts)
+        private void Refresh(IEnumerable<PlayerViewModel> players)
         {
-            this.allPlayers = new List<Item>();
-            this.Load(qbs);
-            this.Load(rbs);
-            this.Load(wrs);
-            this.Load(ks);
-            this.Load(dsts);
+            this.allPlayers = new List<PlayerViewModel>(players);
             this.ApplyFilter();
         }
 
         private void ApplyFilter()
         {
-            IEnumerable<Item> filteredList = this.allPlayers.Where(IsNotFiltered);
+            IEnumerable<PlayerViewModel> filteredList = this.allPlayers.Where(IsNotFiltered);
 
             var remove = this.Players.Except(filteredList).ToArray();
             var add = filteredList.Except(this.Players).ToArray();
 
-            foreach (Item player in remove)
+            foreach (PlayerViewModel player in remove)
             {
                 this.Players.Remove(player);
             }
 
-            foreach (Item player in add)
+            foreach (PlayerViewModel player in add)
             {
                 this.Players.Add(player);
             }
         }
 
-        private bool IsNotFiltered(Item player)
+        private bool IsNotFiltered(PlayerViewModel player)
         {
             switch (player.PlayerData.Position)
             {
@@ -249,7 +236,7 @@ namespace WaFFL.Evaluation
             return player.Name.IndexOf(Filter, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 
-        private void Load<T>(IEnumerable<T> players) where T : Item
+        private void Load<T>(IEnumerable<T> players) where T : PlayerViewModel
         {
             foreach (T player in players)
             {

@@ -365,13 +365,24 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public IEnumerable<NFLPlayer> GetAll(FanastyPosition position)
+        public IEnumerable<NFLPlayer> GetAll()
         {
             var query = from p in this.playerCache.Values
-                        where p.Position == position
                         select p;
             return query.ToArray();
         }
+
+        /// <summary />
+        public IEnumerable<NFLPlayer> GetAll(params FanastyPosition[] positions)
+        {
+            var cache = new HashSet<FanastyPosition>(positions);
+
+            var query = from p in this.playerCache.Values
+                        where cache.Contains(p.Position)
+                        select p;
+            return query.ToArray();
+        }
+
 
         /// <summary />
         public IEnumerable<NFLPlayer> GetAllPlayers()

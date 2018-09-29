@@ -8,10 +8,10 @@ namespace WaFFL.Evaluation
 {
     /// <summary />
     [DebuggerDisplay("{PlayerData}")]
-    public abstract class Item : ViewModelBase
+    public class PlayerViewModel : ViewModelBase
     {
         /// <summary />
-        public Item(NFLPlayer p)
+        public PlayerViewModel(NFLPlayer p)
         {
             this.PlayerData = p;
 
@@ -382,7 +382,7 @@ namespace WaFFL.Evaluation
             get { return IsByeWeek(17); }
         }
 
-        public static void Initialize(NFLPlayer player, Item viewModel)
+        public static void Initialize(NFLPlayer player, PlayerViewModel viewModel)
         {
 
         }

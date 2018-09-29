@@ -1,65 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WaFFL.Evaluation.Views.ViewModels
 {
-    public class PlayerLoader<T> where T: Item
+    public class PlayerLoader
     {
-        private FanastyPosition _postition;
-        private int _replacementLevel;
-        private Func<NFLPlayer, T> _factory;
+        private FanastySeason _season;
+        private Dictionary<FanastyPosition, int> _replacementScores;
 
-        public PlayerLoader(FanastyPosition position, int replacementLevel, Func<NFLPlayer, T> factory)
+        public PlayerLoader(FanastySeason season)
         {
-            _postition = position;
-            _replacementLevel = replacementLevel;
-            _factory = factory;
+            _season = season;
+            _replacementScores = new Dictionary<FanastyPosition, int>()
+            {
+                { FanastyPosition.QB, season.ReplacementValue.QB },
+                { FanastyPosition.RB, season.ReplacementValue.RB },
+                { FanastyPosition.WR, season.ReplacementValue.WR },
+                { FanastyPosition.K, season.ReplacementValue.K },
+                { FanastyPosition.DST, season.ReplacementValue.DST }
+            };
         }
 
-        public IEnumerable<T> GetViewModels(FanastySeason season)
+        public IEnumerable<PlayerViewModel> GetViewModels()
         {
-            Collection<T> results = new Collection<T>();
+            var results = this._season.GetAll().Select(ConvertToViewModel);
+            return results;
+        }
 
-            foreach (NFLPlayer player in season.GetAll(_postition))
+        private PlayerViewModel ConvertToViewModel(NFLPlayer player)
+        {
+            int points = 0;
+            int games = 0;
+            int por = 0;
+            int wpor = 0;
+            double mean = 0;
+            double standardDeviation = 0;
+            double variationCoefficient = 0;
+
+            if (player.Position == FanastyPosition.DST)
             {
-                T vm = _factory(player);
-
-                int points = player.FanastyPoints();
-                int games = player.GamesPlayed();
+                points = player.Team.ESPNTeamDefense.Estimate_Points();
+                games = _season.GetAllPlayers().Where(p => p.Team == player.Team).Max(p => p.GamesPlayed());
 
                 if (games > 0)
                 {
-                    vm.PointsOverReplacement = (points / games) - _replacementLevel;
-                    vm.WeightedPointsOverReplacement = (player.FanastyPointsInRecentGames(3) / 3) - _replacementLevel;
+                    por = (points / games) - _season.ReplacementValue.DST;
 
-                    double mean = player.FanastyPointsPerGame().Mean();
-
-                    double standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
-
-                    vm.Mean = Convert.ToInt32(Math.Round(mean, 0));
-                    vm.StandardDeviation = Convert.ToInt32(Math.Round(standardDeviation, 0));
-
-                    if (mean > 0)
-                    {
-                        vm.CoefficientOfVariation = Convert.ToInt32(Math.Round(standardDeviation / mean * 100, 0));
-                    }
-                    else
-                    {
-                        vm.CoefficientOfVariation = 0;
-                    }
+                    // fudge with the number to make the scores relative to the players who have played
+                    // less than 3 games in the beginning of the season.
+                    double factor = 1.0;
+                    if (games == 1) factor = 0.333;
+                    if (games == 2) factor = 0.666;
+                    wpor = (int)Math.Round(por * factor, 0);
                 }
+            }
+            else
+            {
+                points = player.FanastyPoints();
+                games = player.GamesPlayed();
 
-                vm.FanastyPoints = points;
-                vm.TotalBonuses = player.TotalBonuses();
+                if (games > 0)
+                {
+                    int replacementScore = _replacementScores[player.Position];
 
-                results.Add(vm);
+                    por = (points / games) - replacementScore;
+                    wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
+
+                    mean = player.FanastyPointsPerGame().Mean();
+
+                    standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
+                }
             }
 
-            return results;
+            if (mean > 0)
+            {
+                variationCoefficient = standardDeviation / mean;
+            }
+            else
+            {
+                variationCoefficient = 0;
+            }
+
+            PlayerViewModel vm = new PlayerViewModel(player);
+            vm.PointsOverReplacement = por;
+            vm.WeightedPointsOverReplacement = wpor;
+            vm.FanastyPoints = points;
+            vm.TotalBonuses = player.TotalBonuses();
+            vm.Mean = RoundToInt(mean);
+            vm.StandardDeviation = RoundToInt(standardDeviation);
+            vm.CoefficientOfVariation = RoundToInt(variationCoefficient * 100);
+            return vm;
+        }
+
+        private int RoundToInt(double value)
+        {
+            return Convert.ToInt32(Math.Round(value, 0));
         }
 
     }

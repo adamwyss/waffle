@@ -7,6 +7,6 @@ namespace WaFFL.Evaluation
 {
     public interface ISelectable
     {
-        Item SelectedItem { get; }
+        PlayerViewModel SelectedItem { get; }
     }
 }

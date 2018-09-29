@@ -218,7 +218,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            Item item = this.playerView.SelectedItem;
+            PlayerViewModel item = this.playerView.SelectedItem;
             int espn_id = item.PlayerData.ESPN_Identifier;
             string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
 
@@ -237,7 +237,7 @@ namespace WaFFL.Evaluation
         {
             if (this.playerView != null && this.playerView.Visibility == System.Windows.Visibility.Visible)
             {
-                Item item = this.playerView.SelectedItem;
+                PlayerViewModel item = this.playerView.SelectedItem;
                 MarkedPlayers.Evaluate(item.PlayerData.Name);
             }
             else if (this.defenseView != null && this.defenseView.Visibility == System.Windows.Visibility.Visible)

@@ -105,6 +105,8 @@ namespace WaFFL.Evaluation
                         { "Phillip Lindsay", "Philip Lindsay" },
                         { "Will Fuller V", "Will Fuller" },
                         { "Patrick Mahomes", "Pat Mahomes" },
+                        { "Devonta Freeman", "Davonta Freeman" },
+                        { "Davante Adams", "Davonte Adams" },
 
                     };
 

@@ -34,6 +34,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
             int games = 0;
             int por = 0;
             int wpor = 0;
+            int cpor = 0;
             double mean = 0;
             double standardDeviation = 0;
             double variationCoefficient = 0;
@@ -53,6 +54,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
                     if (games == 1) factor = 0.333;
                     if (games == 2) factor = 0.666;
                     wpor = (int)Math.Round(por * factor, 0);
+                    cpor = por / 2;
                 }
             }
             else
@@ -68,23 +70,25 @@ namespace WaFFL.Evaluation.Views.ViewModels
                     wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
 
                     mean = player.FanastyPointsPerGame().Mean();
+                    if (mean > 0)
+                    {
+                        standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
+                        variationCoefficient = standardDeviation / mean;
 
-                    standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
+
+                        double multiplier = 1 - Math.Min(variationCoefficient, 1);
+
+                        cpor = (RoundToInt(points * multiplier) / games) - replacementScore;
+                     }
+
                 }
             }
 
-            if (mean > 0)
-            {
-                variationCoefficient = standardDeviation / mean;
-            }
-            else
-            {
-                variationCoefficient = 0;
-            }
 
             PlayerViewModel vm = new PlayerViewModel(player);
             vm.PointsOverReplacement = por;
             vm.WeightedPointsOverReplacement = wpor;
+            vm.ConsistentPointsOverReplacement = cpor;
             vm.FanastyPoints = points;
             vm.TotalBonuses = player.TotalBonuses();
             vm.Mean = RoundToInt(mean);

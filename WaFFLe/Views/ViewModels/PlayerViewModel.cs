@@ -82,6 +82,9 @@ namespace WaFFL.Evaluation
         public int WeightedPointsOverReplacement { get; set; }
 
         /// <summary />
+        public int ConsistentPointsOverReplacement { get; set; }
+
+        /// <summary />
         public int FanastyPoints { get; set; }
 
         /// <summary />

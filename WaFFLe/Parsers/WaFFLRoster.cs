@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace WaFFL.Evaluation
 {
@@ -33,11 +35,14 @@ namespace WaFFL.Evaluation
         private WaFFLRoster()
         {
             WebClient client = new WebClient();
-            this.rosterText = client.DownloadString(WaFFLRosterUri);
+            string raw = client.DownloadString(WaFFLRosterUri);
+
+            // planned feature to support intelligently determing if a player on the roster + name overrides
+            ExtractRosterPlayers(raw);
 
             foreach (string pattern in HtmlScrubExpressions)
             {
-                this.rosterText = Regex.Replace(this.rosterText, pattern, @" ", RegexOptions.IgnoreCase);
+                this.rosterText = Regex.Replace(raw, pattern, @" ", RegexOptions.IgnoreCase);
             }
         }
 
@@ -133,6 +138,29 @@ namespace WaFFL.Evaluation
             }
 
             return 0.0;
+        }
+
+        /// <summary />
+        private readonly string[] Delimiters = new string[] { "\n" };
+
+        /// <summary />
+        private IEnumerable<XElement> ExtractRosterPlayers(string xhtml)
+        {           
+            // extract the html data table that we are interested in.
+            string[] lines = xhtml.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i] == "\t\t\t\t\t\t\t\t\t\t\t<!-- End SIDE1 -->")
+                {
+                    // start
+                }
+                else if (lines[i] == "\t\t\t\t\t\t\t\t\t\t\t<!-- Begin SIDE2 -->")
+                {
+
+                }
+            }
+
+            return null;
         }
     }
 }

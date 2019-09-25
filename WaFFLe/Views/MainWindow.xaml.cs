@@ -106,7 +106,7 @@ namespace WaFFL.Evaluation
             this.SetIsRefreshingData(true);
             try
             {
-                Action<string> x = new Action<string>(
+                Action<string> updateStatus = new Action<string>(
                     delegate(string value)
                     {
                         this.Dispatcher.BeginInvoke(new Action<string>(delegate(string val)
@@ -115,8 +115,10 @@ namespace WaFFL.Evaluation
                             }), value);
                     });
 
-                ESPNEntityParser espn = new ESPNEntityParser(x);
-                espn.ParseSeason(YEAR, ref this.season);
+                ProFootballReferenceParser parser = new ProFootballReferenceParser(updateStatus);
+                parser.ParseSeason(YEAR, ref this.season);
+                ReplacementValueCalculator replacement = new ReplacementValueCalculator();
+                replacement.Calculate(this.season);
 
                 if (this.subscribers != null)
                 {
@@ -219,8 +221,7 @@ namespace WaFFL.Evaluation
         private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             PlayerViewModel item = this.playerView.SelectedItem;
-            int espn_id = item.PlayerData.ESPN_Identifier;
-            string url = string.Format("http://sports.espn.go.com/nfl/players/profile?playerId={0}", espn_id);
+            string url = string.Format("https://www.pro-football-reference.com/{0}", item.PlayerData.PlayerPageUri);
 
             // tell the explorer to 
             Process.Start(url);
@@ -229,7 +230,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void CanExecuteGoToCommand(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute =  this.playerView != null && this.playerView.SelectedItem != null;
+            e.CanExecute = this.playerView?.SelectedItem?.PlayerData?.PlayerPageUri != null;
         }
 
         /// <summary />

@@ -66,7 +66,7 @@ namespace WaFFL.Evaluation
 
                                 foreach (string x3 in x2)
                                 {
-                                    string[] x4 = x3.Split(new string[] {"<>"}, StringSplitOptions.None);
+                                    string[] x4 = x3.Split(new string[] {"="}, StringSplitOptions.None);
 
                                     if (x4.Length == 2)
                                     {

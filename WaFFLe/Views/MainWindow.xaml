@@ -98,7 +98,7 @@
                 <RibbonGroup Header="View">
                     <RibbonControlGroup>
                         <RibbonRadioButton Label="Players" LargeImageSource="/Views/Assets/players-32.png" SmallImageSource="/Views/Assets/players-16.png" IsChecked="True" Checked="WhenPlayerViewChecked" Unchecked="WhenPlayerViewUnchecked" />
-                        <RibbonRadioButton Label="Defense" LargeImageSource="/Views/Assets/dst-32.png" SmallImageSource="/Views/Assets/dst-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />
+                        <RibbonRadioButton Label="Teams" LargeImageSource="/Views/Assets/dst-32.png" SmallImageSource="/Views/Assets/dst-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />
                     </RibbonControlGroup>
                 </RibbonGroup>
             </RibbonTab>

@@ -13,7 +13,5 @@ namespace WaFFL.Evaluation
         }
 
         public string TeamCode { get; private set; }
-
-        public ESPNDefenseLeaders ESPNTeamDefense { get; set; }
     }
 }

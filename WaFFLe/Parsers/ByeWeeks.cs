@@ -10,6 +10,22 @@ namespace WaFFL.Evaluation.Parsers
         /// <summary />
         private static Dictionary<string, int> index;
 
+        public static int ByeWeek(string team)
+        {
+            Ensure();
+
+            int byeWeek;
+            bool success = index.TryGetValue(team, out byeWeek);
+            if (success)
+            {
+                return byeWeek;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public static bool IsByeWeek(string team, int week)
         {
             Ensure();

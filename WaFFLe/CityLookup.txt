@@ -1,35 +1,32 @@
-﻿ARI<>Arizona
-ATL<>Atlanta
-BAL<>Baltimore
-BUF<>Buffalo
-CAR<>Carolina
-CIN<>Cincinnati
-CHI<>Chicago
-CLE<>Cleveland
-DAL<>Dallas
-DEN<>Denver
-DET<>Detroit
-GB<>Green Bay
-HOU<>Houston
-IND<>Indianapolis
-JAX<>Jacksonville
-KC<>Kansas City
-MIA<>Miami
-MIN<>Minnesota
-NE<>New England
-NO<>New Orleans
-NYG<>NY Giants
-NYJ<>NY Jets
-OAK<>Oakland
-PHI<>Philadelphia
-PIT<>Pittsburgh
-SD<>San Diego
-SEA<>Seattle
-SF<>San Francisco
-STL<>St. Louis
-LA<>Los Angeles
-TB<>Tampa Bay
-TEN<>Tennessee
-WSH<>Washington
-LAR<>LA Rams
-LAC<>LA Chargers
+﻿ARI=Arizona
+ATL=Atlanta
+BAL=Baltimore
+BUF=Buffalo
+CAR=Carolina
+CIN=Cincinnati
+CHI=Chicago
+CLE=Cleveland
+DAL=Dallas
+DEN=Denver
+DET=Detroit
+GNB=Green Bay
+HOU=Houston
+IND=Indianapolis
+JAX=Jacksonville
+KAN=Kansas City
+LAC=LA Chargers
+LAR=LA Rams
+MIA=Miami
+MIN=Minnesota
+NWE=New England
+NOR=New Orleans
+NYG=NY Giants
+NYJ=NY Jets
+OAK=Oakland
+PHI=Philadelphia
+PIT=Pittsburgh
+SEA=Seattle
+SFO=San Francisco
+TAM=Tampa Bay
+TEN=Tennessee
+WAS=Washington

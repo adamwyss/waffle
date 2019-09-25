@@ -18,13 +18,13 @@ namespace WaFFL.Evaluation.Views.ViewModels
                 { FanastyPosition.RB, season.ReplacementValue.RB },
                 { FanastyPosition.WR, season.ReplacementValue.WR },
                 { FanastyPosition.K, season.ReplacementValue.K },
-                { FanastyPosition.DST, season.ReplacementValue.DST }
+                { FanastyPosition.DST, season.ReplacementValue.DST },
             };
         }
 
         public IEnumerable<PlayerViewModel> GetViewModels()
         {
-            var results = this._season.GetAll().Select(ConvertToViewModel);
+            var results = this._season.GetAllPlayers().Select(ConvertToViewModel);
             return results;
         }
 
@@ -39,51 +39,29 @@ namespace WaFFL.Evaluation.Views.ViewModels
             double standardDeviation = 0;
             double variationCoefficient = 0;
 
-            if (player.Position == FanastyPosition.DST)
+            points = player.FanastyPoints();
+            games = player.GamesPlayed();
+
+            if (games > 0)
             {
-                points = player.Team.ESPNTeamDefense.Estimate_Points();
-                games = _season.GetAllPlayers().Where(p => p.Team == player.Team).Max(p => p.GamesPlayed());
+                int replacementScore = _replacementScores[player.Position];
 
-                if (games > 0)
+                por = (points / games) - replacementScore;
+                wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
+
+                mean = player.FanastyPointsPerGame().Mean();
+                if (mean > 0)
                 {
-                    por = (points / games) - _season.ReplacementValue.DST;
+                    standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
+                    variationCoefficient = standardDeviation / mean;
 
-                    // fudge with the number to make the scores relative to the players who have played
-                    // less than 3 games in the beginning of the season.
-                    double factor = 1.0;
-                    if (games == 1) factor = 0.333;
-                    if (games == 2) factor = 0.666;
-                    wpor = (int)Math.Round(por * factor, 0);
-                    cpor = por / 2;
+
+                    double multiplier = 1 - Math.Min(variationCoefficient, 1);
+
+                    cpor = (RoundToInt(points * multiplier) / games) - replacementScore;
                 }
+
             }
-            else
-            {
-                points = player.FanastyPoints();
-                games = player.GamesPlayed();
-
-                if (games > 0)
-                {
-                    int replacementScore = _replacementScores[player.Position];
-
-                    por = (points / games) - replacementScore;
-                    wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
-
-                    mean = player.FanastyPointsPerGame().Mean();
-                    if (mean > 0)
-                    {
-                        standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
-                        variationCoefficient = standardDeviation / mean;
-
-
-                        double multiplier = 1 - Math.Min(variationCoefficient, 1);
-
-                        cpor = (RoundToInt(points * multiplier) / games) - replacementScore;
-                     }
-
-                }
-            }
-
 
             PlayerViewModel vm = new PlayerViewModel(player);
             vm.PointsOverReplacement = por;

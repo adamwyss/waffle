@@ -81,7 +81,8 @@
     <Compile Include="Parsers\ByeWeeks.cs" />
     <Compile Include="Parsers\DataConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
-    <Compile Include="Parsers\NFLEntityParser.cs" />
+    <Compile Include="Parsers\ProFootballReferenceParser.cs" />
+    <Compile Include="Formulas\ReplacementValueCalculator.cs" />
     <Compile Include="Views\Components\ApplicationCommands.cs" />
     <Compile Include="Views\Components\WaFFLPersister.cs" />
     <Compile Include="Views\Components\MarkedPlayerPersister.cs" />
@@ -116,7 +117,6 @@
     </Page>
     <Compile Include="Formulas\PlayerExtensions.cs" />
     <Compile Include="Entities\Leaders\ESPNDefenseLeaders.cs" />
-    <Compile Include="Parsers\ESPNEntityParser.cs" />
     <Compile Include="Parsers\WaFFLRoster.cs" />
     <Compile Include="WaFFLApplication.xaml.cs">
       <DependentUpon>WaFFLApplication.xaml</DependentUpon>

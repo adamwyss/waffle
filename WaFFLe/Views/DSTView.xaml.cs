@@ -8,6 +8,7 @@ using System.Collections;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using WaFFL.Evaluation.Parsers;
 
 namespace WaFFL.Evaluation
 {
@@ -104,59 +105,16 @@ namespace WaFFL.Evaluation
             get { return this.displayName; }
         }
 
-        public int EstimatedPoints
+        public string TeamCode
         {
-            get
-            {
-                ESPNDefenseLeaders td = this.model.ESPNTeamDefense;
-                if (td != null)
-                {
-                    return td.Estimate_Points();
-                }
-
-                return 0;
-            }
+            get { return this.model.TeamCode; }
         }
 
-        public int Sacks
+        public int ByeWeek
         {
             get
             {
-                ESPNDefenseLeaders td = this.model.ESPNTeamDefense;
-                if (td != null)
-                {
-                    return td.SACK;
-                }
-
-                return 0;
-            }
-        }
-
-        public int Interceptions
-        {
-            get
-            {
-                ESPNDefenseLeaders td = this.model.ESPNTeamDefense;
-                if (td != null)
-                {
-                    return td.INT;
-                }
-
-                return 0;
-            }
-        }
-
-        public int Fumbles
-        {
-            get
-            {
-                ESPNDefenseLeaders td = this.model.ESPNTeamDefense;
-                if (td != null)
-                {
-                    return td.REC;
-                }
-
-                return 0;
+                return ByeWeeks.ByeWeek(this.model.TeamCode);
             }
         }
     }

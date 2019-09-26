@@ -97,22 +97,23 @@ namespace WaFFL.Evaluation
                         { "T.Y. Hilton", "TY Hilton" },
                         { "Branden Oliver", "Brandon Oliver" },
                         { "Jordan Matthews", "Jordan Mathews" },
-                        { "Odell Beckham Jr.", "O'Dell Beckham Jr" },
                         { "Austin Seferian-Jenkins", "Austin Safarian-Jenkens" },
                         { "Julian Edelman", "Julien Edelman" },
                         { "Michael Floyd", "Michael Foyd" },
                         { "Brandon LaFell", "Brando LaFell" },
                         { "T.J. Yeldon", "TJ Yeldon" },
                         // 2018
-                        { "Saquon Barkley", "Saquon Barclay" },
                         { "Todd Gurley II", "Todd Gurley" },
                         { "James Conner", "James Connor" },
                         { "Phillip Lindsay", "Philip Lindsay" },
                         { "Will Fuller V", "Will Fuller" },
-                        { "Patrick Mahomes", "Pat Mahomes" },
                         { "Devonta Freeman", "Davonta Freeman" },
                         { "Davante Adams", "Davonte Adams" },
-
+                        // 2019
+                        { "Saquon Barkley", "Saquan Barclay" },
+                        { "Deshaun Watson", "DeShaun Watson" },
+                        { "Odell Beckham", "O'Dell Beckham Jr" },
+                        { "Patrick Mahomes", "Pat Mahomes" },
                     };
 
                 for (int i = 0; i < corrections.Length / 2; i++)

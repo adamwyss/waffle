@@ -28,6 +28,9 @@ namespace WaFFL.Evaluation
 
         /// <summary />
         public Kicking Kicking { get; set; }
+
+        /// <summary />
+        public Defense Defense { get; set; }
     }
 
 
@@ -204,5 +207,41 @@ namespace WaFFL.Evaluation
         /// Extra point attempts
         /// </summary>
         public int XPA { get; set; }
+    }
+
+    /// <summary />
+    [DebuggerDisplay("DST: {SACK}s, {INT}int, {REC}fum")]
+    [Serializable]
+    public class Defense
+    {
+        /// <summary>
+        /// Total sacks
+        /// </summary>
+        public int SACK { get; set; }
+
+        /// <summary>
+        /// Passes intercepted
+        /// </summary>
+        public int INT { get; set; }
+
+        /// <summary>
+        /// Intercepted returned yards
+        /// </summary>
+        public int YDS { get; set; }
+
+        /// <summary>
+        /// Interceptions returned for touchdowns
+        /// </summary>
+        public int TD_INT { get; set; }
+
+        /// <summary>
+        /// Fumbles recovered
+        /// </summary>
+        public int REC { get; set; }
+
+        /// <summary>
+        /// Fumbles returned for touchdowns
+        /// </summary>
+        public int TD_FUM { get; set; }
     }
 }

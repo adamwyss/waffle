@@ -180,6 +180,25 @@ namespace WaFFL.Evaluation
                 points -= (k.XPA - k.XPM) * 33;
             }
 
+            Defense defense = game.Defense;
+            if (defense != null)
+            {
+                //calculate points for interceptions
+                points += defense.INT * 50;
+                points += defense.YDS;
+                if (defense.TD_INT > 0)
+                {
+                    points += (defense.YDS / defense.TD_INT) * defense.TD_INT;
+                }
+
+                // calculate points for fumble recoveries
+                points += defense.REC * 25;
+                points += defense.TD_FUM * 25;
+
+                // calculate points for sacks
+                points += defense.SACK * 10;
+            }
+
             return points;
         }
 
@@ -190,7 +209,8 @@ namespace WaFFL.Evaluation
                    game.Rushing == null &&
                    game.Receiving == null &&
                    game.Fumbles == null &&
-                   game.Kicking == null;
+                   game.Kicking == null &&
+                   game.Defense == null;
         }
 
         /// <summary />

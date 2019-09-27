@@ -102,7 +102,9 @@ namespace WaFFL.Evaluation
                     RecordKickingStats(baseUri, week, kicker);
                 }
 
-                // <table class="sortable stats_table" id="pbp" data-cols-to-freeze=2><caption>Full Play-By-Play Table</caption>
+                var defensivePlayers = ExtractDefense(xhtml);
+                RecordDefensiveStats(week, defensivePlayers);
+
             }
 
             System.Threading.Thread.Sleep(200);
@@ -184,29 +186,69 @@ namespace WaFFL.Evaluation
 
             Kicking k = game.Kicking = new Kicking();
 
-            // In 2016, the average kick was from 37.7 yards away; the average
-            // successful kick was from 36.2 yards out - while the average miss was from 46.2 yards away.
-
-            k.FGM_01to19 = 0;
-            k.FGA_01to19 = 0;
-
-            k.FGM_20to29 = 0;
-            k.FGA_20to29 = 0;
-
-            k.FGM_30to39 = string.IsNullOrWhiteSpace(rawFGM) ? 0 : int.Parse(rawFGM);
-            k.FGA_30to39 = string.IsNullOrWhiteSpace(rawFGA) ? 0 : int.Parse(rawFGA);
-
-            k.FGM_40to49 = 0;
-            k.FGA_40to49 = 0;
-
-            k.FGM_50plus = 0;
-            k.FGA_50plus = 0;
+            k.FGM = string.IsNullOrWhiteSpace(rawFGM) ? 0 : int.Parse(rawFGM);
+            k.FGA = string.IsNullOrWhiteSpace(rawFGA) ? 0 : int.Parse(rawFGA);
 
             k.XPM = string.IsNullOrWhiteSpace(rawXPM) ? 0 : int.Parse(rawXPM);
             k.XPA = string.IsNullOrWhiteSpace(rawXPA) ? 0 : int.Parse(rawXPA);
 
             player.GameLog.Add(game);
         }
+
+        private void RecordDefensiveStats(string week, List<XElement> element)
+        {
+            var teams = element.GroupBy(e => e.Elements().ToList()[1].Value);
+            foreach (var team in teams)
+            {
+                var teamCode = team.Key;
+
+                // extract player
+                NFLPlayer player = this.context.GetPlayer(teamCode, p =>
+                {
+                    p.PlayerPageUri = string.Format("/teams/{0}/{1}.htm", teamCode.ToLowerInvariant(), this.context.Year);
+                    p.Team = this.context.GetTeam(teamCode);
+                    p.Name = DataConverter.ConvertToName(teamCode);
+                    p.Position = FanastyPosition.DST;
+                });
+
+                double sacks = 0.0;
+                int interceptions = 0;
+                int interceptionYards = 0;
+                int interceptionTouchdowns = 0;
+                int fumblesRecovered = 0;
+                int fumbleYards = 0;
+                int fumbleTouchdowns = 0;
+
+                foreach (var te in team)
+                {
+                    var values = te.Elements().ToList();
+
+                    sacks += Convert.ToDouble(values[7].Value);
+                    interceptions += Convert.ToInt32(values[2].Value);
+                    interceptionYards += Convert.ToInt32(values[3].Value);
+                    interceptionTouchdowns += Convert.ToInt32(values[4].Value);
+                    fumblesRecovered += Convert.ToInt32(values[13].Value);
+                    fumbleYards += Convert.ToInt32(values[14].Value);
+                    fumbleTouchdowns += Convert.ToInt32(values[15].Value);
+                }
+
+                Game game = new Game();
+                game.Week = int.Parse(week);
+                //game2.Opponent = this.context.GetTeam(values[1].Value);
+
+                Defense dst = game.Defense = new Defense();
+                dst.SACK = Convert.ToInt32(sacks);
+                dst.INT = interceptions;
+                dst.YDS_INT = interceptionYards;
+                dst.TD_INT = interceptionTouchdowns;
+                dst.FUM = fumblesRecovered;
+                dst.YDS_FUM = fumbleYards;
+                dst.TD_FUM = fumbleTouchdowns;
+
+                player.GameLog.Add(game);
+            }
+        }
+
 
         private NFLPlayer ExtractPlayerInfo(XElement element, string baseUri)
         {
@@ -292,6 +334,20 @@ namespace WaFFL.Evaluation
             {
                 throw new InvalidOperationException();
             }
+        }
+
+        private List<XElement> ExtractDefense(string xhtml)
+        {
+            const string start = "  <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=1><caption>Defense Table</caption>";
+            const string end = "</tbody></table>";
+            string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
+            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
+
+            var players = parsedElement.Element("tbody")
+                                       .Elements("tr")
+                                       .Where(IsPlayerRow)
+                                       .ToList();
+            return players;
         }
 
         private List<XElement> ExtractPlayerKicking(string xhtml)

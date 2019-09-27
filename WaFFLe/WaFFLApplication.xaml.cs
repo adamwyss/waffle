@@ -15,8 +15,6 @@ namespace WaFFL.Evaluation
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            //WaFFLOutput.DisplayAll();
         }
     }
 }

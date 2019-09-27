@@ -139,64 +139,19 @@ namespace WaFFL.Evaluation
     }
 
     /// <summary />
-    [DebuggerDisplay("K: {XPM}XP; {FGM_01to19+FGM_20to29+FGM_30to39+FGM_40to49+FGM_50plus}FG")]
+    [DebuggerDisplay("K: {XPM}XP; {FGM}FG")]
     [Serializable]
     public class Kicking
-    {
+    { 
         /// <summary>
-        /// 1-19 yard field goals made
+        /// field goals made
         /// </summary>
-        public int FGM_01to19 { get; set; }
+        public int FGM { get; set; }
 
         /// <summary>
-        /// 1-19 yard field goals attempts
+        /// field goals attempts
         /// </summary>
-        public int FGA_01to19 { get; set; }
-
-        /// <summary>
-        /// 20-29 yard field goals made
-        /// </summary>
-        public int FGM_20to29 { get; set; }
-
-        /// <summary>
-        /// 20-29 yard field goals attempts
-        /// </summary>
-        public int FGA_20to29 { get; set; }
-
-        /// <summary>
-        /// 30-39 yard field goals made
-        /// </summary>
-        public int FGM_30to39 { get; set; }
-
-        /// <summary>
-        /// 30-39 yard field goals attempts
-        /// </summary>
-        public int FGA_30to39 { get; set; }
-
-        /// <summary>
-        /// 40-49 yard field goals made
-        /// </summary>
-        public int FGM_40to49 { get; set; }
-
-        /// <summary>
-        /// 40-49 yard field goals attempts
-        /// </summary>
-        public int FGA_40to49 { get; set; }
-
-        /// <summary>
-        /// 50+ yard field goals made
-        /// </summary>
-        public int FGM_50plus { get; set; }
-
-        /// <summary>
-        /// 50+ yard field goals attempts
-        /// </summary>
-        public int FGA_50plus { get; set; }
-
-        /// <summary>
-        /// Longest field goal made
-        /// </summary>
-        public int LONG { get; set; }
+        public int FGA { get; set; }
 
         /// <summary>
         /// Extra points made
@@ -210,7 +165,7 @@ namespace WaFFL.Evaluation
     }
 
     /// <summary />
-    [DebuggerDisplay("DST: {SACK}s, {INT}int, {REC}fum")]
+    [DebuggerDisplay("DST: {SACK}s, {INT}int, {FUM}fum")]
     [Serializable]
     public class Defense
     {
@@ -227,7 +182,7 @@ namespace WaFFL.Evaluation
         /// <summary>
         /// Intercepted returned yards
         /// </summary>
-        public int YDS { get; set; }
+        public int YDS_INT { get; set; }
 
         /// <summary>
         /// Interceptions returned for touchdowns
@@ -237,7 +192,12 @@ namespace WaFFL.Evaluation
         /// <summary>
         /// Fumbles recovered
         /// </summary>
-        public int REC { get; set; }
+        public int FUM { get; set; }
+
+        /// <summary>
+        /// Fumbles recovered returned yards
+        /// </summary>
+        public int YDS_FUM { get; set; }
 
         /// <summary>
         /// Fumbles returned for touchdowns

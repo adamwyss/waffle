@@ -28,8 +28,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         public PositionBaseline ReplacementValue { get; set; }
 
-        /// <summary />
-        public NFLPlayer GetPlayer(string uuid)
+        public NFLPlayer GetPlayer(string uuid, Action<NFLPlayer> initializer = null)
         {
             NFLPlayer player;
 
@@ -39,29 +38,19 @@ namespace WaFFL.Evaluation
                 // create the player and update the cache
                 player = new NFLPlayer(uuid);
                 this.playerCache.Add(uuid, player);
+                if (initializer != null)
+                {
+                    initializer(player);
+                }
             }
 
             return player;
         }
 
         /// <summary />
-        public bool IsBadTeamCode(string code)
-        {
-            code = code.TrimStart('@');
-            code = code.TrimStart('v', 's');
-            code = code.TrimStart();
-            code = code.TrimEnd();
-
-            return code == "IRV" || code == "CTR" || code == "RIC" || string.IsNullOrEmpty(code);
-        }
-
-        /// <summary />
         public NFLTeam GetTeam(string code)
         {
-            code = code.TrimStart('@');
-            code = code.TrimStart('v', 's');
-            code = code.TrimStart();
-            code = code.TrimEnd();
+            code = code.Trim();
             
             NFLTeam team;
 

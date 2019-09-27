@@ -89,13 +89,13 @@ namespace WaFFL.Evaluation
                 Kicking k = game.Kicking;
                 if (k != null)
                 {
-                    bonuses += k.FGM_50plus;
+                    // unable to determine bonuses for kicking yet
+                }
 
-                    if (k.LONG > 63)
-                    {
-                        // award 4 bonues for 200 points.
-                        bonuses += 4;
-                    }
+                Defense dst = game.Defense;
+                if (dst != null)
+                {
+                    // unable to determine bonuses for defense yet
                 }
             }
 
@@ -150,29 +150,12 @@ namespace WaFFL.Evaluation
                 // calculate the points for all field goals awarding
                 // points per yard of a field goal and subtracting the
                 // points of a missed fieldgoal.
-                points += k.FGM_01to19 * 15;
-                points -= (k.FGA_01to19 - k.FGM_01to19) * 15;
 
-                points += k.FGM_20to29 * 25;
-                points -= (k.FGA_20to29 - k.FGM_20to29) * 25;
+                // In 2016, the average kick was from 37.7 yards away; the average
+                // successful kick was from 36.2 yards out - while the average miss was from 46.2 yards away.
 
-                points += k.FGM_30to39 * 35;
-                points -= (k.FGA_30to39 - k.FGM_30to39) * 35;
-
-                points += k.FGM_40to49 * 45;
-                points -= (k.FGA_40to49 - k.FGM_40to49) * 45;
-
-                points += k.FGM_50plus * 50;
-                points -= (k.FGA_50plus - k.FGM_50plus) * 50;
-
-                // provide 50 bonus points for FG's over 50 yards
-                points += k.FGM_50plus * 50;
-
-                if (k.LONG >= 63)
-                {
-                    // 200 point bonus for the nfl record
-                    points += 200;
-                }
+                points += k.FGM * 38;
+                points -= (k.FGA - k.FGM) * 46;
 
                 // calculate 20 points for each extra point made and 
                 // subtract 20 points for each point missed
@@ -185,15 +168,20 @@ namespace WaFFL.Evaluation
             {
                 //calculate points for interceptions
                 points += defense.INT * 50;
-                points += defense.YDS;
+                points += defense.YDS_INT;
                 if (defense.TD_INT > 0)
                 {
-                    points += (defense.YDS / defense.TD_INT) * defense.TD_INT;
+                    // if we have a touchdown, one point per yard avaraged
+                    points += (defense.YDS_INT / defense.TD_INT) * defense.TD_INT;
                 }
 
                 // calculate points for fumble recoveries
-                points += defense.REC * 25;
-                points += defense.TD_FUM * 25;
+                points += defense.FUM * 25;
+                if (defense.TD_FUM > 0)
+                {
+                    // if we have a touchdown, one point per yard averaged
+                    points += (defense.YDS_FUM / defense.TD_FUM) * defense.TD_FUM;
+                }               
 
                 // calculate points for sacks
                 points += defense.SACK * 10;

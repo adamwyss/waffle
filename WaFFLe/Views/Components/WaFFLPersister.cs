@@ -12,7 +12,10 @@ namespace WaFFL.Evaluation
         private const string DataFolder = "WaFFL";
 
         /// <summary />
-        private const string DataFile = "WaFFLSeason.data";
+        private const string DataFile = "WaFFLSeasonV2.data";
+
+        /// <summary />
+        private const string OldDataFile = "WaFFLSeason.data";
 
         /// <summary />
         public static void SaveSeason(FanastySeason data)
@@ -42,6 +45,16 @@ namespace WaFFL.Evaluation
 
             if (Directory.Exists(folderpath))
             {
+                string filepathToDelete = Path.Combine(folderpath, OldDataFile);
+                try
+                {
+                    File.Delete(filepathToDelete);
+                }
+                catch(IOException)
+                {
+                    // eat any delete exception -- if we can't delete it, then that's fine; we will move on
+                }
+
                 string filepath = Path.Combine(folderpath, DataFile);
                 try
                 {

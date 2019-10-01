@@ -262,24 +262,12 @@ namespace WaFFL.Evaluation
                 throw new InvalidOperationException();
             }
 
-            NFLPlayer player = this.context.GetPlayer(playerid);
-
-            // capture the player page url
-            player.PlayerPageUri = fields[0].Element("a")?.Attribute("href")?.Value;
-
-            if (string.IsNullOrEmpty(player.Name))
+            NFLPlayer player = this.context.GetPlayer(playerid, p =>
             {
-                player.Name = name;
-            }
-            else if (player.Name != name)
-            {
-                throw new InvalidOperationException("player name changed");
-            }
-
-            if (player.Position == FanastyPosition.UNKNOWN)
-            {
-                player.Position = GetPosition(element, baseUri);
-            }
+                p.PlayerPageUri = fields[0].Element("a")?.Attribute("href")?.Value;
+                p.Name = name;
+                p.Position = GetPosition(element, baseUri);
+            });
 
             return player;
         }
@@ -321,18 +309,11 @@ namespace WaFFL.Evaluation
             string teamcode = fields[1].Value;
 
             NFLTeam team = this.context.GetTeam(teamcode);
-
-            if (player.Team == null)
+            if (player.Team != team)
             {
+                // if team has changed, we will update -- we only need to track the most recent
+                // team.  This is all that matters.
                 player.Team = team;
-            }
-            else if (player.Team == team)
-            {
-                // do nothing
-            }
-            else
-            {
-                throw new InvalidOperationException();
             }
         }
 

@@ -1,9 +1,10 @@
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace WaFFL.Evaluation
@@ -51,16 +52,16 @@ namespace WaFFL.Evaluation
             try
             {
                 this.context.ClearAllPlayerGameLogs();
-            string uri = string.Format(SeasonScheduleUri, year);
-            ParseGames(uri);
+                string uri = string.Format(SeasonScheduleUri, year);
+                ParseGames(uri);
             }
             finally
             {
-            this.context.LastUpdated = DateTime.Now;
-            season = this.context;
+                this.context.LastUpdated = DateTime.Now;
+                season = this.context;
 
-            this.context = null;
-        }
+                this.context = null;
+            }
         }
 
         private void ParseGames(string uri)
@@ -98,9 +99,7 @@ namespace WaFFL.Evaluation
                 string uri = boxscore.Element("a").Attribute("href").Value;
                 string boxscoreUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
                 string xhtml = this.httpClient.DownloadString(boxscoreUri);
-
-                // <table class="stats_table" id="scoring" data-cols-to-freeze=2><caption>Scoring Table</caption>
-
+                
                 var players = ExtractPlayerOffense(xhtml);
                 foreach (var player in players)
                 {
@@ -115,6 +114,12 @@ namespace WaFFL.Evaluation
 
                 var defensivePlayers = ExtractDefense(xhtml);
                 RecordDefensiveStats(week, defensivePlayers);
+
+                var scores = ExtractScoringPlays(xhtml);
+                foreach (var score in scores)
+                {
+                    RecordScoringPlays(week, score);
+                }
 
             }
 
@@ -260,6 +265,89 @@ namespace WaFFL.Evaluation
             }
         }
 
+        Dictionary<Regex, Action> tdscores = new Dictionary<Regex, Action>()
+        {
+            // td passes
+            { new Regex(@"([\w ']*) (\d*) yard pass from ([\w ']*)", RegexOptions.Compiled), null },
+
+            // td rushing
+            { new Regex(@"([\w ']*) (\d*) yard rush", RegexOptions.Compiled), null },
+
+            // td defense
+            { new Regex(@"([\w ']*) fumble recovery in end zone", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard fumble return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard interception return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard blocked punt return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard kickoff return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard punt return", RegexOptions.Compiled), null },           
+        };
+
+        Dictionary<Regex, Action> otherscores = new Dictionary<Regex, Action>()
+        {
+            // field goals
+            { new Regex(@"([\w ']*) (\d*) yard field goal", RegexOptions.Compiled), null },
+
+            // safety
+            { new Regex(@"Safety, ([\w ']*) tackled in end zone by ([\w ']*)", RegexOptions.Compiled), null },
+            { new Regex(@"Safety, ([\w ']*) sacked in end zone by ([\w ']*)", RegexOptions.Compiled), null },
+        };
+
+        Dictionary<Regex, Action> xp = new Dictionary<Regex, Action>()
+        {
+            // extra points
+            { new Regex(@"\(([\w ']*) kick\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) kick failed\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) run\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(run failed\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) pass from ([\w ']*)\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(pass failed\)$", RegexOptions.Compiled), null },
+        };
+
+        private static bool TryProcess(Dictionary<Regex, Action> actions, string text, Action followup = null)
+        {
+            foreach (var set in actions)
+            {
+                Regex re = set.Key;
+                if (re.IsMatch(text))
+                {
+                    set.Value?.Invoke();
+                    followup?.Invoke();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void RecordScoringPlays(string week, XElement score)
+        {
+            string text = score.Elements().ToList()[3].Value;
+
+            bool success = TryProcess(tdscores, text, () =>
+            {
+                bool xpsuccess = TryProcess(xp, text);
+                if (!xpsuccess)
+                {
+                    // happens when a TD wins the game
+                   Console.WriteLine("NO-XP FOUND: {0}", text);
+                }
+            });
+
+            if (!success)
+            {
+                return;
+            }
+
+            success = TryProcess(otherscores, text);
+
+            if (!success)
+            {
+                return;
+            }
+
+            // need to build a regex for this.
+            Console.WriteLine("UNKNOWN-SCORE: {0}", text);
+        }
 
         private NFLPlayer ExtractPlayerInfo(XElement element, string baseUri)
         {
@@ -370,6 +458,19 @@ namespace WaFFL.Evaluation
             return players;
         }
 
+        private List<XElement> ExtractScoringPlays(string xhtml)
+        {
+            const string start = "  <table class=\"stats_table\" id=\"scoring\" data-cols-to-freeze=2><caption>Scoring Table</caption>";
+            const string end = "</tbody></table>";
+            string[] exclude = { "   <colgroup><col><col><col><col><col><col></colgroup>" };
+            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
+
+            var scores = parsedElement.Element("tbody")
+                                      .Elements("tr")
+                                      .ToList();
+            return scores;
+        }
+
         private bool IsPlayerRow(XElement row)
         {
             var classAttribute = row.Attribute("class");
@@ -435,10 +536,12 @@ namespace WaFFL.Evaluation
                     // do some post processing
                     var raw = sb.ToString();
                     raw = raw.Replace("data-cols-to-freeze=1", "data-cols-to-freeze=\"1\"");
+                    raw = raw.Replace("data-cols-to-freeze=2", "data-cols-to-freeze=\"2\"");
                     raw = raw.Replace("& ", "&amp; ");
                     raw = raw.Replace("<br>", " ");
                     raw = raw.Replace("<br />", " ");
                     raw = raw.Replace("data-tip=\"<b>Yards per Punt</b>", "data-tip=\"Yards per Punt");
+                    raw = raw.Replace("</td></td>", "</td>");
 
                     // parse and return
                     return XElement.Parse(raw);

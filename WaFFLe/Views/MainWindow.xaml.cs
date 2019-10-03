@@ -207,6 +207,13 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void RefreshCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            bool forceFullRefresh = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift);
+            if (forceFullRefresh)
+            {
+                // if shift is pressed, we will wipe out our data.
+                this.season = null;
+            }
+
             Thread thread = new Thread(this.refreshDelegate);
             thread.Start();
         }

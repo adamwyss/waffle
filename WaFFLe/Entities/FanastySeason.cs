@@ -74,6 +74,14 @@ namespace WaFFL.Evaluation
             return query.ToArray();
         }
 
+        public void ClearAllPlayerGameLogs()
+        {
+            foreach (NFLPlayer player in this.playerCache.Values)
+            {
+                player.GameLog.Clear();
+            }
+        }
+
         /// <summary />
         public IEnumerable<NFLPlayer> GetAll(params FanastyPosition[] positions)
         {

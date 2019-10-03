@@ -9,6 +9,25 @@ namespace WaFFL.Evaluation
     /// <summary />
     public class WaFFLRoster
     {
+        private static readonly Dictionary<string, string> mappings = new Dictionary<string, string>()
+        {
+        //  { "Correct Spelling", "WaFFL Misspelling" },
+            // 2019
+            { "Patrick Mahomes", "Pat Mahomes" },
+            { "Saquon Barkley", "Saquan Barclay" },
+            { "Odell Beckham", "O'Dell Beckham Jr" },
+            { "Le'Veon Bell", "LeVeon Bell" },
+            { "Phillip Lindsay", "Philip Lindsay" },
+            { "Devonta Freeman", "Davonta Freeman" },
+            { "T.Y.Hilton", "TY Hilton" },
+            { "Matthew Stafford", "Matt Stafford" },
+            { "Deshaun Watson", "DeShaun Watson" },
+            { "Julian Edelman", "Julien Edelman" },
+            { "Alshon Jeffery", "Alshon Jeffrey" },
+            { "Stephen Gostkowski", "Stephan Gostkowski" },
+            { "San Francisco 49ers", "San Fransciso 49ers" },
+        };
+
         /// <summary />
         private const string WaFFLRosterUri = @"http://www.thewaffl.net/Rosters.php";
 
@@ -54,84 +73,23 @@ namespace WaFFL.Evaluation
                 instance = new WaFFLRoster();
             }
 
-            return 0.3 > instance.CheckRosterStatus(search);
+            return instance.CheckRosterStatus(search) <  0.3;
         }
 
         /// <summary />
         private double CheckRosterStatus(string search)
         {
-            // corect NY abbrev.
-            if (search.StartsWith("NY", StringComparison.InvariantCulture))
-            {
-                search = "New York" + search.Substring(2);
-            }
-
             bool found = this.rosterText.IndexOf(search) != -1;
             if (!found)
             {
-                // correct common miss spellings
-                string[,] corrections = new string[,]
-                    {
-                    //  { "ESPN", "WaFFL" },
-                        { "Philip", "Phillip" },
-                        { "Malcom", "Malcolm" },
-                        { "Matthew", "Matt" },
-                        { "Griffin", "Griffen" },
-                        { "Stevan", "Steven" },
-                        { "Leshoure", "LaShoure" },
-                        { "Bolden", "Boldin" },
-                        { "Mathews", "Matthews" },
-                        { "Isaac", "Issac" },
-                        { "A.J.", "AJ" },
-                        { "Zuerlein", "Zuerlien" },
-                        { "Stephen", "Stephan" },
-                        { "Darrius Heyward-Bey", "Darius Hayward-Bey" },
-                        { "C.J.", "CJ" },
-                        { "Jeffery", "Jeffrey" },
-                        { "Blackmon", "Blackman" },
-                        { "Eric", "Erik" },
-                        { "Le'Veon Bell", "LeVeon Bell" },
-                        { "Shane Vereen", "Shane Vareen" },
-                        { "Steve Smith Sr.", "Steve Smith" },
-                        { "Cordarrelle Patterson", "Cordarelle Patterson" },
-                        { "T.Y. Hilton", "TY Hilton" },
-                        { "Branden Oliver", "Brandon Oliver" },
-                        { "Jordan Matthews", "Jordan Mathews" },
-                        { "Austin Seferian-Jenkins", "Austin Safarian-Jenkens" },
-                        { "Julian Edelman", "Julien Edelman" },
-                        { "Michael Floyd", "Michael Foyd" },
-                        { "Brandon LaFell", "Brando LaFell" },
-                        { "T.J. Yeldon", "TJ Yeldon" },
-                        // 2018
-                        { "Todd Gurley II", "Todd Gurley" },
-                        { "James Conner", "James Connor" },
-                        { "Phillip Lindsay", "Philip Lindsay" },
-                        { "Will Fuller V", "Will Fuller" },
-                        { "Devonta Freeman", "Davonta Freeman" },
-                        { "Davante Adams", "Davonte Adams" },
-                        // 2019
-                        { "Saquon Barkley", "Saquan Barclay" },
-                        { "Deshaun Watson", "DeShaun Watson" },
-                        { "Odell Beckham", "O'Dell Beckham Jr" },
-                        { "Patrick Mahomes", "Pat Mahomes" },
-                    };
-
-                for (int i = 0; i < corrections.Length / 2; i++)
+                string alternate;
+                bool alternateExists = mappings.TryGetValue(search, out alternate);
+                if (alternateExists)
                 {
-                    string value = corrections[i, 0];
-
-                    int pos = search.IndexOf(value);
-                    if (pos >= 0)
+                    bool adjustedFound = this.rosterText.IndexOf(alternate) != -1;
+                    if (adjustedFound)
                     {
-                        string adjustedSearch = search.Substring(0, pos) + corrections[i, 1] + search.Substring(pos + value.Length);
-
-                        bool adjustedFound = this.rosterText.IndexOf(adjustedSearch) != -1;
-                        if (adjustedFound)
-                        {
-                            return 0.1;
-                        }
-                      
-                        break;
+                        return 0.1;
                     }
                 }
 

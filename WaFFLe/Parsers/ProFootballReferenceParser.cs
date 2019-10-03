@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,19 +37,30 @@ namespace WaFFL.Evaluation
         {
             if (this.context != null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("parsing action in progress");
             }
 
-            this.context = new FanastySeason();
-            this.context.Year = year;
+            if (season == null)
+            {
+                season = new FanastySeason();
+                season.Year = year;
+            }
 
+            this.context = season;
+
+            try
+            {
+                this.context.ClearAllPlayerGameLogs();
             string uri = string.Format(SeasonScheduleUri, year);
             ParseGames(uri);
-
+            }
+            finally
+            {
             this.context.LastUpdated = DateTime.Now;
             season = this.context;
 
             this.context = null;
+        }
         }
 
         private void ParseGames(string uri)

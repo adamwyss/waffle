@@ -14,7 +14,7 @@
             <DataGrid.DataContext>
                 <CollectionViewSource Source="{Binding DefenseSpecialTeams}">
                     <CollectionViewSource.SortDescriptions>
-                        <scm:SortDescription PropertyName="EstimatedPoints" Direction="Descending" />
+                        <scm:SortDescription PropertyName="TeamCode" Direction="Descending" />
                     </CollectionViewSource.SortDescriptions>
                 </CollectionViewSource>
             </DataGrid.DataContext>

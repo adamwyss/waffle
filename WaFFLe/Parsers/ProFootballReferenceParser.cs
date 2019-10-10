@@ -123,8 +123,6 @@ namespace WaFFL.Evaluation
 
             }
 
-            System.Threading.Thread.Sleep(200);
-
             return completed;
         }
 
@@ -265,88 +263,11 @@ namespace WaFFL.Evaluation
             }
         }
 
-        Dictionary<Regex, Action> tdscores = new Dictionary<Regex, Action>()
-        {
-            // td passes
-            { new Regex(@"([\w ']*) (\d*) yard pass from ([\w ']*)", RegexOptions.Compiled), null },
-
-            // td rushing
-            { new Regex(@"([\w ']*) (\d*) yard rush", RegexOptions.Compiled), null },
-
-            // td defense
-            { new Regex(@"([\w ']*) fumble recovery in end zone", RegexOptions.Compiled), null },
-            { new Regex(@"([\w ']*) (\d*) yard fumble return", RegexOptions.Compiled), null },
-            { new Regex(@"([\w ']*) (\d*) yard interception return", RegexOptions.Compiled), null },
-            { new Regex(@"([\w ']*) (\d*) yard blocked punt return", RegexOptions.Compiled), null },
-            { new Regex(@"([\w ']*) (\d*) yard kickoff return", RegexOptions.Compiled), null },
-            { new Regex(@"([\w ']*) (\d*) yard punt return", RegexOptions.Compiled), null },           
-        };
-
-        Dictionary<Regex, Action> otherscores = new Dictionary<Regex, Action>()
-        {
-            // field goals
-            { new Regex(@"([\w ']*) (\d*) yard field goal", RegexOptions.Compiled), null },
-
-            // safety
-            { new Regex(@"Safety, ([\w ']*) tackled in end zone by ([\w ']*)", RegexOptions.Compiled), null },
-            { new Regex(@"Safety, ([\w ']*) sacked in end zone by ([\w ']*)", RegexOptions.Compiled), null },
-        };
-
-        Dictionary<Regex, Action> xp = new Dictionary<Regex, Action>()
-        {
-            // extra points
-            { new Regex(@"\(([\w ']*) kick\)$", RegexOptions.Compiled), null },
-            { new Regex(@"\(([\w ']*) kick failed\)$", RegexOptions.Compiled), null },
-            { new Regex(@"\(([\w ']*) run\)$", RegexOptions.Compiled), null },
-            { new Regex(@"\(run failed\)$", RegexOptions.Compiled), null },
-            { new Regex(@"\(([\w ']*) pass from ([\w ']*)\)$", RegexOptions.Compiled), null },
-            { new Regex(@"\(pass failed\)$", RegexOptions.Compiled), null },
-        };
-
-        private static bool TryProcess(Dictionary<Regex, Action> actions, string text, Action followup = null)
-        {
-            foreach (var set in actions)
-            {
-                Regex re = set.Key;
-                if (re.IsMatch(text))
-                {
-                    set.Value?.Invoke();
-                    followup?.Invoke();
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private void RecordScoringPlays(string week, XElement score)
         {
             string text = score.Elements().ToList()[3].Value;
-
-            bool success = TryProcess(tdscores, text, () =>
-            {
-                bool xpsuccess = TryProcess(xp, text);
-                if (!xpsuccess)
-                {
-                    // happens when a TD wins the game
-                   Console.WriteLine("NO-XP FOUND: {0}", text);
-                }
-            });
-
-            if (!success)
-            {
-                return;
-            }
-
-            success = TryProcess(otherscores, text);
-
-            if (!success)
-            {
-                return;
-            }
-
-            // need to build a regex for this.
-            Console.WriteLine("UNKNOWN-SCORE: {0}", text);
+            var parser = new ScoringPlayParser(this.context, int.Parse(week));
+            parser.Parse(score);
         }
 
         private NFLPlayer ExtractPlayerInfo(XElement element, string baseUri)
@@ -549,6 +470,105 @@ namespace WaFFL.Evaluation
             }
 
             throw new InvalidOperationException("The specified data was not found");
+        }
+    }
+
+    public class ScoringPlayParser
+    {
+        // scoring types that should have an extra point (not all do)
+        private static readonly Dictionary<Regex, Action> tdscores = new Dictionary<Regex, Action>()
+        {
+            // td passes
+            { new Regex(@"([\w ']*) (\d*) yard pass from ([\w ']*)", RegexOptions.Compiled), null },
+
+            // td rushing
+            { new Regex(@"([\w ']*) (\d*) yard rush", RegexOptions.Compiled), null },
+
+            // td defense
+            { new Regex(@"([\w ']*) fumble recovery in end zone", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard fumble return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard interception return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard blocked punt return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard kickoff return", RegexOptions.Compiled), null },
+            { new Regex(@"([\w ']*) (\d*) yard punt return", RegexOptions.Compiled), null },
+        };
+
+        // extra point types
+        private static readonly Dictionary<Regex, Action> xp = new Dictionary<Regex, Action>()
+        {
+            // extra points
+            { new Regex(@"\(([\w ']*) kick\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) kick failed\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) run\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(run failed\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(([\w ']*) pass from ([\w ']*)\)$", RegexOptions.Compiled), null },
+            { new Regex(@"\(pass failed\)$", RegexOptions.Compiled), null },
+        };
+
+        // scoring types that do not have an extra point
+        private static readonly Dictionary<Regex, Action> otherscores = new Dictionary<Regex, Action>()
+        {
+            // field goals
+            { new Regex(@"([\w ']*) (\d*) yard field goal", RegexOptions.Compiled), null },
+
+            // safety
+            { new Regex(@"Safety, ([\w ']*) tackled in end zone by ([\w ']*)", RegexOptions.Compiled), null },
+            { new Regex(@"Safety, ([\w ']*) sacked in end zone by ([\w ']*)", RegexOptions.Compiled), null },
+        };
+
+        private readonly FanastySeason _season;
+        private readonly int _week;
+
+        public ScoringPlayParser(FanastySeason season, int week)
+        {
+            _season = season;
+            _week = week;
+        }
+
+        public bool Parse(XElement score)
+        {
+            string text = score.Elements().ToList()[3].Value;
+
+            bool success = TryProcess(tdscores, text, () =>
+            {
+                bool xpsuccess = TryProcess(xp, text);
+                if (!xpsuccess)
+                {
+                    // happens when a TD wins the game
+                    Console.WriteLine("NO-XP FOUND: {0}", text);
+                }
+            });
+
+            if (!success)
+            {
+                return true;
+            }
+
+            success = TryProcess(otherscores, text);
+
+            if (!success)
+            {
+                return true;
+            }
+
+            Console.WriteLine("UNKNOWN-SCORE: {0}", text);
+            return false;
+        }
+
+        private static bool TryProcess(Dictionary<Regex, Action> actions, string text, Action followup = null)
+        {
+            foreach (var set in actions)
+            {
+                Regex re = set.Key;
+                if (re.IsMatch(text))
+                {
+                    set.Value?.Invoke();
+                    followup?.Invoke();
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

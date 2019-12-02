@@ -38,7 +38,13 @@
             <DataGrid.Columns>
                 <local:DataGridWaFFLRosterColumn />
                 <DataGridTextColumn  Header="Pos" Binding="{Binding Position}" Foreground="DarkGray" />
-                <DataGridTextColumn  Header="Name" Binding="{Binding Name}" CellStyle="{StaticResource MarkedPlayerCellStyle}" />
+                <DataGridTextColumn  Header="Name" Binding="{Binding Name}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MarkedPlayerCellStyle}">
+                            <Setter Property="ToolTip" Value="{Binding InjuryStatus}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
                 <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
                 <DataGridTextColumn  Header="wPOR" Width="60" Binding="{Binding WeightedPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />

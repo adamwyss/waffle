@@ -286,38 +286,83 @@ namespace WaFFL.Evaluation
             {
                 p.PlayerPageUri = fields[0].Element("a")?.Attribute("href")?.Value;
                 p.Name = name;
-                p.Position = GetPosition(element, baseUri);
+                UpdatePlayerMetadata(p, element, baseUri);
             });
 
             return player;
         }
 
-        private FanastyPosition GetPosition(XElement element, string baseUri)
+        private void UpdatePlayerMetadata(NFLPlayer player, XElement element, string baseUri)
         {
             var fields = element.Elements().ToList();
             string uri = fields[0].Element("a").Attribute("href").Value;
-            string boxscoreUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
-            string xhtml = this.httpClient.DownloadString(boxscoreUri);
+            string playerUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
+            string xhtml = this.httpClient.DownloadString(playerUri);
+
+            const string start = "            <div class=\"section_wrapper\" id=\"injury\">";
+            const string end = "</div>";
+            string[] exclude = { };
+            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude, true);
+            if (parsedElement != null)
+            {
+                var status = parsedElement.Element("h3").Value;
+                var reason = parsedElement.Element("p").Value;
+                Console.WriteLine("INJURY ::: {0} {1}", status, reason);
+
+                player.Status = new InjuryStatus() { Reason = reason };
+                if (status == "Injured Reserve")
+                {
+                    player.Status.Status = PlayerInjuryStatus.InjuredReserve;
+                }
+                else if (status == "Out")
+                {
+                    player.Status.Status = PlayerInjuryStatus.Out;
+                }
+                else if (status == "Doubtful")
+                {
+                    player.Status.Status = PlayerInjuryStatus.Doubtful;
+                }
+                else if (status == "Questionable")
+                {
+                    player.Status.Status = PlayerInjuryStatus.Questionable;
+                }
+                else if (status == "Probable")
+                {
+                    player.Status.Status = PlayerInjuryStatus.Probable;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unknown injury status");
+                }
+
+            }
+            else
+            {
+                player.Status = null;
+            }
+
 
             // TODO parse this properly
             if (xhtml.Contains("<strong>Position</strong>: QB"))
             {
-                return FanastyPosition.QB;
+                player.Position = FanastyPosition.QB;
             }
             else if (xhtml.Contains("<strong>Position</strong>: RB") || xhtml.Contains("<strong>Position</strong>: FB"))
             {
-                return FanastyPosition.RB;
+                player.Position = FanastyPosition.RB;
             }
             else if (xhtml.Contains("<strong>Position</strong>: WR") || xhtml.Contains("<strong>Position</strong>: TE"))
             {
-                return FanastyPosition.WR;
+                player.Position = FanastyPosition.WR;
             }
             else if (xhtml.Contains("<strong>Position</strong>: K"))
             {
-                return FanastyPosition.K;
+                player.Position = FanastyPosition.K;
             }
-
-            return FanastyPosition.UNKNOWN;
+            else
+            {
+                player.Position = FanastyPosition.UNKNOWN;
+            }
         }
 
         private void AssignTeam(NFLPlayer player, XElement element)
@@ -428,7 +473,7 @@ namespace WaFFL.Evaluation
             return true;
         }
 
-        private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude)
+        private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude, bool optional = false)
         {
             // extract the html data table that we are interested in.
             string[] lines = xhtml.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -467,6 +512,11 @@ namespace WaFFL.Evaluation
                     // parse and return
                     return XElement.Parse(raw);
                 }
+            }
+
+            if (optional)
+            {
+                return null;
             }
 
             throw new InvalidOperationException("The specified data was not found");

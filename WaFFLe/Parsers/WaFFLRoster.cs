@@ -26,6 +26,8 @@ namespace WaFFL.Evaluation
             { "Alshon Jeffery", "Alshon Jeffrey" },
             { "Stephen Gostkowski", "Stephan Gostkowski" },
             { "San Francisco 49ers", "San Fransciso 49ers" },
+            { "D.J. Moore", "DJ Moore " },
+            { "DeVante Parker", "DaVante Parker" },
         };
 
         /// <summary />

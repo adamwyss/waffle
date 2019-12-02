@@ -22,8 +22,29 @@ namespace WaFFL.Evaluation
 
         public FanastyPosition Position { get; set; }
 
+        public InjuryStatus Status { get; set; }
+
         public NFLTeam Team { get; set; }
 
         public Collection<Game> GameLog { get; private set; }
+    }
+
+    [DebuggerDisplay("{Status}")]
+    [Serializable]
+    public class InjuryStatus
+    {
+        public PlayerInjuryStatus Status { get; set; }
+
+        public string Reason { get; set; }
+    }
+
+    [Serializable]
+    public enum PlayerInjuryStatus
+    {
+        Probable,
+        Questionable,
+        Doubtful,
+        Out,
+        InjuredReserve,
     }
 }

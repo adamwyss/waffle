@@ -15,6 +15,9 @@ namespace WaFFL.Evaluation
         {
             this.PlayerData = p;
 
+            // cache the name+injury status here.
+            this.Name = this.PlayerData.Name + GetInjuryStatus();
+
             Messenger.Default.Register<MarkedPlayerChanged>(this,
                 (m) =>
                 {
@@ -34,6 +37,11 @@ namespace WaFFL.Evaluation
             get { return WaFFLRoster.IsActive(this.PlayerData.Name); }
         }
 
+        public string InjuryStatus
+        {
+            get { return this.PlayerData.Status?.Reason; }
+        }
+
         /// <summary />
         public bool IsHighlighted
         {
@@ -43,7 +51,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         public string Name
         {
-            get { return this.PlayerData.Name; }
+            get; private set;
         }
 
         public string Position
@@ -385,9 +393,25 @@ namespace WaFFL.Evaluation
             get { return IsByeWeek(17); }
         }
 
-        public static void Initialize(NFLPlayer player, PlayerViewModel viewModel)
+        private string GetInjuryStatus()
         {
+            if (this.PlayerData.Status != null)
+            {
+                if (this.PlayerData.Status.Status == PlayerInjuryStatus.InjuredReserve || this.PlayerData.Status.Status == PlayerInjuryStatus.Out)
+                {
+                    return " [OUT]";
+                }
+                else if (this.PlayerData.Status.Status == PlayerInjuryStatus.Doubtful)
+                {
+                    return " [D]";
+                }
+                else if (this.PlayerData.Status.Status == PlayerInjuryStatus.Questionable)
+                {
+                    return " [Q]";
+                }
+            }
 
+            return string.Empty;
         }
 
     }

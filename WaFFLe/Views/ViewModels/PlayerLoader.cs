@@ -14,11 +14,11 @@ namespace WaFFL.Evaluation.Views.ViewModels
             _season = season;
             _replacementScores = new Dictionary<FanastyPosition, int>()
             {
-                { FanastyPosition.QB, season.ReplacementValue.QB },
-                { FanastyPosition.RB, season.ReplacementValue.RB },
-                { FanastyPosition.WR, season.ReplacementValue.WR },
-                { FanastyPosition.K, season.ReplacementValue.K },
-                { FanastyPosition.DST, season.ReplacementValue.DST },
+                { FanastyPosition.QB, season.ReplacementValue?.QB ?? 0 },
+                { FanastyPosition.RB, season.ReplacementValue?.RB ?? 0 },
+                { FanastyPosition.WR, season.ReplacementValue?.WR ?? 0 },
+                { FanastyPosition.K, season.ReplacementValue?.K ?? 0 },
+                { FanastyPosition.DST, season.ReplacementValue?.DST ?? 0 },
             };
         }
 

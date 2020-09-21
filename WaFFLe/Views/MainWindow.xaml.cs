@@ -19,7 +19,7 @@ namespace WaFFL.Evaluation
         /// <summary>
         /// The year we want stats.
         /// </summary>
-        const int YEAR = 2019;
+        const int YEAR = 2020;
 
         /// <summary />
         public static readonly DependencyProperty IsRefreshingDataProperty = DependencyProperty.Register(

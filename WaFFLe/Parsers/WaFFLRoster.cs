@@ -28,6 +28,10 @@ namespace WaFFL.Evaluation
             { "San Francisco 49ers", "San Fransciso 49ers" },
             { "D.J. Moore", "DJ Moore " },
             { "DeVante Parker", "DaVante Parker" },
+            //2020
+            { "J.K. Dobbins", "JK Dobbins" },
+            { "Adam Thielen", "Adam Theilen" },
+
         };
 
         /// <summary />

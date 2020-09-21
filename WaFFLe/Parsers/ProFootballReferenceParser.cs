@@ -384,7 +384,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractDefense(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=1><caption>Defense Table</caption>";
+            const string start = "  <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=\"1\"><caption>Defense Table</caption>";
             const string end = "</tbody></table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
@@ -398,7 +398,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractPlayerKicking(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"kicking\" data-cols-to-freeze=1><caption>Kicking & Punting Table</caption>";
+            const string start = "  <table class=\"sortable stats_table\" id=\"kicking\" data-cols-to-freeze=\"1\"><caption>Kicking & Punting Table</caption>";
             const string end = "</tbody></table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
@@ -412,7 +412,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractPlayerOffense(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"player_offense\" data-cols-to-freeze=1><caption>Passing, Rushing, & Receiving Table</caption>";
+            const string start = "  <table class=\"sortable stats_table\" id=\"player_offense\" data-cols-to-freeze=\"1\"><caption>Passing, Rushing, & Receiving Table</caption>";
             const string end = "</tbody></table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
@@ -426,7 +426,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractScoringPlays(string xhtml)
         {
-            const string start = "  <table class=\"stats_table\" id=\"scoring\" data-cols-to-freeze=2><caption>Scoring Table</caption>";
+            const string start = "  <table class=\"stats_table\" id=\"scoring\" data-cols-to-freeze=\"2\"><caption>Scoring Table</caption>";
             const string end = "</tbody></table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
@@ -450,7 +450,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractRawGames(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"games\" data-cols-to-freeze=1><caption>Week-by-Week Games Table</caption>";
+            const string start = "  <table class=\"sortable stats_table\" id=\"games\" data-cols-to-freeze=\"1\"><caption>Week-by-Week Games Table</caption>";
             const string end = "</tbody></table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);

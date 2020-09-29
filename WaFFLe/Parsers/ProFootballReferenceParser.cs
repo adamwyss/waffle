@@ -103,6 +103,13 @@ namespace WaFFL.Evaluation
                 var players = ExtractPlayerOffense(xhtml);
                 foreach (var player in players)
                 {
+                    if (player.Elements().ToList().First().Attribute("data-append-csv") == null)
+                    {
+                        // boxscore contains player stat line with no player id - we are missing stats
+                        Console.WriteLine("Invalid player in boxscore: " + boxscoreUri);
+                        continue;
+                    }
+
                     RecordPlayerStats(baseUri, week, player);
                 }
 

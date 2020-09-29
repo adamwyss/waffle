@@ -31,6 +31,7 @@ namespace WaFFL.Evaluation
             //2020
             { "J.K. Dobbins", "JK Dobbins" },
             { "Adam Thielen", "Adam Theilen" },
+            { "D.K. Metcalf", "DK Metcalf" },
 
         };
 

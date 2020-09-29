@@ -64,6 +64,19 @@ namespace WaFFL.Evaluation
             }
         }
 
+        public void UpdatePlayerInjuryStatus(int year, ref FanastySeason season, Func<NFLPlayer, bool> update)
+        {
+            string uri = string.Format(SeasonScheduleUri, year);
+
+            foreach (var player in season.GetAllPlayers())
+            {
+                if (update(player))
+                {
+                    UpdatePlayerMetadata(player, player.PlayerPageUri, uri);
+                }
+            }
+        }
+
         private void ParseGames(string uri)
         {
             string xhtml = this.httpClient.DownloadString(uri);
@@ -303,7 +316,12 @@ namespace WaFFL.Evaluation
         {
             var fields = element.Elements().ToList();
             string uri = fields[0].Element("a").Attribute("href").Value;
-            string playerUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
+            UpdatePlayerMetadata(player, uri, baseUri);
+        }
+
+        private void UpdatePlayerMetadata(NFLPlayer player, string playerPageUri, string baseUri)
+        {
+            string playerUri = new Uri(new Uri(baseUri), playerPageUri).AbsoluteUri;
             string xhtml = this.httpClient.DownloadString(playerUri);
 
             const string start = "            <div class=\"section_wrapper\" id=\"injury\">";

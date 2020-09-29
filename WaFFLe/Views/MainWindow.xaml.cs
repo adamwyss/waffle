@@ -200,8 +200,7 @@ namespace WaFFL.Evaluation
             // when the window closes, save the current season data
             // to disk, so we don't have to requery the server the
             // next time we open.
-            WaFFLPersister.SaveSeason(this.season);
-            MarkedPlayerPersister.SavePlayers(MarkedPlayers.Players);
+            WhenSaveClicked(sender, null);
         }
 
         /// <summary />
@@ -272,9 +271,21 @@ namespace WaFFL.Evaluation
             }
         }
 
+        private void WhenSaveClicked(object sender, RoutedEventArgs e)
+        {
+            WaFFLPersister.SaveSeason(this.season);
+            MarkedPlayerPersister.SavePlayers(MarkedPlayers.Players);
+        }
+
         private void WhenExitClicked(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void WhenRefreshInjuryStatusClicked(object sender, RoutedEventArgs e)
+        {
+            ProFootballReferenceParser parser = new ProFootballReferenceParser(null);
+            parser.UpdatePlayerInjuryStatus(YEAR, ref this.season, p => MarkedPlayers.IsMarked(p.Name));
         }
 
         private void WhenPlayerViewChecked(object sender, RoutedEventArgs e)

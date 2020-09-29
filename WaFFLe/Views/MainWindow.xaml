@@ -41,6 +41,8 @@
             </Ribbon.ContextualTabGroups>
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
+                    <RibbonApplicationMenuItem Header="Save State" Click="WhenSaveClicked" />
+                    <RibbonApplicationMenuItem Header="Import Injury Status for Marked Players" Click="WhenRefreshInjuryStatusClicked" />
                     <RibbonApplicationMenu.FooterPaneContent>
                         <RibbonButton Label="Exit" Click="WhenExitClicked" />
                     </RibbonApplicationMenu.FooterPaneContent>

@@ -14,7 +14,6 @@ namespace WaFFL.Evaluation
         //  { "Correct Spelling", "WaFFL Misspelling" },
             // 2019
             { "Patrick Mahomes", "Pat Mahomes" },
-            { "Saquon Barkley", "Saquan Barclay" },
             { "Odell Beckham", "O'Dell Beckham Jr" },
             { "Le'Veon Bell", "LeVeon Bell" },
             { "Phillip Lindsay", "Philip Lindsay" },
@@ -22,7 +21,6 @@ namespace WaFFL.Evaluation
             { "T.Y.Hilton", "TY Hilton" },
             { "Matthew Stafford", "Matt Stafford" },
             { "Deshaun Watson", "DeShaun Watson" },
-            { "Julian Edelman", "Julien Edelman" },
             { "Alshon Jeffery", "Alshon Jeffrey" },
             { "Stephen Gostkowski", "Stephan Gostkowski" },
             { "San Francisco 49ers", "San Fransciso 49ers" },
@@ -32,7 +30,11 @@ namespace WaFFL.Evaluation
             { "J.K. Dobbins", "JK Dobbins" },
             { "Adam Thielen", "Adam Theilen" },
             { "D.K. Metcalf", "DK Metcalf" },
-
+            //2021
+            { "A.J. Brown", "AJ Brown" },
+            { "Ja'Marr Chase", "JaMarr Chase" },
+            { "Cordarrelle Patterson", "Cordarelle Patterson" },
+            { "Saquon Barkley", "Saquon Barclay" },
         };
 
         /// <summary />

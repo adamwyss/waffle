@@ -409,13 +409,12 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractDefense(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=\"1\"><caption>Defense Table</caption>";
-            const string end = "</tbody></table>";
+            const string start = "    <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=\",1\">";
+            const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
 
-            var players = parsedElement.Element("tbody")
-                                       .Elements("tr")
+            var players = parsedElement.Elements("tr")
                                        .Where(IsPlayerRow)
                                        .ToList();
             return players;
@@ -423,13 +422,12 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractPlayerKicking(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"kicking\" data-cols-to-freeze=\"1\"><caption>Kicking & Punting Table</caption>";
-            const string end = "</tbody></table>";
+            const string start = "    <table class=\"sortable stats_table\" id=\"kicking\" data-cols-to-freeze=\",1\">";
+            const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
 
-            var players = parsedElement.Element("tbody")
-                                       .Elements("tr")
+            var players = parsedElement.Elements("tr")
                                        .Where(IsPlayerRow)
                                        .ToList();
             return players;
@@ -437,13 +435,12 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractPlayerOffense(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"player_offense\" data-cols-to-freeze=\"1\"><caption>Passing, Rushing, & Receiving Table</caption>";
-            const string end = "</tbody></table>";
+            const string start = "    <table class=\"sortable stats_table\" id=\"player_offense\" data-cols-to-freeze=\",1\">";
+            const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
 
-            var players = parsedElement.Element("tbody")
-                                       .Elements("tr")
+            var players = parsedElement.Elements("tr")
                                        .Where(IsPlayerRow)
                                        .ToList();
             return players;
@@ -451,13 +448,12 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractScoringPlays(string xhtml)
         {
-            const string start = "  <table class=\"stats_table\" id=\"scoring\" data-cols-to-freeze=\"2\"><caption>Scoring Table</caption>";
-            const string end = "</tbody></table>";
+            const string start = "    <table class=\"stats_table\" id=\"scoring\" data-cols-to-freeze=\"1,2\">";
+            const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
 
-            var scores = parsedElement.Element("tbody")
-                                      .Elements("tr")
+            var scores = parsedElement.Elements("tr")
                                       .ToList();
             return scores;
         }
@@ -475,13 +471,13 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractRawGames(string xhtml)
         {
-            const string start = "  <table class=\"sortable stats_table\" id=\"games\" data-cols-to-freeze=\"1\"><caption>Week-by-Week Games Table</caption>";
-            const string end = "</tbody></table>";
+
+            const string start = "    <table class=\"sortable stats_table\" id=\"games\" data-cols-to-freeze=\"1,3\">";
+            const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
 
-            var games = parsedElement.Element("tbody")
-                                     .Elements("tr")
+            var games = parsedElement.Elements("tr")
                                      .Where(IsGameRow)
                                      .ToList();
             return games;
@@ -526,11 +522,10 @@ namespace WaFFL.Evaluation
                 {
                     // do some post processing
                     var raw = sb.ToString();
-                    raw = raw.Replace("data-cols-to-freeze=1", "data-cols-to-freeze=\"1\"");
-                    raw = raw.Replace("data-cols-to-freeze=2", "data-cols-to-freeze=\"2\"");
                     raw = raw.Replace("& ", "&amp; ");
                     raw = raw.Replace("<br>", " ");
                     raw = raw.Replace("<br />", " ");
+                    raw = raw.Replace("<tbody>", "");
                     raw = raw.Replace("data-tip=\"<b>Yards per Punt</b>", "data-tip=\"Yards per Punt");
                     raw = raw.Replace("</td></td>", "</td>");
 

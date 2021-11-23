@@ -35,6 +35,10 @@ namespace WaFFL.Evaluation
             { "Ja'Marr Chase", "JaMarr Chase" },
             { "Cordarrelle Patterson", "Cordarelle Patterson" },
             { "Saquon Barkley", "Saquon Barclay" },
+            { "Michael Pittman Jr.", "Michael Pittman Jr" },
+            { "Mike Williams", "Mike Wiliams"},
+            { "Damien Harris", "Damian Harris" },
+            { "Chuba Hubbard", "Chubba Hubbard" },
         };
 
         /// <summary />

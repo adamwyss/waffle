@@ -324,69 +324,59 @@ namespace WaFFL.Evaluation
             string playerUri = new Uri(new Uri(baseUri), playerPageUri).AbsoluteUri;
             string xhtml = this.httpClient.DownloadString(playerUri);
 
-            const string start = "            <div class=\"section_wrapper\" id=\"injury\">";
-            const string end = "</div>";
+            const string start = "</div><!-- div.media-item --><div itemscope itemtype=\"https://schema.org/Person\" >";
+            const string end = "  <strong>Born:</strong> ";
             string[] exclude = { };
-            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude, true);
+            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude, true, s => s + "</p></div>");
             if (parsedElement != null)
             {
-                var status = parsedElement.Element("h3").Value;
-                var reason = parsedElement.Element("p").Value;
-                Console.WriteLine("INJURY ::: {0} {1}", status, reason);
-
-                player.Status = new InjuryStatus() { Reason = reason };
-                if (status == "Injured Reserve")
+                foreach (var p in parsedElement.Elements("p"))
                 {
-                    player.Status.Status = PlayerInjuryStatus.InjuredReserve;
+                    string value = p.Element("strong")?.Value;
+                    switch (value)
+                    {
+                        case "Position":
+                            {
+                                var position = p.FirstNode.NextNode.ToString().TrimStart(new char[] { ':' }).Trim();
+                                switch (position)
+                                {
+                                    case "QB":
+                                        player.Position = FanastyPosition.QB;
+                                        break;
+                                    case "RB":
+                                    case "FB":
+                                        player.Position = FanastyPosition.RB;
+                                        break;
+                                    case "WR":
+                                    case "TE":
+                                        player.Position = FanastyPosition.WR;
+                                        break;
+                                    case "K":
+                                        player.Position = FanastyPosition.K;
+                                        break;
+                                    default:
+                                        player.Position = FanastyPosition.UNKNOWN;
+                                        break;
+                                }
+                            }
+                            break;
+                        case "Team":
+                            {
+                                var statusNode = p.Element("span").FirstNode.NextNode;
+                                if (statusNode != null)
+                                {
+                                    // data source no longer provides injury status
+                                    string status = statusNode.ToString().Trim();
+                                    player.Status = new InjuryStatus() { Reason = status, Status = PlayerInjuryStatus.Out };
+                                }
+                                else
+                                {
+                                    player.Status = null;
+                                }
+                            }
+                            break;
+                    }
                 }
-                else if (status == "Out")
-                {
-                    player.Status.Status = PlayerInjuryStatus.Out;
-                }
-                else if (status == "Doubtful")
-                {
-                    player.Status.Status = PlayerInjuryStatus.Doubtful;
-                }
-                else if (status == "Questionable")
-                {
-                    player.Status.Status = PlayerInjuryStatus.Questionable;
-                }
-                else if (status == "Probable")
-                {
-                    player.Status.Status = PlayerInjuryStatus.Probable;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Unknown injury status");
-                }
-
-            }
-            else
-            {
-                player.Status = null;
-            }
-
-
-            // TODO parse this properly
-            if (xhtml.Contains("<strong>Position</strong>: QB"))
-            {
-                player.Position = FanastyPosition.QB;
-            }
-            else if (xhtml.Contains("<strong>Position</strong>: RB") || xhtml.Contains("<strong>Position</strong>: FB"))
-            {
-                player.Position = FanastyPosition.RB;
-            }
-            else if (xhtml.Contains("<strong>Position</strong>: WR") || xhtml.Contains("<strong>Position</strong>: TE"))
-            {
-                player.Position = FanastyPosition.WR;
-            }
-            else if (xhtml.Contains("<strong>Position</strong>: K"))
-            {
-                player.Position = FanastyPosition.K;
-            }
-            else
-            {
-                player.Position = FanastyPosition.UNKNOWN;
             }
         }
 
@@ -494,7 +484,7 @@ namespace WaFFL.Evaluation
             return true;
         }
 
-        private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude, bool optional = false)
+        private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude, bool optional = false, Func<string, string> cleanupDelegate = null)
         {
             // extract the html data table that we are interested in.
             string[] lines = xhtml.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -522,6 +512,7 @@ namespace WaFFL.Evaluation
                 {
                     // do some post processing
                     var raw = sb.ToString();
+                    raw = raw.Replace("&nbsp;", " ");
                     raw = raw.Replace("& ", "&amp; ");
                     raw = raw.Replace("<br>", " ");
                     raw = raw.Replace("<br />", " ");
@@ -529,6 +520,13 @@ namespace WaFFL.Evaluation
                     raw = raw.Replace("data-tip=\"<b>Yards per Punt</b>", "data-tip=\"Yards per Punt");
                     raw = raw.Replace("</td></td>", "</td>");
 
+                    raw = raw.Replace("</div><!-- div.media-item --><div itemscope itemtype=\"https://schema.org/Person\" >", "<div>");
+
+                    if (cleanupDelegate != null)
+                    {
+                        raw = cleanupDelegate(raw);
+                    }
+                    
                     // parse and return
                     return XElement.Parse(raw);
                 }

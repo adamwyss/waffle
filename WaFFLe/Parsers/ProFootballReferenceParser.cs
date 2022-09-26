@@ -324,7 +324,7 @@ namespace WaFFL.Evaluation
             string playerUri = new Uri(new Uri(baseUri), playerPageUri).AbsoluteUri;
             string xhtml = this.httpClient.DownloadString(playerUri);
 
-            const string start = "</div><!-- div.media-item --><div itemscope itemtype=\"https://schema.org/Person\" >";
+            const string start = "</div><!-- div.media-item --><div >";
             const string end = "  <strong>Born:</strong> ";
             string[] exclude = { };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude, true, s => s + "</p></div>");
@@ -520,7 +520,7 @@ namespace WaFFL.Evaluation
                     raw = raw.Replace("data-tip=\"<b>Yards per Punt</b>", "data-tip=\"Yards per Punt");
                     raw = raw.Replace("</td></td>", "</td>");
 
-                    raw = raw.Replace("</div><!-- div.media-item --><div itemscope itemtype=\"https://schema.org/Person\" >", "<div>");
+                    raw = raw.Replace("</div><!-- div.media-item --><div >", "<div>");
 
                     if (cleanupDelegate != null)
                     {

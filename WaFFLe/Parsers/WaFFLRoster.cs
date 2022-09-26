@@ -39,6 +39,10 @@ namespace WaFFL.Evaluation
             { "Mike Williams", "Mike Wiliams"},
             { "Damien Harris", "Damian Harris" },
             { "Chuba Hubbard", "Chubba Hubbard" },
+            //2022
+            { "Tua Tagovailoa", "Tua Tagovialoa"},
+            {"Michael Pittman Jr.", "Michael Pittman" },
+
         };
 
         /// <summary />

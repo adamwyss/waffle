@@ -35,14 +35,12 @@ namespace WaFFL.Evaluation
             { "Ja'Marr Chase", "JaMarr Chase" },
             { "Cordarrelle Patterson", "Cordarelle Patterson" },
             { "Saquon Barkley", "Saquon Barclay" },
-            { "Michael Pittman Jr.", "Michael Pittman Jr" },
             { "Mike Williams", "Mike Wiliams"},
             { "Damien Harris", "Damian Harris" },
             { "Chuba Hubbard", "Chubba Hubbard" },
             //2022
             { "Tua Tagovailoa", "Tua Tagovialoa"},
             {"Michael Pittman Jr.", "Michael Pittman" },
-
         };
 
         /// <summary />

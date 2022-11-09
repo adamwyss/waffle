@@ -399,7 +399,7 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractDefense(string xhtml)
         {
-            const string start = "    <table class=\"sortable stats_table\" id=\"player_defense\" data-cols-to-freeze=\",1\">";
+            const string start = "    <table class=\"sortable stats_table shade_zero\" id=\"player_defense\" data-cols-to-freeze=\",1\">";
             const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };
             XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);

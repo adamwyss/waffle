@@ -5,6 +5,7 @@
        xmlns:local="clr-namespace:WaFFL.Evaluation"
        Title="WaFFL" Height="900" Width="1200">
     <Window.CommandBindings>
+        <CommandBinding Command="local:ApplicationCommands.RefreshOptions" CanExecute="CanExecuteRefreshOptionsCommand" Executed="RefreshOptionsExecuted" />
         <CommandBinding Command="local:ApplicationCommands.Refresh" CanExecute="CanExecuteRefreshCommand" Executed="RefreshCommandExecuted" />
         <CommandBinding Command="local:ApplicationCommands.GoTo" CanExecute="CanExecuteGoToCommand" Executed="GoToCommandExecuted" />
         <CommandBinding Command="local:ApplicationCommands.Flag" CanExecute="CanExecuteFlagCommand" Executed="FlagCommandExecuted" />
@@ -50,7 +51,7 @@
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
                 <RibbonGroup Header="ESPN">
-                    <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.Refresh" />
+                    <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.RefreshOptions" />
                     <RibbonButton Label="View" LargeImageSource="/Views/Assets/espn32.png" Command="local:ApplicationCommands.GoTo" />
                 </RibbonGroup>
                 <RibbonGroup Header="Player">
@@ -111,6 +112,63 @@
             <local:DSTView x:Name="defenseView" Visibility="Collapsed" />
         </Grid>
 
+        <Grid Background="Transparent" Grid.RowSpan="2">
+            <Grid.Visibility>
+                <Binding Path="IsRefreshOptionsVisible">
+                    <Binding.Converter>
+                        <local:VisibilityConverter TrueIs="Visible" FalseIs="Collapsed" />
+                    </Binding.Converter>
+                </Binding>
+            </Grid.Visibility>
+            <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="5" Width="500" Height="335">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.5" />
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Import data" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30" Width="350" />
+                    <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Margin="0,0,0,15" TextWrapping="Wrap" MaxWidth="350" Text="Choose the week that you want to import. The requests will be throttled by the provider, so only sync the minimum weeks necessary." />
+                        <ComboBox SelectedIndex="{Binding TargetSyncWeek}" Width="250">
+                            <ComboBoxItem>All Weeks</ComboBoxItem>
+                            <ComboBoxItem>Week 1</ComboBoxItem>
+                            <ComboBoxItem>Week 2</ComboBoxItem>
+                            <ComboBoxItem>Week 3</ComboBoxItem>
+                            <ComboBoxItem>Week 4</ComboBoxItem>
+                            <ComboBoxItem>Week 5</ComboBoxItem>
+                            <ComboBoxItem>Week 6</ComboBoxItem>
+                            <ComboBoxItem>Week 7</ComboBoxItem>
+                            <ComboBoxItem>Week 8</ComboBoxItem>
+                            <ComboBoxItem>Week 9</ComboBoxItem>
+                            <ComboBoxItem>Week 10</ComboBoxItem>
+                            <ComboBoxItem>Week 11</ComboBoxItem>
+                            <ComboBoxItem>Week 12</ComboBoxItem>
+                            <ComboBoxItem>Week 13</ComboBoxItem>
+                            <ComboBoxItem>Week 14</ComboBoxItem>
+                            <ComboBoxItem>Week 15</ComboBoxItem>
+                            <ComboBoxItem>Week 16</ComboBoxItem>
+                            <ComboBoxItem>Week 17</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="15">
+                        <Button Width="100" Height="30" Click="WhenCancelSyncButtonClicked" Margin="0 ,0, 15, 0">
+                            <TextBlock Text="Cancel" />
+                        </Button>
+                        <Button Width="100" Height="30" Command="local:ApplicationCommands.Refresh">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Views/Assets/import32.png" Height="16" Width="16" />
+                                <TextBlock Text="Import" Margin="10,0,0,0" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
         <Grid Background="Transparent" Cursor="Wait" Grid.RowSpan="2">
             <Grid.Visibility>
                 <Binding Path="IsRefreshingData">
@@ -132,6 +190,6 @@
                 </Grid>
             </Border>
         </Grid>
-        
+
     </Grid>
 </RibbonWindow>

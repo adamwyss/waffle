@@ -26,5 +26,11 @@ namespace WaFFL.Evaluation
             "Flag",
             "FlagCommand",
             typeof(ApplicationCommands));
+
+        /// <summary />
+        public readonly static RoutedUICommand RefreshOptions = new RoutedUICommand(
+            "RefreshOptions",
+            "RefreshOptionsCommand",
+            typeof(ApplicationCommands));
     }
 }

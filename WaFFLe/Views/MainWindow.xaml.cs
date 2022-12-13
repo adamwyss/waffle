@@ -28,6 +28,12 @@ namespace WaFFL.Evaluation
             typeof(MainWindow));
 
         /// <summary />
+        public static readonly DependencyProperty IsRefreshOptionsVisibleProperty = DependencyProperty.Register(
+            "IsRefreshOptionsVisible",
+            typeof(bool),
+            typeof(MainWindow));
+
+        /// <summary />
         public static readonly DependencyProperty ParsingStatusTextProperty = DependencyProperty.Register(
             "ParsingStatusText",
             typeof(string),
@@ -37,6 +43,12 @@ namespace WaFFL.Evaluation
         public static readonly DependencyProperty CurrentSeasonProperty = DependencyProperty.Register(
             "CurrentSeason",
             typeof(FanastySeason),
+            typeof(MainWindow));
+
+        /// <summary />
+        public static readonly DependencyProperty TargetSyncWeekProperty = DependencyProperty.Register(
+            "TargetSyncWeek",
+            typeof(int),
             typeof(MainWindow));
 
         /// <summary />
@@ -74,6 +86,13 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
+        public bool IsRefreshOptionsVisible
+        {
+            get { return (bool)this.GetValue(IsRefreshOptionsVisibleProperty); }
+            set { this.SetValue(IsRefreshOptionsVisibleProperty, value); }
+        }
+
+        /// <summary />
         public string ParsingStatusText
         {
             get { return (string)this.GetValue(ParsingStatusTextProperty); }
@@ -85,6 +104,13 @@ namespace WaFFL.Evaluation
         {
             get { return (FanastySeason)this.GetValue(CurrentSeasonProperty); }
             set { this.SetValue(CurrentSeasonProperty, value); }
+        }
+
+        /// <summary />
+        public int TargetSyncWeek
+        {
+            get { return (int)this.GetValue(TargetSyncWeekProperty); }
+            set { this.SetValue(TargetSyncWeekProperty, value); }
         }
 
         /// <summary />
@@ -116,7 +142,7 @@ namespace WaFFL.Evaluation
                     });
 
                 ProFootballReferenceParser parser = new ProFootballReferenceParser(updateStatus);
-                parser.ParseSeason(YEAR, ref this.season);
+                parser.ParseSeason(YEAR, GetTargetWeekFromUI(), ref this.season);
                 ReplacementValueCalculator replacement = new ReplacementValueCalculator();
                 replacement.Calculate(this.season);
 
@@ -132,6 +158,28 @@ namespace WaFFL.Evaluation
             {
                 this.SetIsRefreshingData(false);
             }
+        }
+
+        /// <summary>Returns null for all weeks, int is week value 1-17</summary>
+        private int? GetTargetWeekFromUI()
+        {
+            int targetWeek = -1;
+            if (!this.Dispatcher.CheckAccess())
+            {
+                targetWeek = this.Dispatcher.Invoke<int>(() => this.TargetSyncWeek);
+            }
+            else
+            {
+                targetWeek = this.TargetSyncWeek;
+            }
+
+            int? returnValue = null;
+            if (targetWeek > 0)
+            {
+                returnValue = targetWeek;
+            }
+
+            return returnValue;
         }
 
         /// <summary />
@@ -203,9 +251,22 @@ namespace WaFFL.Evaluation
             WhenSaveClicked(sender, null);
         }
 
+        private void RefreshOptionsExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.IsRefreshOptionsVisible = true;
+        }
+
+        /// <summary />
+        private void CanExecuteRefreshOptionsCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !this.IsRefreshingData;
+        }
+
         /// <summary />
         private void RefreshCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            this.IsRefreshOptionsVisible = false;
+
             bool forceFullRefresh = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift);
             if (forceFullRefresh)
             {
@@ -320,6 +381,11 @@ namespace WaFFL.Evaluation
                 return;
 
             this.defenseView.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void WhenCancelSyncButtonClicked(object sender, RoutedEventArgs e)
+        {
+            this.IsRefreshOptionsVisible = false;
         }
     }
 }

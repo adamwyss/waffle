@@ -74,11 +74,24 @@ namespace WaFFL.Evaluation
             return query.ToArray();
         }
 
+        /// <summary />
         public void ClearAllPlayerGameLogs()
         {
             foreach (NFLPlayer player in this.playerCache.Values)
             {
                 player.GameLog.Clear();
+            }
+        }
+
+        public void ClearAllPlayerGameLogs(int week)
+        {
+            foreach (NFLPlayer player in this.playerCache.Values)
+            {
+                var games = player.GameLog.Where(x => x.Week == week).ToArray();
+                foreach (Game g in games)
+                {
+                    player.GameLog.Remove(g);
+                }
             }
         }
 

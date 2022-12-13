@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -27,18 +28,33 @@ namespace WaFFL.Evaluation
         private Action<string> callback;
 
         /// <summary />
+        private int webRequests;
+
+        /// <summary>
+        /// Null means sync all weeks; if value is specified, only sync that week.
+        /// </summary>
+        private int? syncWeek;
+
+        /// <summary />
         public ProFootballReferenceParser(Action<string> callback)
         {
             this.callback = callback;
             this.httpClient = new WebClient();
+            this.webRequests = 0;
         }
 
         /// <summary />
-        public void ParseSeason(int year, ref FanastySeason season)
+        public void ParseSeason(int year, int? week, ref FanastySeason season)
         {
             if (this.context != null)
             {
                 throw new InvalidOperationException("parsing action in progress");
+            }
+
+            bool validWeek = week.HasValue && week.Value > 0 && week.Value <= 17;
+            if (!validWeek)
+            {
+                throw new InvalidOperationException("invalid week");
             }
 
             if (season == null)
@@ -48,10 +64,19 @@ namespace WaFFL.Evaluation
             }
 
             this.context = season;
+            this.syncWeek = week;
 
             try
             {
-                this.context.ClearAllPlayerGameLogs();
+                if (this.syncWeek.HasValue)
+                {
+                    this.context.ClearAllPlayerGameLogs(this.syncWeek.Value);
+                }
+                else
+                {
+                    this.context.ClearAllPlayerGameLogs();
+                }
+
                 string uri = string.Format(SeasonScheduleUri, year);
                 ParseGames(uri);
             }
@@ -77,9 +102,18 @@ namespace WaFFL.Evaluation
             }
         }
 
+        private string ClientDownloadString(string uri)
+        {
+            string data = this.httpClient.DownloadString(uri);
+
+            // we are somewhat restricted on our web requests.  Need to understand what is needed.
+            Console.WriteLine("Web Requests {0} - {1}", ++this.webRequests, uri);
+            return data;
+        }
+
         private void ParseGames(string uri)
         {
-            string xhtml = this.httpClient.DownloadString(uri);
+            string xhtml = this.ClientDownloadString(uri);
             var games = this.ExtractRawGames(xhtml);
             foreach (var game in games)
             {
@@ -95,6 +129,16 @@ namespace WaFFL.Evaluation
         {
             var fields = game.Elements().ToList();
             string week = fields[0].Value;
+            if (this.syncWeek.HasValue)
+            {
+                string targetWeek = this.syncWeek.Value.ToString(CultureInfo.InvariantCulture);
+                if (week != targetWeek)
+                {
+                    // continue to next week
+                    return true;
+                }
+            }
+
             string winner = fields[4].Value;
             string location = fields[5].Value;
             if (string.IsNullOrWhiteSpace(location))
@@ -111,7 +155,7 @@ namespace WaFFL.Evaluation
             {
                 string uri = boxscore.Element("a").Attribute("href").Value;
                 string boxscoreUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
-                string xhtml = this.httpClient.DownloadString(boxscoreUri);
+                string xhtml = this.ClientDownloadString(boxscoreUri);
                 
                 var players = ExtractPlayerOffense(xhtml);
                 foreach (var player in players)
@@ -322,7 +366,7 @@ namespace WaFFL.Evaluation
         private void UpdatePlayerMetadata(NFLPlayer player, string playerPageUri, string baseUri)
         {
             string playerUri = new Uri(new Uri(baseUri), playerPageUri).AbsoluteUri;
-            string xhtml = this.httpClient.DownloadString(playerUri);
+            string xhtml = this.ClientDownloadString(playerUri);
 
             const string start = "</div><!-- div.media-item --><div >";
             const string end = "  <strong>Born:</strong> ";

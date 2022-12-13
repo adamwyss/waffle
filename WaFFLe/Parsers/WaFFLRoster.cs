@@ -40,7 +40,11 @@ namespace WaFFL.Evaluation
             { "Chuba Hubbard", "Chubba Hubbard" },
             //2022
             { "Tua Tagovailoa", "Tua Tagovialoa"},
-            {"Michael Pittman Jr.", "Michael Pittman" },
+            { "Michael Pittman Jr.", "Michael Pittman" },
+            { "DeAndre Hopkins", "De'Andre Hopkins" },
+            { "Joshua Palmer", "Joshua Palmer" },
+            { "Brian Robinson Jr.", "Brian Robinson" },
+            { "Kenneth Walker III", "Kenneth Walker"},
         };
 
         /// <summary />

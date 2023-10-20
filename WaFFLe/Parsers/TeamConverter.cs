@@ -6,13 +6,13 @@ using System.Reflection;
 namespace WaFFL.Evaluation
 {
     /// <summary />
-    public class DataConverter
+    public class TeamConverter
     {
         /// <summary />
         private static Dictionary<string, string> index;
 
         /// <summary />
-        private DataConverter()
+        private TeamConverter()
         {
         }
 

@@ -77,7 +77,7 @@ namespace WaFFL.Evaluation
         public Item_DST(NFLTeam dst)
         {
             this.model = dst;
-            this.displayName = DataConverter.ConvertToCode(this.model.TeamCode);
+            this.displayName = TeamConverter.ConvertToCode(this.model.TeamCode);
 
             Messenger.Default.Register<MarkedPlayerChanged>(this,
                 (m) =>

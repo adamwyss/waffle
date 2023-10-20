@@ -81,7 +81,7 @@
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\MathExtensions.cs" />
     <Compile Include="Parsers\ByeWeeks.cs" />
-    <Compile Include="Parsers\DataConverter.cs" />
+    <Compile Include="Parsers\TeamConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
     <Compile Include="Parsers\ProFootballReferenceParser.cs" />
     <Compile Include="Formulas\ReplacementValueCalculator.cs" />

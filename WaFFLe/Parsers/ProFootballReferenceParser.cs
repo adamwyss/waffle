@@ -272,7 +272,7 @@ namespace WaFFL.Evaluation
                 {
                     p.PlayerPageUri = string.Format("/teams/{0}/{1}.htm", teamCode.ToLowerInvariant(), this.context.Year);
                     p.Team = this.context.GetTeam(teamCode);
-                    p.Name = DataConverter.ConvertToName(teamCode);
+                    p.Name = TeamConverter.ConvertToName(teamCode);
                     p.Position = FanastyPosition.DST;
                 });
 

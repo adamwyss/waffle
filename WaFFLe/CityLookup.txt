@@ -29,4 +29,4 @@ SEA=Seattle Seahawks
 SFO=San Francisco 49ers
 TAM=Tampa Bay Buccaneers
 TEN=Tennessee Titans
-WAS=Washington Redskins
+WAS=Washington Commanders

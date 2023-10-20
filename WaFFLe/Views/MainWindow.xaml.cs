@@ -19,7 +19,7 @@ namespace WaFFL.Evaluation
         /// <summary>
         /// The year we want stats.
         /// </summary>
-        const int YEAR = 2022;
+        const int YEAR = 2023;
 
         /// <summary />
         public static readonly DependencyProperty IsRefreshingDataProperty = DependencyProperty.Register(
@@ -342,13 +342,13 @@ namespace WaFFL.Evaluation
         {
             Application.Current.Shutdown();
         }
-
+        
         private void WhenRefreshInjuryStatusClicked(object sender, RoutedEventArgs e)
         {
             ProFootballReferenceParser parser = new ProFootballReferenceParser(null);
             parser.UpdatePlayerInjuryStatus(YEAR, ref this.season, p => MarkedPlayers.IsMarked(p.Name));
         }
-
+        
         private void WhenPlayerViewChecked(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)

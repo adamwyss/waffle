@@ -43,7 +43,6 @@
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
                     <RibbonApplicationMenuItem Header="Save State" Click="WhenSaveClicked" />
-                    <RibbonApplicationMenuItem Header="Import Injury Status for Marked Players" Click="WhenRefreshInjuryStatusClicked" />
                     <RibbonApplicationMenu.FooterPaneContent>
                         <RibbonButton Label="Exit" Click="WhenExitClicked" />
                     </RibbonApplicationMenu.FooterPaneContent>
@@ -107,7 +106,7 @@
             </RibbonTab>
         </Ribbon>
 
-        <Grid  Grid.Row="1">
+        <Grid Grid.Row="1">
             <local:PlayerView x:Name="playerView" />
             <local:DSTView x:Name="defenseView" Visibility="Collapsed" />
         </Grid>

@@ -342,13 +342,7 @@ namespace WaFFL.Evaluation
         {
             Application.Current.Shutdown();
         }
-        
-        private void WhenRefreshInjuryStatusClicked(object sender, RoutedEventArgs e)
-        {
-            ProFootballReferenceParser parser = new ProFootballReferenceParser(null);
-            parser.UpdatePlayerInjuryStatus(YEAR, ref this.season, p => MarkedPlayers.IsMarked(p.Name));
-        }
-        
+
         private void WhenPlayerViewChecked(object sender, RoutedEventArgs e)
         {
             if (!this.IsLoaded)

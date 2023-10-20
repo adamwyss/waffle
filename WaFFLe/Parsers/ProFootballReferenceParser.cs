@@ -89,19 +89,6 @@ namespace WaFFL.Evaluation
             }
         }
 
-        public void UpdatePlayerInjuryStatus(int year, ref FanastySeason season, Func<NFLPlayer, bool> update)
-        {
-            string uri = string.Format(SeasonScheduleUri, year);
-
-            foreach (var player in season.GetAllPlayers())
-            {
-                if (update(player))
-                {
-                    UpdatePlayerMetadata(player, player.PlayerPageUri, uri);
-                }
-            }
-        }
-
         private string ClientDownloadString(string uri)
         {
             string data = this.httpClient.DownloadString(uri);
@@ -350,78 +337,9 @@ namespace WaFFL.Evaluation
             {
                 p.PlayerPageUri = fields[0].Element("a")?.Attribute("href")?.Value;
                 p.Name = name;
-                UpdatePlayerMetadata(p, element, baseUri);
             });
 
             return player;
-        }
-
-        private void UpdatePlayerMetadata(NFLPlayer player, XElement element, string baseUri)
-        {
-            var fields = element.Elements().ToList();
-            string uri = fields[0].Element("a").Attribute("href").Value;
-            UpdatePlayerMetadata(player, uri, baseUri);
-        }
-
-        private void UpdatePlayerMetadata(NFLPlayer player, string playerPageUri, string baseUri)
-        {
-            string playerUri = new Uri(new Uri(baseUri), playerPageUri).AbsoluteUri;
-            string xhtml = this.ClientDownloadString(playerUri);
-
-            const string start = "</div><!-- div.media-item --><div >";
-            const string end = "  <strong>Born:</strong> ";
-            string[] exclude = { };
-            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude, true, s => s + "</p></div>");
-            if (parsedElement != null)
-            {
-                foreach (var p in parsedElement.Elements("p"))
-                {
-                    string value = p.Element("strong")?.Value;
-                    switch (value)
-                    {
-                        case "Position":
-                            {
-                                var position = p.FirstNode.NextNode.ToString().TrimStart(new char[] { ':' }).Trim();
-                                switch (position)
-                                {
-                                    case "QB":
-                                        player.Position = FanastyPosition.QB;
-                                        break;
-                                    case "RB":
-                                    case "FB":
-                                        player.Position = FanastyPosition.RB;
-                                        break;
-                                    case "WR":
-                                    case "TE":
-                                        player.Position = FanastyPosition.WR;
-                                        break;
-                                    case "K":
-                                        player.Position = FanastyPosition.K;
-                                        break;
-                                    default:
-                                        player.Position = FanastyPosition.UNKNOWN;
-                                        break;
-                                }
-                            }
-                            break;
-                        case "Team":
-                            {
-                                var statusNode = p.Element("span").FirstNode.NextNode;
-                                if (statusNode != null)
-                                {
-                                    // data source no longer provides injury status
-                                    string status = statusNode.ToString().Trim();
-                                    player.Status = new InjuryStatus() { Reason = status, Status = PlayerInjuryStatus.Out };
-                                }
-                                else
-                                {
-                                    player.Status = null;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
         }
 
         private void AssignTeam(NFLPlayer player, XElement element)
@@ -505,7 +423,6 @@ namespace WaFFL.Evaluation
 
         private List<XElement> ExtractRawGames(string xhtml)
         {
-
             const string start = "    <table class=\"sortable stats_table\" id=\"games\" data-cols-to-freeze=\"1,3\">";
             const string end = "</table>";
             string[] exclude = { "   <colgroup><col><col><col><col><col><col><col><col><col><col><col><col><col><col></colgroup>" };

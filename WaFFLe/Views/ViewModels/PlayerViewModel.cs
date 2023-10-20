@@ -34,7 +34,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         public bool IsAvailable
         {
-            get { return WaFFLRoster.IsActive(this.PlayerData.Name); }
+            get { return WaFFLTeam.IsRostered(this.PlayerData.Name); }
         }
 
         public string InjuryStatus
@@ -387,7 +387,7 @@ namespace WaFFL.Evaluation
         {
             get { return GetScoreForWeekSortable(17); }
         }
-        
+
         public bool IsWeek17Bye
         {
             get { return IsByeWeek(17); }

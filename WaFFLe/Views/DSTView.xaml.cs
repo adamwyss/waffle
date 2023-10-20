@@ -91,7 +91,7 @@ namespace WaFFL.Evaluation
 
         public bool IsAvailable
         {
-            get { return WaFFLRoster.IsActive(this.displayName); }
+            get { return WaFFLTeam.IsRostered(this.displayName); }
         }
 
         /// <summary />

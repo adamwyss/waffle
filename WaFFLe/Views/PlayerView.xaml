@@ -9,6 +9,16 @@
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="Foreground" Value="DarkGray" />
         </Style>
+        <ContextMenu x:Key="RowMenu">
+            <MenuItem Header="Copy spelling correction" Click="WhenCopySpellingCorrectionClicked" />
+            <MenuItem Header="Update Position">
+                <MenuItem Header="QB" Click="WhenSetPositionClicked" />
+                <MenuItem Header="RB" Click="WhenSetPositionClicked" />
+                <MenuItem Header="WR" Click="WhenSetPositionClicked" />
+                <MenuItem Header="K" Click="WhenSetPositionClicked" />
+                <MenuItem Header="DST" Click="WhenSetPositionClicked" />
+            </MenuItem>
+        </ContextMenu>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -33,6 +43,9 @@
                             <Setter Property="FontWeight" Value="Bold" />
                         </DataTrigger>
                     </Style.Triggers>
+                    <Style.Setters>
+                        <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                    </Style.Setters>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

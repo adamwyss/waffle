@@ -243,5 +243,56 @@ namespace WaFFL.Evaluation
                 this.allPlayers.Add(player);
             }
         }
+
+        private void WhenCopySpellingCorrectionClicked(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                PlayerViewModel viewModel = menuItem.DataContext as PlayerViewModel;
+                if (viewModel != null)
+                {
+                    string clipboardText = string.Format("{{ \"{0}\", \"\" }},", viewModel.Name);
+                    Clipboard.SetText(clipboardText);
+                }
+            }
+        }
+
+        private void WhenSetPositionClicked(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                PlayerViewModel viewModel = menuItem.DataContext as PlayerViewModel;
+                if (viewModel != null)
+                {
+                    switch (menuItem.Header)
+                    {
+                        case "QB":
+                            viewModel.PlayerData.Position = FanastyPosition.QB;
+                            viewModel.InvalidatePosition();
+                            break;
+                        case "RB":
+                            viewModel.PlayerData.Position = FanastyPosition.RB;
+                            viewModel.InvalidatePosition();
+                            break;
+                        case "WR":
+                            viewModel.PlayerData.Position = FanastyPosition.WR;
+                            viewModel.InvalidatePosition();
+                            break;
+                        case "K":
+                            viewModel.PlayerData.Position = FanastyPosition.K;
+                            viewModel.InvalidatePosition();
+                            break;
+                        case "DST":
+                            viewModel.PlayerData.Position = FanastyPosition.DST;
+                            viewModel.InvalidatePosition();
+                            break;
+                    }
+                    
+
+                }
+            }
+        }
     }
 }

@@ -68,6 +68,11 @@ namespace WaFFL.Evaluation
             }
         }
 
+        public void InvalidatePosition()
+        {
+            this.RaisePropertyChanged(nameof(Position));
+        }
+
         /// <summary />
         public string Team
         {

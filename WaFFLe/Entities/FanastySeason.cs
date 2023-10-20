@@ -69,7 +69,6 @@ namespace WaFFL.Evaluation
         public IEnumerable<NFLPlayer> GetAllPlayers()
         {
             var query = from p in this.playerCache.Values
-                        where p.Position != FanastyPosition.UNKNOWN
                         select p;
             return query.ToArray();
         }

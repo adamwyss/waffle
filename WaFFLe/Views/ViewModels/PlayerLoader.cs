@@ -24,7 +24,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
 
         public IEnumerable<PlayerViewModel> GetViewModels()
         {
-            var results = this._season.GetAllPlayers().Select(ConvertToViewModel);
+            var results = this._season.GetAllPlayers().Where(p => p.GamesPlayed() > 0).Select(ConvertToViewModel);
             return results;
         }
 
@@ -42,7 +42,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
             points = player.FanastyPoints();
             games = player.GamesPlayed();
 
-            if (games > 0)
+            if (games > 0 && player.Position != FanastyPosition.UNKNOWN)
             {
                 int replacementScore = _replacementScores[player.Position];
 

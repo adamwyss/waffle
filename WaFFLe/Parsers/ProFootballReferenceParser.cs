@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -132,6 +133,8 @@ namespace WaFFL.Evaluation
             }
             string loser = fields[6].Value;
 
+            TeamsInGame teamsInGame = new TeamsInGame(this.context, TeamConverter.ConvertToCode(winner), TeamConverter.ConvertToCode(loser));
+
             this.callback(string.Format("Week {0} - {1} {2} {3}", week, winner, location, loser));
 
             var boxscore = fields[7];
@@ -141,7 +144,7 @@ namespace WaFFL.Evaluation
                 string uri = boxscore.Element("a").Attribute("href").Value;
                 string boxscoreUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
                 string xhtml = this.ClientDownloadString(boxscoreUri);
-                
+
                 var players = ExtractPlayerOffense(xhtml);
                 foreach (var player in players)
                 {
@@ -152,7 +155,7 @@ namespace WaFFL.Evaluation
                         continue;
                     }
 
-                    RecordPlayerStats(baseUri, week, player);
+                    RecordPlayerStats(baseUri, week, player, teamsInGame);
                 }
 
                 var kickers = ExtractPlayerKicking(xhtml);
@@ -175,7 +178,7 @@ namespace WaFFL.Evaluation
             return completed;
         }
 
-        private void RecordPlayerStats(string baseUri, string week, XElement element)
+        private void RecordPlayerStats(string baseUri, string week, XElement element, TeamsInGame teamsInGame)
         {
             NFLPlayer player = ExtractPlayerInfo(element, baseUri);
             AssignTeam(player, element);
@@ -183,7 +186,7 @@ namespace WaFFL.Evaluation
             var values = element.Elements().ToList();
             Game game = new Game();
             game.Week = int.Parse(week);
-            //game2.Opponent = this.context.GetTeam(values[1].Value);
+            game.Opponent = teamsInGame.GetOther(player.Team);
 
             int attempts = int.Parse(values[3].Value);
             if (attempts > 0)
@@ -323,7 +326,7 @@ namespace WaFFL.Evaluation
         {
             var fields = element.Elements().ToList();
             string playerid = fields[0].Attribute("data-append-csv").Value;
-            string name = fields[0].Value;
+            string name = fields[0].Value.Trim();
 
             // the player must have an id and name, but position is optional
             if (playerid == null || string.IsNullOrEmpty(name))
@@ -567,7 +570,7 @@ namespace WaFFL.Evaluation
                     {
                         raw = cleanupDelegate(raw);
                     }
-                    
+
                     // parse and return
                     return XElement.Parse(raw);
                 }
@@ -579,6 +582,32 @@ namespace WaFFL.Evaluation
             }
 
             throw new InvalidOperationException("The specified data was not found");
+        }
+    }
+
+    public class TeamsInGame
+    {
+        NFLTeam team1;
+        NFLTeam team2;
+
+        public TeamsInGame(FanastySeason season, string code1, string code2)
+            : this(season.GetTeam(code1), season.GetTeam(code2))
+        {
+        }
+
+        public TeamsInGame(NFLTeam team1, NFLTeam team2)
+        {
+            this.team1 = team1;
+            this.team2 = team2;
+        }
+
+        public NFLTeam GetOther(NFLTeam team)
+        {
+            if (this.team1 == team)
+                return this.team2;
+            if (this.team2 == team) 
+                return this.team1;
+            throw new InvalidOperationException();
         }
     }
 

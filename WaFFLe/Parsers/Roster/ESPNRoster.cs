@@ -1,13 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace WaFFL.Evaluation
 {
@@ -91,6 +86,10 @@ namespace WaFFL.Evaluation
             var trimmed = search.Trim();
             if (trimmed != search)
             {
+                if (Debugger.IsAttached)
+                {
+                    throw new InvalidOperationException();
+                }
                 System.Diagnostics.Debug.WriteLine("ESPNRoster Found spaces on search term '{0}', expected: '{1}'", search, trimmed);
                 search = trimmed;
             }

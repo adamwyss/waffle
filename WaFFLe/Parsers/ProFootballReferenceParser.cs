@@ -16,6 +16,9 @@ namespace WaFFL.Evaluation
         private readonly string SeasonScheduleUri = "https://www.pro-football-reference.com/years/{0}/games.htm";
 
         /// <summary />
+        private readonly string InjuryReportUri = "https://www.pro-football-reference.com/players/injuries.htm";
+
+        /// <summary />
         private readonly string[] Delimiters = new string[] { "\n" };
 
         /// <summary />
@@ -79,6 +82,8 @@ namespace WaFFL.Evaluation
 
                 string uri = string.Format(SeasonScheduleUri, year);
                 ParseGames(uri);
+
+                ParseInjuries(InjuryReportUri);
             }
             finally
             {
@@ -87,15 +92,8 @@ namespace WaFFL.Evaluation
 
                 this.context = null;
             }
-        }
 
-        private string ClientDownloadString(string uri)
-        {
-            string data = this.httpClient.DownloadString(uri);
 
-            // we are somewhat restricted on our web requests.  Need to understand what is needed.
-            Console.WriteLine("Web Requests {0} - {1}", ++this.webRequests, uri);
-            return data;
         }
 
         private void ParseGames(string uri)
@@ -443,6 +441,88 @@ namespace WaFFL.Evaluation
             }
 
             return true;
+        }
+
+        private void ParseInjuries(string uri)
+        {
+            ClearPlayerInjuries();
+
+            // fetch injury status.
+            string xhtml = this.ClientDownloadString(uri);
+            var injuries = ExtractInjuryReport(xhtml);
+            foreach (var injury in injuries)
+            {
+                ParseInjury(injury);
+            }
+        }
+
+        private void ClearPlayerInjuries()
+        {
+            foreach (var player in context.GetAllPlayers())
+            {
+                player.Status = null;
+            }
+        }
+
+        private void ParseInjury(XElement injury)
+        {
+            var fields = injury.Elements().ToList();
+            var id = fields[0].Attribute("data-append-csv").Value;
+            var player = this.context.GetPlayer(id, null);
+            if (player != null)
+            {
+                var status = fields[3].Value;
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    var report = fields[4].Value;
+                    var pratice = fields[5].Value;
+
+                    player.Status = new InjuryStatus()
+                    {
+                        Status = ConvertToInjuryStatus(status),
+                        Reason = string.Format("{0} - {1}", report, pratice)
+                    };
+                }
+            }
+        }
+
+        private PlayerInjuryStatus ConvertToInjuryStatus(string status)
+        {
+            switch (status)
+            {
+                case "Out":
+                    return PlayerInjuryStatus.Out;
+                case "Questionable":
+                    return PlayerInjuryStatus.Questionable;
+            }
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return PlayerInjuryStatus.Probable;
+        }
+
+        private List<XElement> ExtractInjuryReport(string xhtml)
+        {
+            const string start = "    <table class=\"sortable stats_table\" id=\"injuries\" data-cols-to-freeze=\"1,2\">";
+            const string end = "</table>";
+            string[] exclude = { "   <colgroup><col><col><col><col><col><col></colgroup>" };
+            XElement parsedElement = ExtractRawData(xhtml, start, end, exclude);
+
+            var injuries = parsedElement.Elements("tr")
+                                     .ToList();
+            return injuries;
+        }
+
+        private string ClientDownloadString(string uri)
+        {
+            string data = this.httpClient.DownloadString(uri);
+
+            // we are somewhat restricted on our web requests.  Need to understand what is needed.
+            Console.WriteLine("Web Requests {0} - {1}", ++this.webRequests, uri);
+            return data;
         }
 
         private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude, bool optional = false, Func<string, string> cleanupDelegate = null)

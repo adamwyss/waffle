@@ -33,15 +33,12 @@ namespace WaFFL.Evaluation
             NFLPlayer player;
 
             bool exists = this.playerCache.TryGetValue(uuid, out player);
-            if (!exists)
+            if (!exists && initializer != null)
             {
                 // create the player and update the cache
                 player = new NFLPlayer(uuid);
                 this.playerCache.Add(uuid, player);
-                if (initializer != null)
-                {
-                    initializer(player);
-                }
+                initializer(player);
             }
 
             return player;
@@ -69,6 +66,7 @@ namespace WaFFL.Evaluation
         public IEnumerable<NFLPlayer> GetAllPlayers()
         {
             var query = from p in this.playerCache.Values
+                        where p.IsRelevant()
                         select p;
             return query.ToArray();
         }
@@ -99,7 +97,7 @@ namespace WaFFL.Evaluation
         {
             var cache = new HashSet<FanastyPosition>(positions);
 
-            var query = from p in this.playerCache.Values
+            var query = from p in this.GetAllPlayers()
                         where cache.Contains(p.Position)
                         select p;
             return query.ToArray();

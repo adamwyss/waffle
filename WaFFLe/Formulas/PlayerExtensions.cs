@@ -218,5 +218,33 @@ namespace WaFFL.Evaluation
 
             return bonuses;
         }
+
+        /// <summary />
+        public static bool IsRelevant(this NFLPlayer player)
+        {
+            int games = player.GameLog.Count(g => !g.IsDNP());
+            if (games == 0)
+                return false;
+
+            int touches = player.GameLog.Sum(g => g.TotalTouches());
+            return touches / games > 3;
+        }
+
+        /// <summary />
+        private static int TotalTouches(this Game game)
+        {
+            if (game.Defense != null)
+            {
+                // defense has large number of touches.
+                return 100;
+            }
+
+            int p = game.Passing != null ? game.Passing.ATT : 0;
+            int r = game.Rushing != null ? game.Rushing.CAR : 0;
+            int c = game.Receiving != null ? game.Receiving.REC : 0;
+            int k = game.Kicking != null ? game.Kicking.XPA + game.Kicking.FGA : 0;
+            return p + r + c + k*5;
+        }
+
     }
 }

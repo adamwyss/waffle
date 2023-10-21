@@ -28,7 +28,13 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <local:DataGridWaFFLRosterColumn />
+                <local:DataGridWaFFLRosterColumn>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="ToolTip" Value="{Binding RosteredWaFFLTeam}" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </local:DataGridWaFFLRosterColumn>
                 <DataGridTextColumn Header="Team Name" Binding="{Binding TeamName}" CellStyle="{StaticResource MarkedPlayerCellStyle}"  />
                 <DataGridTextColumn Header="Code" Binding="{Binding TeamCode}" ElementStyle="{StaticResource RightAlignTextStyle}" />
                 <DataGridTextColumn Header="Bye Week" Binding="{Binding ByeWeek}" ElementStyle="{StaticResource RightAlignTextStyle}" />

@@ -85,7 +85,7 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public double CheckRosterStatus(string search)
+        public string CheckRosterStatus(string search)
         {
             //some players are coming in with a space.  need to check enjestion.
             var trimmed = search.Trim();
@@ -106,10 +106,10 @@ namespace WaFFL.Evaluation
             bool found = this.playerLookup.TryGetValue(search, out teamCode);
             if (!found)
             {
-                return 1.0;
+                return null;
             }
 
-            return 0.0;
+            return teamCode;
         }
     }
 }

@@ -73,25 +73,35 @@ namespace WaFFL.Evaluation
     {
         private NFLTeam model;
         private string displayName;
+        private string rosteredTeamCode;
 
         public Item_DST(NFLTeam dst)
         {
             this.model = dst;
             this.displayName = TeamConverter.ConvertToCode(this.model.TeamCode);
 
+            this.rosteredTeamCode = WaFFLTeam.IsRosteredOn(this.displayName);
+
             Messenger.Default.Register<MarkedPlayerChanged>(this,
                 (m) =>
                 {
                     if (m.Name == this.displayName)
                     {
-                        this.RaisePropertyChanged("IsHighlighted");
+                        this.RaisePropertyChanged(nameof(IsHighlighted));
                     }
                 });
         }
 
+        /// <summary />
         public bool IsAvailable
         {
-            get { return WaFFLTeam.IsRostered(this.displayName); }
+            get { return this.rosteredTeamCode != null; }
+        }
+
+        /// <summary />
+        public string RosteredWaFFLTeam
+        {
+            get { return this.rosteredTeamCode; }
         }
 
         /// <summary />

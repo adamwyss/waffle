@@ -82,7 +82,7 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public double CheckRosterStatus(string search)
+        public string CheckRosterStatus(string search)
         {
             bool found = this.rosterText.IndexOf(search) != -1;
             if (!found)
@@ -94,14 +94,14 @@ namespace WaFFL.Evaluation
                     bool adjustedFound = this.rosterText.IndexOf(alternate) != -1;
                     if (adjustedFound)
                     {
-                        return 0.1;
+                        return "n/a";
                     }
                 }
 
-                return 1.0;
+                return null;
             }
 
-            return 0.0;
+            return "n/a";
         }
     }
 }

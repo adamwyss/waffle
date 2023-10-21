@@ -10,6 +10,8 @@ namespace WaFFL.Evaluation
     [DebuggerDisplay("{PlayerData}")]
     public class PlayerViewModel : ViewModelBase
     {
+        private string rosteredTeamCode;
+
         /// <summary />
         public PlayerViewModel(NFLPlayer p)
         {
@@ -18,12 +20,14 @@ namespace WaFFL.Evaluation
             // cache the name+injury status here.
             this.Name = this.PlayerData.Name + GetInjuryStatus();
 
+            this.rosteredTeamCode = WaFFLTeam.IsRosteredOn(this.PlayerData.Name);
+
             Messenger.Default.Register<MarkedPlayerChanged>(this,
                 (m) =>
                 {
                     if (m.Name == this.PlayerData.Name)
                     {
-                        this.RaisePropertyChanged("IsHighlighted");
+                        this.RaisePropertyChanged(nameof(IsHighlighted));
                     }
                 });
         }
@@ -34,7 +38,13 @@ namespace WaFFL.Evaluation
         /// <summary />
         public bool IsAvailable
         {
-            get { return WaFFLTeam.IsRostered(this.PlayerData.Name); }
+            get { return this.rosteredTeamCode != null; }
+        }
+
+        /// <summary />
+        public string RosteredWaFFLTeam
+        {
+            get { return this.rosteredTeamCode; }
         }
 
         public string InjuryStatus

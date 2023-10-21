@@ -3,7 +3,7 @@ namespace WaFFL.Evaluation
 {
     public interface IWaFFLRoster
     {
-        double CheckRosterStatus(string search);
+        string CheckRosterStatus(string search);
     }
 
     /// <summary />
@@ -17,11 +17,21 @@ namespace WaFFL.Evaluation
         {
             if (provider == null)
             {
-                //provider = new WaFFLRoster();
                 provider = new ESPNRoster();
             }
 
-            return provider.CheckRosterStatus(search) < 0.3;
+            return provider.CheckRosterStatus(search) != null;
+        }
+
+        /// <summary />
+        public static string IsRosteredOn(string search)
+        {
+            if (provider == null)
+            {
+                provider = new ESPNRoster();
+            }
+
+            return provider.CheckRosterStatus(search);
         }
     }
 }

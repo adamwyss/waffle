@@ -495,8 +495,12 @@ namespace WaFFL.Evaluation
             {
                 case "Out":
                     return PlayerInjuryStatus.Out;
+                case "Doubtful":
+                    return PlayerInjuryStatus.Doubtful;
                 case "Questionable":
                     return PlayerInjuryStatus.Questionable;
+                case "Unknown":
+                    return PlayerInjuryStatus.Probable;
             }
 
             if (System.Diagnostics.Debugger.IsAttached)
@@ -565,6 +569,7 @@ namespace WaFFL.Evaluation
                     raw = raw.Replace("</td></td>", "</td>");
 
                     raw = raw.Replace("</div><!-- div.media-item --><div >", "<div>");
+                    raw = raw.Replace(", <a href='https://www.pro-football-reference.com/about/glossary.htm'>see glossary</a> for details Different ratings are used by the NFL and NCAA. Minimum 1500 pass attempts to qualify as career leader, minimum 150 pass attempts for playoffs leader.", "");
 
                     if (cleanupDelegate != null)
                     {

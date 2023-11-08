@@ -31,7 +31,7 @@ namespace WaFFL.Evaluation
             { "Los Angeles Rams", "Rams D/ST" },
             { "Las Vegas Raiders", "Raiders D/ST" },
             { "Miami Dolphins", "Dolphins D/ST" },
-            { "Minnesota Vikings", "V D/ST" },
+            { "Minnesota Vikings", "Vikings D/ST" },
             { "New England Patriots", "Patriots D/ST" },
             { "New Orleans Saints", "Saints D/ST" },
             { "New York Giants", "Giants D/ST" },
@@ -48,6 +48,7 @@ namespace WaFFL.Evaluation
             { "D.J. Moore", "DJ Moore" },
             { "Travis Etienne", "Travis Etienne Jr." },
             { "D.K. Metcalf", "DK Metcalf" },
+            { "Darrell Henderson", "Darrell Henderson Jr." },
         };
 
         /// <summary />

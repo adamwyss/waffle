@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace WaFFL.Evaluation.Views.ViewModels
 {
@@ -42,25 +45,18 @@ namespace WaFFL.Evaluation.Views.ViewModels
             points = player.FanastyPoints();
             games = player.GamesPlayed();
 
+
             if (games > 0 && player.Position != FanastyPosition.UNKNOWN)
             {
                 int replacementScore = _replacementScores[player.Position];
 
                 por = (points / games) - replacementScore;
                 wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
+                cpor = GetRunningAverageOfGamePoints(player) - replacementScore;
 
                 mean = player.FanastyPointsPerGame().Mean();
-                if (mean > 0)
-                {
-                    standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
-                    variationCoefficient = standardDeviation / mean;
-
-
-                    double multiplier = 1 - Math.Min(variationCoefficient, 1);
-
-                    cpor = (RoundToInt(points * multiplier) / games) - replacementScore;
-                }
-
+                standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
+                variationCoefficient = standardDeviation / mean;
             }
 
             PlayerViewModel vm = new PlayerViewModel(player);
@@ -73,6 +69,33 @@ namespace WaFFL.Evaluation.Views.ViewModels
             vm.StandardDeviation = RoundToInt(standardDeviation);
             vm.CoefficientOfVariation = RoundToInt(variationCoefficient * 100);
             return vm;
+        }
+
+        private int GetRunningAverageOfGamePoints(NFLPlayer player)
+        {
+            var games = player.GameLog.OrderBy(g => g.Week).ToList();
+            List<int> avgScores = new List<int>();
+            for (int i = 0; i < games.Count; i++)
+            {
+                int avg = 0;
+                if (i == 0)
+                {
+                    avg = games[i].GetFanastyPoints();
+                }
+                else if (i == 1)
+                {
+                    avg = (games[i].GetFanastyPoints() + games[i - 1].GetFanastyPoints());
+                    avg /= 2;
+                }
+                else if (i >= 2)
+                {
+                    avg = games[i].GetFanastyPoints() + games[i - 1].GetFanastyPoints() + games[i - 2].GetFanastyPoints();
+                    avg /= 3;
+                }
+
+                avgScores.Add(avg);
+            }
+            return (int)avgScores.Average();
         }
 
         private int RoundToInt(double value)

@@ -19,6 +19,30 @@
                 <MenuItem Header="DST" Click="WhenSetPositionClicked" />
             </MenuItem>
         </ContextMenu>
+        <Style TargetType="DataGridColumnHeader" x:Key="PointsOverReplacementHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Points Over Replacement" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="WeightedPointsOverReplacementHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Weighted Points Over Replacement" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="ConsistentPointsOverReplacementHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Consistent Points Over Replacement" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="FanastyPointsHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Total Fanasty Points" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="TotalBonusesHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Total Bonuses Received" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="MeanHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Mean" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="StandardDeviationHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Standard Deviation" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader" x:Key="CoefficientVariationHeaderStyle">
+            <Setter Property="ToolTipService.ToolTip" Value="Coefficient of Variation" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -65,15 +89,15 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
-                <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="wPOR" Width="60" Binding="{Binding WeightedPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="cPOR" Width="60" Binding="{Binding ConsistentPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource PointsOverReplacementHeaderStyle}" />
+                <DataGridTextColumn  Header="wPOR" Width="60" Binding="{Binding WeightedPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource WeightedPointsOverReplacementHeaderStyle}" />
+                <DataGridTextColumn  Header="cPOR" Width="60" Binding="{Binding ConsistentPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource ConsistentPointsOverReplacementHeaderStyle}" />
+                <DataGridTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource FanastyPointsHeaderStyle}" />
+                <DataGridTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource TotalBonusesHeaderStyle}" />
 <!--
-                <DataGridTextColumn  Header="μ" Width="60" Binding="{Binding Mean}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="σ" Width="60" Binding="{Binding StandardDeviation}" ElementStyle="{StaticResource RightAlignTextStyle}" />
-                <DataGridTextColumn  Header="cv%" Width="60" Binding="{Binding CoefficientOfVariation}" ElementStyle="{StaticResource RightAlignTextStyle}" />
+                <DataGridTextColumn  Header="μ" Width="60" Binding="{Binding Mean}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource MeanHeaderStyle}" />
+                <DataGridTextColumn  Header="σ" Width="60" Binding="{Binding StandardDeviation}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource StandardDeviationHeaderStyle}" />
+                <DataGridTextColumn  Header="cv%" Width="60" Binding="{Binding CoefficientOfVariation}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource CoefficientVariationHeaderStyle}" />
 -->
                 <!-- WEEK BY WEEK SCORES -->
                 <DataGridTextColumn  Header="W1" Width="40" Binding="{Binding Week1Score}" ElementStyle="{StaticResource WeekByWeekScoreStyle}" SortMemberPath="Week1ScoreSortable">

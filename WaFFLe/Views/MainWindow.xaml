@@ -3,7 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:settings="clr-namespace:WaFFL.Evaluation.Properties"
        xmlns:local="clr-namespace:WaFFL.Evaluation"
-       Title="WaFFL" Height="900" Width="1200">
+       Title="WaFFL" Height="900" Width="1200" Icon="/App.ico">
     <Window.CommandBindings>
         <CommandBinding Command="local:ApplicationCommands.RefreshOptions" CanExecute="CanExecuteRefreshOptionsCommand" Executed="RefreshOptionsExecuted" />
         <CommandBinding Command="local:ApplicationCommands.Refresh" CanExecute="CanExecuteRefreshCommand" Executed="RefreshCommandExecuted" />

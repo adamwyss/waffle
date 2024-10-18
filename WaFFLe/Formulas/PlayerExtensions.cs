@@ -227,7 +227,7 @@ namespace WaFFL.Evaluation
                 return false;
 
             int touches = player.GameLog.Sum(g => g.TotalTouches());
-            return touches / games > 3;
+            return touches / games >= 3;
         }
 
         /// <summary />

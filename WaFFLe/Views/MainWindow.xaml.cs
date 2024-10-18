@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
@@ -19,7 +19,7 @@ namespace WaFFL.Evaluation
         /// <summary>
         /// The year we want stats.
         /// </summary>
-        const int YEAR = 2023;
+        const int YEAR = 2024;
 
         /// <summary />
         public static readonly DependencyProperty IsRefreshingDataProperty = DependencyProperty.Register(

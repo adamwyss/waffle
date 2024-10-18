@@ -56,7 +56,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
 
                 mean = player.FanastyPointsPerGame().Mean();
                 standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
-                variationCoefficient = standardDeviation / mean;
+                variationCoefficient = mean > 0 ? standardDeviation / mean : 0;
             }
 
             PlayerViewModel vm = new PlayerViewModel(player);

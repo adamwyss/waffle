@@ -1,4 +1,4 @@
-﻿
+
 namespace WaFFL.Evaluation
 {
     public interface IWaFFLRoster
@@ -11,17 +11,6 @@ namespace WaFFL.Evaluation
     {
         /// <summary />
         private static IWaFFLRoster provider;
-
-        /// <summary />
-        public static bool IsRostered(string search)
-        {
-            if (provider == null)
-            {
-                provider = new ESPNRoster();
-            }
-
-            return provider.CheckRosterStatus(search) != null;
-        }
 
         /// <summary />
         public static string IsRosteredOn(string search)

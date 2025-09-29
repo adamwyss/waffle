@@ -52,7 +52,7 @@ namespace WaFFL.Evaluation
         };
 
         /// <summary />
-        private const string WaFFLRosterUri = @"https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2023/segments/0/leagues/69765935?view=mSettings&view=mRoster&view=mTeam&view=modular&view=mNav";
+        private const string WaFFLRosterUri = @"https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2025/segments/0/leagues/69765935?view=mSettings&view=mRoster&view=mTeam&view=modular&view=mNav";
 
         /// <summary />
         private Dictionary<string, string> playerLookup;

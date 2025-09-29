@@ -136,6 +136,10 @@
     <Compile Include="Entities\NFLTeam.cs" />
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\MathExtensions.cs" />
+    <Compile Include="Learning\PlayerPositions\PlayerPositionExtensions.cs" />
+    <Compile Include="Learning\PlayerPositions\PositionData.cs" />
+    <Compile Include="Learning\PlayerPositions\PositionPrediction.cs" />
+    <Compile Include="Learning\PlayerPositions\WaFFLMachineLearning.cs" />
     <Compile Include="Parsers\ByeWeeks.cs" />
     <Compile Include="Parsers\TeamConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
@@ -262,6 +266,11 @@
   <ItemGroup>
     <Resource Include="Views\Assets\available-16.png" />
     <Resource Include="Views\Assets\saved-16.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Learning\PlayerPositions\Data\training.txt" />
+    <None Include="Learning\PlayerPositions\Data\verification.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

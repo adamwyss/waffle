@@ -8,6 +8,10 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Controls.Ribbon;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using WaFFL.Evaluation.Learning.Positions;
 
 namespace WaFFL.Evaluation
 {
@@ -287,6 +291,8 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void GoToCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            //WaFFLMachineLearning.VerifyResultsWithRealData(this.season); return;
+
             PlayerViewModel item = this.playerView.SelectedItem;
             string url = string.Format("https://www.pro-football-reference.com/{0}", item.PlayerData.PlayerPageUri);
 

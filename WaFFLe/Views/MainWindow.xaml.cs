@@ -141,8 +141,8 @@ namespace WaFFL.Evaluation
                             }), value);
                     });
 
-                ProFootballReferenceParser parser = new ProFootballReferenceParser(updateStatus);
-                parser.ParseSeason(YEAR, GetTargetWeekFromUI(), ref this.season);
+                ProFootballReferenceParser parser = new ProFootballReferenceParser(this.season, updateStatus);
+                parser.ParseWeek(GetTargetWeekFromUI());
                 ReplacementValueCalculator replacement = new ReplacementValueCalculator();
                 replacement.Calculate(this.season);
 
@@ -161,7 +161,7 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary>Returns null for all weeks, int is week value 1-17</summary>
-        private int? GetTargetWeekFromUI()
+        private int GetTargetWeekFromUI()
         {
             int targetWeek = -1;
             if (!this.Dispatcher.CheckAccess())
@@ -173,13 +173,7 @@ namespace WaFFL.Evaluation
                 targetWeek = this.TargetSyncWeek;
             }
 
-            int? returnValue = null;
-            if (targetWeek > 0)
-            {
-                returnValue = targetWeek;
-            }
-
-            return returnValue;
+            return targetWeek + 1;
         }
 
         /// <summary />
@@ -228,6 +222,23 @@ namespace WaFFL.Evaluation
             }
             else
             {
+                if (this.season.Year != YEAR)
+                {
+                    MessageBoxResult result = MessageBox.Show("Your cache is for a different season.  Would you like to reset?",
+                                                              "Reset Data Store",
+                                                              MessageBoxButton.YesNo,
+                                                              MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.No)
+                    {
+                        // bail out and don't save
+                        Application.Current.Shutdown();
+                        Environment.Exit(0);
+                    }
+                    // year mismatch... we need to update.
+                    this.season.Year = YEAR;
+                    this.season.ClearAllPlayerGameLogs();
+                }
+
                 this.CurrentSeason = this.season;
             }
 
@@ -271,7 +282,8 @@ namespace WaFFL.Evaluation
             if (forceFullRefresh)
             {
                 // if shift is pressed, we will wipe out our data.
-                this.season = null;
+                this.season.ClearAllPlayerGameLogs();
+                MarkedPlayers.Players.Clear();
             }
 
             Thread thread = new Thread(this.refreshDelegate);

@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.Linq;
+using System.Numerics;
 
 namespace WaFFL.Evaluation
 {
@@ -13,6 +14,9 @@ namespace WaFFL.Evaluation
 
         /// <summary />
         private Dictionary<string, NFLTeam> teamCache = new Dictionary<string, NFLTeam>();
+
+        /// <summary />
+        private Dictionary<string, NFLPlayer> nameIndex;
 
         /// <summary />
         public FanastySeason()
@@ -28,6 +32,9 @@ namespace WaFFL.Evaluation
         /// <summary />
         public PositionBaseline ReplacementValue { get; set; }
 
+        /// <summary>
+        /// Finds player by ID or creates a new player reference with the specified initialization.
+        /// </summary>
         public NFLPlayer GetPlayer(string uuid, Action<NFLPlayer> initializer = null)
         {
             NFLPlayer player;
@@ -45,10 +52,29 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
+        public IEnumerable<NFLPlayer> GetAllPlayers()
+        {
+            var query = from p in this.playerCache.Values
+                        select p;
+            return query.ToArray();
+        }
+
+        /// <summary />
+        public IEnumerable<NFLPlayer> GetAll(params FanastyPosition[] positions)
+        {
+            var cache = new HashSet<FanastyPosition>(positions);
+
+            var query = from p in this.GetAllPlayers()
+                        where cache.Contains(p.GetPositionOrBestGuess())
+                        select p;
+            return query.ToArray();
+        }
+
+        /// <summary />
         public NFLTeam GetTeam(string code)
         {
             code = code.Trim();
-            
+
             NFLTeam team;
 
             bool exists = this.teamCache.TryGetValue(code, out team);
@@ -63,11 +89,10 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public IEnumerable<NFLPlayer> GetAllPlayers()
+        public IEnumerable<NFLTeam> GetAllTeams()
         {
-            var query = from p in this.playerCache.Values
-                        where p.IsRelevant()
-                        select p;
+            var query = from t in this.teamCache.Values
+                        select t;
             return query.ToArray();
         }
 
@@ -80,6 +105,7 @@ namespace WaFFL.Evaluation
             }
         }
 
+        /// <summary />
         public void ClearAllPlayerGameLogs(int week)
         {
             foreach (NFLPlayer player in this.playerCache.Values)
@@ -93,20 +119,38 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        public IEnumerable<NFLPlayer> GetAll(params FanastyPosition[] positions)
+        public void CreateIndex()
         {
-            var cache = new HashSet<FanastyPosition>(positions);
+            if (this.nameIndex != null)
+            {
+                throw new InvalidOperationException("Index already exists.  Call DeleteIndex before CreateIndex.");
+            }
 
-            var query = from p in this.GetAllPlayers()
-                        where cache.Contains(p.Position)
-                        select p;
-            return query.ToArray();
+            this.nameIndex = this.playerCache.Values.ToDictionary(p => p.Name);
         }
 
         /// <summary />
-        public IEnumerable<NFLTeam> GetAllTeams()
+        public void DeleteIndex()
         {
-            return this.teamCache.Values;
+            this.nameIndex = null;
+        }
+
+        /// <summary />
+        public NFLPlayer GetPlayerByIndex(string name)
+        {
+            if (this.nameIndex == null)
+            {
+                throw new InvalidOperationException("Index does not exist.  Call CreateIndex before GetPlayerByIndex.");
+            }
+
+            NFLPlayer player;
+            bool exists = this.nameIndex.TryGetValue(name, out player);
+            if (!exists)
+            {
+                throw new InvalidOperationException("Player with specified name does not exist.");
+            }
+
+            return player;
         }
     }
 }

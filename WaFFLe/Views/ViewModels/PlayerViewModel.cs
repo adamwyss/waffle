@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using System.Diagnostics;
 using WaFFL.Evaluation.Parsers;
 
 namespace WaFFL.Evaluation
@@ -74,6 +73,12 @@ namespace WaFFL.Evaluation
                     return position.ToString();
                 }
 
+                position = this.PlayerData.GuessPosition();
+                if (position != FanastyPosition.UNKNOWN)
+                {
+                    return position.ToString() + "′";
+                }
+
                 return "n/a";
             }
         }
@@ -124,7 +129,7 @@ namespace WaFFL.Evaluation
 
         private string GetScoreForWeek(int week)
         {
-            foreach (Game g in this.PlayerData.GameLog)
+         foreach (Game g in this.PlayerData.GameLog)
             {
                 if (g.Week == week)
                 {

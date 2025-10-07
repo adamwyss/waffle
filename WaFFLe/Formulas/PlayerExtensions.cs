@@ -71,31 +71,34 @@ namespace WaFFL.Evaluation
                 Passing p = game.Passing;
                 if (p != null)
                 {
-                    bonuses += CountBonuses(p.YDS, 300, 100);
+                    bonuses += CountYardageBonuses(p.YDS, 300, 100);
+                    bonuses += CountScoringDistanceBonuses(p.TD_YDS, 50);
                 }
 
                 Rushing r = game.Rushing;
                 if (r != null)
                 {
-                    bonuses += CountBonuses(r.YDS, 100, 50);
+                    bonuses += CountYardageBonuses(r.YDS, 100, 50);
+                    bonuses += CountScoringDistanceBonuses(r.TD_YDS, 50);
                 }
 
                 Receiving c = game.Receiving;
                 if (c != null)
                 {
-                    bonuses += CountBonuses(c.YDS, 100, 50);
+                    bonuses += CountYardageBonuses(c.YDS, 100, 50);
+                    bonuses += CountScoringDistanceBonuses(c.TD_YDS, 50);
                 }
 
                 Kicking k = game.Kicking;
                 if (k != null)
                 {
-                    // unable to determine bonuses for kicking yet
+                    bonuses += CountScoringDistanceBonuses(k.FG_YDS, 50, 67, 4);
                 }
 
                 Defense dst = game.Defense;
                 if (dst != null)
                 {
-                    // unable to determine bonuses for defense yet
+                    bonuses += CountScoringDistanceBonuses(dst.TD_YDS, 50);
                 }
             }
 
@@ -110,34 +113,52 @@ namespace WaFFL.Evaluation
             Passing p = game.Passing;
             if (p != null)
             {
+                // 1 point per yard; BONUS: 300yds = 50pts, 400yds = 100pts, 500yds = 150pts, etc.
                 points += p.YDS;
-                points += 50 * CountBonuses(p.YDS, 300, 100);
-                points -= p.INT * 50;
+                points += 50 * CountYardageBonuses(p.YDS, 300, 100);
 
-                // estimate 10 yards per passing TD on average
-                points += p.TD * 10;
+                // Touchdown(TD) = 1 point per yard; BONUS: 50 + yds = 50pts
+                points += p.TD_YDS?.Sum() ?? 0;
+                points += 50 * CountScoringDistanceBonuses(p.TD_YDS, 50);
+
+                // Two-Point Conversion = 25pts
+                points += p.TWO_PT_CONV * 25;
+
+                // Interception = -50pts
+                points -= p.INT * 50;
             }
 
             Rushing r = game.Rushing;
             if (r != null)
             {
+                // 1 point per yard; BONUS: 100yds = 50pts, 150yds = 100pts, 200yds = 150pts, etc.
                 points += r.YDS;
-                points += 50 * CountBonuses(r.YDS, 100, 50);
+                points += 50 * CountYardageBonuses(r.YDS, 100, 50);
 
-                // estimate 3 yards per rushing TD on average
-                points += r.TD * 3;
+                // Touchdown(TD) = 1 point per yard; BONUS: 50 + yds = 50pts
+                points += r.TD_YDS?.Sum() ?? 0;
+                points += 50 * CountScoringDistanceBonuses(r.TD_YDS, 50);
+
+                // Two - Point Conversion = 25pts
+                points += r.TWO_PT_CONV * 25;
             }
 
             Receiving c = game.Receiving;
             if (c != null)
             {
+                // 1 point per yard; BONUS: 100yds = 50pts, 150yds = 100pts, 200yds = 150pts, etc.
                 points += c.YDS;
-                points += 50 * CountBonuses(c.YDS, 100, 50);
+                points += 50 * CountYardageBonuses(c.YDS, 100, 50);
 
-                // estimate 10 yards per receiving TD on average
-                points += c.TD * 10;
+                // Touchdown(TD) = 1 point per yard; BONUS: 50 + yds = 50pts
+                points += c.TD_YDS?.Sum() ?? 0;
+                points += 50 * CountScoringDistanceBonuses(c.TD_YDS, 50);
+
+                // Two - Point Conversion = 25pts
+                points += c.TWO_PT_CONV * 25;
             }
 
+            // Fumble Lost = -25pts
             Fumbles f = game.Fumbles;
             if (f != null)
             {
@@ -147,44 +168,48 @@ namespace WaFFL.Evaluation
             Kicking k = game.Kicking;
             if (k != null)
             {
-                // calculate the points for all field goals awarding
-                // points per yard of a field goal and subtracting the
-                // points of a missed fieldgoal.
+                // Extra Point(XP) = 33pts
+                points += k.XPM * 33;
+
+                // Field Goal(FG) = 1 point per yard; BONUS: 50 + yds = 50pts, 67 + yds = 200pts
+                points += k.FG_YDS?.Sum() ?? 0;
+                points += 50 * CountScoringDistanceBonuses(k.FG_YDS, 50, 67, 4); // long bonus: 4 x 50 = 200
+
+                // Missed XP = -33pts
+                points -= (k.XPA - k.XPM) * 33;
+
+                // Missed FG = minus 1 point per yard(-1x)
+                points -= (k.FGA - k.FGM) * 46;
 
                 // In 2016, the average kick was from 37.7 yards away; the average
                 // successful kick was from 36.2 yards out - while the average miss was from 46.2 yards away.
-
-                points += k.FGM * 38;
-                points -= (k.FGA - k.FGM) * 46;
-
-                // calculate 20 points for each extra point made and 
-                // subtract 20 points for each point missed
-                points += k.XPM * 33;
-                points -= (k.XPA - k.XPM) * 33;
             }
 
-            Defense defense = game.Defense;
-            if (defense != null)
+            Defense dst = game.Defense;
+            if (dst != null)
             {
-                //calculate points for interceptions
-                points += defense.INT * 50;
-                points += defense.YDS_INT;
-                if (defense.TD_INT > 0)
-                {
-                    // if we have a touchdown, one point per yard avaraged
-                    points += (defense.YDS_INT / defense.TD_INT) * defense.TD_INT;
-                }
+                // Interception = 50pts; Interception Return = 1 point per yard
+                points += dst.INT * 50;
+                points += dst.YDS_INT;
 
-                // calculate points for fumble recoveries
-                points += defense.FUM * 25;
-                if (defense.TD_FUM > 0)
-                {
-                    // if we have a touchdown, one point per yard averaged
-                    points += (defense.YDS_FUM / defense.TD_FUM) * defense.TD_FUM;
-                }               
+                // Fumble Recovery = 25pts
+                points += dst.FUM * 25;
 
-                // calculate points for sacks
-                points += defense.SACK * 10;
+                // Sack = 10pts
+                points += dst.SACK * 10;
+
+                // Safety = 50pts
+                points += dst.SAFETY * 50;
+
+                // TD = 1 point per yard; BONUS: 50 + yds = 50pts
+                points += dst.TD_YDS?.Sum() ?? 0;
+                points += 50 * CountScoringDistanceBonuses(dst.TD_YDS, 50);
+
+                // Blocked Kick = 50pts
+                // TODO
+
+                // Special Teams TD = 1 point per yard(NO Bonus for 50 + yds)
+                points += dst.TD_ST_YDS?.Sum() ?? 0;
             }
 
             return points;
@@ -202,7 +227,7 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
-        private static int CountBonuses(int yds, int min, int step)
+        private static int CountYardageBonuses(int yds, int min, int step)
         {
             int bonuses = 0;
 
@@ -220,11 +245,42 @@ namespace WaFFL.Evaluation
         }
 
         /// <summary />
+        private static int CountScoringDistanceBonuses(List<int> distances, int threshold, int? premiumThreshold = null, int? premiumBonus = null)
+        {
+            if (distances == null)
+            {
+                return 0;
+            }
+
+            int bonuses = 0;
+            foreach (int distance in distances)
+            {
+                if (premiumThreshold.HasValue && distance >= premiumThreshold.Value)
+                {
+                    if (premiumBonus.HasValue)
+                    {
+                        bonuses += premiumBonus.Value;
+                    }
+                    else
+                    {
+                        bonuses += 1;
+                    }
+                }
+                else if (distance >= threshold)
+                {
+                    bonuses += 1;
+                }
+            }
+
+            return bonuses;
+        }
+
+        /// <summary />
         public static bool IsRelevant(this NFLPlayer player)
         {
             int games = player.GameLog.Count(g => !g.IsDNP());
             if (games == 0)
-                return false;
+                return false;            
 
             int touches = player.GameLog.Sum(g => g.TotalTouches());
             return touches / games >= 3;
@@ -246,5 +302,51 @@ namespace WaFFL.Evaluation
             return p + r + c + k*5;
         }
 
+
+        /// <summary />
+        public static bool ProbablyPlays(this NFLPlayer player, FanastyPosition position)
+        {
+            return player.GetPositionOrBestGuess() == position;
+        }
+
+        /// <summary />
+        public static FanastyPosition GetPositionOrBestGuess(this NFLPlayer player)
+        {
+            FanastyPosition position = player.Position;
+            if (position != FanastyPosition.UNKNOWN)
+            {
+                return position;
+            }
+
+            return player.GuessPosition();
+        }
+
+        /// <summary />
+        public static FanastyPosition GuessPosition(this NFLPlayer p)
+        {
+            int passAttempts = p.GameLog.Sum(g => g.Passing != null ? g.Passing.ATT : 0);
+            int rushAttempts = p.GameLog.Sum(g => g.Rushing != null ? g.Rushing.CAR : 0);
+            int recievingAttempts = p.GameLog.Sum(g => g.Receiving != null ? g.Receiving.REC : 0);
+            int kickAttempts = p.GameLog.Sum(g => g.Kicking != null ? g.Kicking.XPA + g.Kicking.FGA : 0);
+
+            if (passAttempts > rushAttempts && recievingAttempts < 2 && kickAttempts == 0)
+            {
+                return FanastyPosition.QB;
+            }
+            else if (passAttempts == 0 && recievingAttempts > rushAttempts && kickAttempts == 0)
+            {
+                return FanastyPosition.WR;
+            }
+            else if (passAttempts == 0 && rushAttempts > 0 && recievingAttempts < rushAttempts && kickAttempts == 0)
+            {
+                return FanastyPosition.RB;
+            }
+            else if (kickAttempts > 0)
+            {
+                return FanastyPosition.K;
+            }
+
+            return p.Position;
+        }
     }
 }

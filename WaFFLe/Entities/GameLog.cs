@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace WaFFL.Evaluation
@@ -50,7 +51,7 @@ namespace WaFFL.Evaluation
         public int ATT { get; set; }
 
         /// <summary>
-        /// Yards gained by passing (
+        /// Yards gained by passing
         /// </summary>
         public int YDS { get; set; }
 
@@ -68,6 +69,16 @@ namespace WaFFL.Evaluation
         /// Longest Completion
         /// </summary>
         public int LONG { get; set; }
+
+        /// <summary>
+        /// Distance of individual touchdown passes
+        /// </summary>
+        public List<int> TD_YDS { get; set; }
+
+        /// <summary>
+        /// Successful two-point conversions pass attempts
+        /// </summary>
+        public int TWO_PT_CONV { get; set; }
     }
 
     /// <summary />
@@ -94,6 +105,16 @@ namespace WaFFL.Evaluation
         /// Longest Rushing Attempt
         /// </summary>
         public int LONG { get; set; }
+
+        /// <summary>
+        /// Distance of individual touchdown runs
+        /// </summary>
+        public List<int> TD_YDS { get; set; }
+
+        /// <summary>
+        /// Successful two-point conversions run attempts
+        /// </summary>
+        public int TWO_PT_CONV { get; set; }
     }
 
     /// <summary />
@@ -120,6 +141,16 @@ namespace WaFFL.Evaluation
         /// Longest Reception
         /// </summary>
         public int LONG { get; set; }
+
+        /// <summary>
+        /// Distance of individual touchdown receptions
+        /// </summary>
+        public List<int> TD_YDS { get; set; }
+
+        /// <summary>
+        /// Successful two-point conversions receptions
+        /// </summary>
+        public int TWO_PT_CONV { get; set; }
     }
 
     /// <summary />
@@ -142,7 +173,7 @@ namespace WaFFL.Evaluation
     [DebuggerDisplay("K: {XPM}XP; {FGM}FG")]
     [Serializable]
     public class Kicking
-    { 
+    {
         /// <summary>
         /// field goals made
         /// </summary>
@@ -162,6 +193,11 @@ namespace WaFFL.Evaluation
         /// Extra point attempts
         /// </summary>
         public int XPA { get; set; }
+
+        /// <summary>
+        /// Distance of individual field goals
+        /// </summary>
+        public List<int> FG_YDS { get; set; }
     }
 
     /// <summary />
@@ -195,13 +231,18 @@ namespace WaFFL.Evaluation
         public int FUM { get; set; }
 
         /// <summary>
-        /// Fumbles recovered returned yards
+        /// Distance of individual touchdowns by the defensive (fumbles, int)
         /// </summary>
-        public int YDS_FUM { get; set; }
+        public List<int> TD_YDS { get; set; }
 
         /// <summary>
-        /// Fumbles returned for touchdowns
+        /// Distance of individual touchdowns by the special teams unit (kickoff, punt, blocks)
         /// </summary>
-        public int TD_FUM { get; set; }
+        public List<int> TD_ST_YDS { get; set; }
+
+        /// <summary>
+        /// Total safeties
+        /// </summary>
+        public int SAFETY { get; set; }
     }
 }

@@ -30,27 +30,27 @@ namespace WaFFL.Evaluation
             }
 
             var qb = from p in tally
-                     where p.Context.Position == FanastyPosition.QB
+                     where p.Context.ProbablyPlays(FanastyPosition.QB)
                      orderby p.Average descending
                      select p;
 
             var rb = from p in tally
-                     where p.Context.Position == FanastyPosition.RB
+                     where p.Context.ProbablyPlays(FanastyPosition.RB)
                      orderby p.Average descending
                      select p;
 
             var wr = from p in tally
-                     where p.Context.Position == FanastyPosition.WR
+                     where p.Context.ProbablyPlays(FanastyPosition.WR)
                      orderby p.Average descending
                      select p;
 
             var k = from p in tally
-                    where p.Context.Position == FanastyPosition.K
+                    where p.Context.ProbablyPlays(FanastyPosition.K)
                     orderby p.Average descending
                     select p;
 
             var dst = from p in tally
-                      where p.Context.Position == FanastyPosition.DST
+                      where p.Context.ProbablyPlays(FanastyPosition.DST)
                       orderby p.Average descending
                       select p;
 

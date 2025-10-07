@@ -195,7 +195,7 @@ namespace WaFFL.Evaluation
 
         private bool IsNotFiltered(PlayerViewModel player)
         {
-            switch (player.PlayerData.Position)
+            switch (player.PlayerData.GetPositionOrBestGuess())
             {
                 case FanastyPosition.QB:
                     if (!this.IsScopeQB) return false;

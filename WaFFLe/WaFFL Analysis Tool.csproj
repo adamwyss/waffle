@@ -176,7 +176,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Formulas\PlayerExtensions.cs" />
-    <Compile Include="Parsers\Roster\WaFFLRoster.cs" />
     <Compile Include="WaFFLApplication.xaml.cs">
       <DependentUpon>WaFFLApplication.xaml</DependentUpon>
       <SubType>Code</SubType>

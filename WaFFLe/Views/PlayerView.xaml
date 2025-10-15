@@ -10,6 +10,7 @@
             <Setter Property="Foreground" Value="DarkGray" />
         </Style>
         <ContextMenu x:Key="RowMenu">
+            <MenuItem Header="Show Score Details"  Click="WhenShowScoreDetailsClicked" />
             <MenuItem Header="Copy spelling correction" Click="WhenCopySpellingCorrectionClicked" />
             <MenuItem Header="Update Position">
                 <MenuItem Header="QB" Click="WhenSetPositionClicked" />
@@ -89,12 +90,14 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn  Header="Team" Binding="{Binding Team}" Foreground="DarkGray" />
+
                 <DataGridTextColumn  Header="POR" Width="50" Binding="{Binding PointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource PointsOverReplacementHeaderStyle}" />
                 <DataGridTextColumn  Header="wPOR" Width="60" Binding="{Binding WeightedPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource WeightedPointsOverReplacementHeaderStyle}" />
                 <DataGridTextColumn  Header="cPOR" Width="60" Binding="{Binding ConsistentPointsOverReplacement}" ElementStyle="{StaticResource RightAlignTextStyle}"  HeaderStyle="{StaticResource ConsistentPointsOverReplacementHeaderStyle}" />
                 <DataGridTextColumn  Header="FP" Width="60" Binding="{Binding FanastyPoints}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource FanastyPointsHeaderStyle}" />
                 <DataGridTextColumn  Header="TB" Width="50" Binding="{Binding TotalBonuses}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource TotalBonusesHeaderStyle}" />
-<!--
+
+                <!--
                 <DataGridTextColumn  Header="μ" Width="60" Binding="{Binding Mean}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource MeanHeaderStyle}" />
                 <DataGridTextColumn  Header="σ" Width="60" Binding="{Binding StandardDeviation}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource StandardDeviationHeaderStyle}" />
                 <DataGridTextColumn  Header="cv%" Width="60" Binding="{Binding CoefficientOfVariation}" ElementStyle="{StaticResource RightAlignTextStyle}" HeaderStyle="{StaticResource CoefficientVariationHeaderStyle}" />
@@ -287,6 +290,7 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
+
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

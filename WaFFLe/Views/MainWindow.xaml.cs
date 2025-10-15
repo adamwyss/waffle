@@ -173,7 +173,7 @@ namespace WaFFL.Evaluation
                 targetWeek = this.TargetSyncWeek;
             }
 
-            return targetWeek + 1;
+            return targetWeek;
         }
 
         /// <summary />
@@ -215,33 +215,41 @@ namespace WaFFL.Evaluation
 
             if (!success)
             {
-                // if we were unable to load the season from disk, we will
-                // scrape the data from the web agian.
-                Thread thread = new Thread(this.refreshDelegate);
-                thread.Start();
-            }
-            else
-            {
-                if (this.season.Year != YEAR)
+                MessageBoxResult result = MessageBox.Show("Would you like to create a new season?",
+                                            "Create Data Store",
+                                            MessageBoxButton.YesNo,
+                                            MessageBoxImage.Information);
+
+                if (result == MessageBoxResult.No)
                 {
-                    MessageBoxResult result = MessageBox.Show("Your cache is for a different season.  Would you like to reset?",
-                                                              "Reset Data Store",
-                                                              MessageBoxButton.YesNo,
-                                                              MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.No)
-                    {
-                        // bail out and don't save
-                        Application.Current.Shutdown();
-                        Environment.Exit(0);
-                    }
-                    // year mismatch... we need to update.
-                    this.season.Year = YEAR;
-                    this.season.ClearAllPlayerGameLogs();
+                    // bail out and don't save
+                    Application.Current.Shutdown();
+                    Environment.Exit(0);
                 }
 
-                this.CurrentSeason = this.season;
+                this.season = new FanastySeason();
+                this.season.Year = YEAR;
+                this.CurrentSeason = season;
+            }
+            else if (this.season.Year != YEAR)
+            {
+                MessageBoxResult result = MessageBox.Show("Your cache is for a different season.  Would you like to reset?",
+                                                            "Reset Data Store",
+                                                            MessageBoxButton.YesNo,
+                                                            MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    // bail out and don't save
+                    Application.Current.Shutdown();
+                    Environment.Exit(0);
+                }
+
+                // year mismatch... we need to update.
+                this.season.Year = YEAR;
+                this.season.ClearAllPlayerGameLogs();
             }
 
+            this.CurrentSeason = this.season;
 
             List<string> markedPlayers = null;
             success = MarkedPlayerPersister.TryLoadPlayers(out markedPlayers);

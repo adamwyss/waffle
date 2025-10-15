@@ -49,6 +49,8 @@ namespace WaFFL.Evaluation
             { "Travis Etienne", "Travis Etienne Jr." },
             { "D.K. Metcalf", "DK Metcalf" },
             { "Darrell Henderson", "Darrell Henderson Jr." },
+            //2025
+            { "James Cook", "James Cook III" },
         };
 
         /// <summary />

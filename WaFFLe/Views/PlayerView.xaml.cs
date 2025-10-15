@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using WaFFL.Evaluation.Views.ViewModels;
@@ -236,14 +237,6 @@ namespace WaFFL.Evaluation
             return player.Name.IndexOf(Filter, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 
-        private void Load<T>(IEnumerable<T> players) where T : PlayerViewModel
-        {
-            foreach (T player in players)
-            {
-                this.allPlayers.Add(player);
-            }
-        }
-
         private void WhenCopySpellingCorrectionClicked(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
@@ -254,6 +247,38 @@ namespace WaFFL.Evaluation
                 {
                     string clipboardText = string.Format("{{ \"{0}\", \"\" }},", viewModel.Name);
                     Clipboard.SetText(clipboardText);
+                }
+            }
+        }
+
+        private void WhenShowScoreDetailsClicked(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                PlayerViewModel viewModel = menuItem.DataContext as PlayerViewModel;
+                if (viewModel != null)
+                {
+                    var games = viewModel.PlayerData.GameLog.OrderByDescending(g => g.Week).Take(6);
+                    if (games != null)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var game in games)
+                        {
+                            string message = game.GetFanastyPointsDetails();
+                            string title = string.Format("Week {0} vs {1} - {2} points", game.Week, game.Opponent?.TeamCode ?? "?", game.GetFanastyPoints());
+                            sb.AppendLine(title);
+                            sb.AppendLine(message);
+                            sb.AppendLine();
+                        }
+
+                        MessageBox.Show(sb.ToString(), viewModel.PlayerData.Name, MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No games found in gamelog.", "Player Error", MessageBoxButton.OK);
+                    }
+
                 }
             }
         }

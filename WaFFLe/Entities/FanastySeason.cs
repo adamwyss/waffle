@@ -147,6 +147,10 @@ namespace WaFFL.Evaluation
             bool exists = this.nameIndex.TryGetValue(name, out player);
             if (!exists)
             {
+                // apparently a player can score, but never be in the listing...
+                // at this point, we don't have and id, page url or anything but a name.
+                // create an empty element, but don't add it to the season.
+                return new NFLPlayer("fake");
                 throw new InvalidOperationException("Player with specified name does not exist.");
             }
 

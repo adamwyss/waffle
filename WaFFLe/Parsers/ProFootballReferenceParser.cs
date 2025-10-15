@@ -1,6 +1,4 @@
-﻿
-using Microsoft.ML;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -10,7 +8,6 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Documents;
 using System.Xml.Linq;
 
 namespace WaFFL.Evaluation
@@ -51,23 +48,35 @@ namespace WaFFL.Evaluation
         public void ParseWeek(int week)
         {
             bool validWeek = week > 0 && week <= 17;
-            if (!validWeek)
+            if (validWeek)
+            {
+                var players = this.context.GetAllPlayers().Where(p => p.GameLog.Count() == 0);
+
+
+                try
+                {
+                    this.context.ClearAllPlayerGameLogs(week);
+
+                    string uri = string.Format(SeasonScheduleUri, this.context.Year);
+                    ParseGames(uri, week);
+                    ParseInjuries();
+                }
+                finally
+                {
+                    this.context.LastUpdated = DateTime.Now;
+                }
+            }
+            else if (week == 0)
+            {
+                // for now, 0 means import injury only
+                ParseInjuries();
+            }
+            else
             {
                 throw new InvalidOperationException("invalid week: " + week.ToString());
             }
 
-            try
-            {
-                this.context.ClearAllPlayerGameLogs(week);
 
-                string uri = string.Format(SeasonScheduleUri, this.context.Year);
-                ParseGames(uri, week);
-                ParseInjuries(InjuryReportUri);
-            }
-            finally
-            {
-                this.context.LastUpdated = DateTime.Now;
-            }
         }
 
         private void ParseGames(string uri, int targetWeek)
@@ -239,12 +248,12 @@ namespace WaFFL.Evaluation
             return true;
         }
 
-        private void ParseInjuries(string uri)
+        private void ParseInjuries()
         {
             ClearPlayerInjuries();
 
             // fetch injury status.
-            string xhtml = this.ClientDownloadString(uri);
+            string xhtml = this.ClientDownloadString(InjuryReportUri);
             var injuries = ExtractInjuryReport(xhtml);
             foreach (var injury in injuries)
             {
@@ -260,6 +269,25 @@ namespace WaFFL.Evaluation
             }
         }
 
+        private FanastyPosition PositionFromString(string code)
+        {
+            switch (code)
+            {
+                case "QB":
+                    return FanastyPosition.QB;
+                case "RB":
+                case "FB":
+                    return FanastyPosition.RB;
+                case "WR":
+                case "TE":
+                    return FanastyPosition.WR;
+                case "K":
+                    return FanastyPosition.K;
+            }
+
+            return FanastyPosition.UNKNOWN;
+        }
+
         private void ParseInjury(XElement injury)
         {
             var fields = injury.Elements().ToList();
@@ -267,6 +295,13 @@ namespace WaFFL.Evaluation
             var player = this.context.GetPlayer(id, null);
             if (player != null)
             {
+                var pos = fields[2].Value;
+                var teamCode = fields[1].Element("a").Value;
+
+                var team = this.context.GetTeam(teamCode);
+                var position = PositionFromString(pos);
+                For.Player(player).CheckTeam(team).CheckPosition(position).UpdateIfChanged();
+
                 var status = fields[3].Value;
                 if (!string.IsNullOrWhiteSpace(status))
                 {
@@ -318,7 +353,6 @@ namespace WaFFL.Evaluation
 
         private string ClientDownloadString(string uri)
         {
-            
             string filePath = null;
 
             if (System.Diagnostics.Debugger.IsAttached)
@@ -455,6 +489,64 @@ namespace WaFFL.Evaluation
             if (this.team2 == team) 
                 return this.team1;
             throw new InvalidOperationException();
+        }
+    }
+
+    public class For
+    {
+        public static For Player(NFLPlayer player)
+        {
+            return new For(player);
+        }
+
+        NFLPlayer _player;
+
+        private For(NFLPlayer player)
+        {
+            _player = player;
+        }
+
+        public For CheckName(string name)
+        {
+            if (_player.Name != name)
+            {
+                Console.WriteLine("NAME-CHANGE: Updating players name from '{0}' to '{1}'.", _player.Name, name);
+                _player.Name = name;
+            }
+            return this;
+        }
+
+        public For CheckPosition(FanastyPosition position)
+        {
+            if (_player.Position != position)
+            {
+                // do not log if the position was undefined.
+                if (_player.Position != FanastyPosition.UNKNOWN)
+                {
+                    Console.WriteLine("POSITION-CHANGE: '{0}' position is now '{1}'.  previously: '{2}'", _player.Name, position, _player.Position);
+                }
+                _player.Position = position;
+            }
+            return this;
+        }
+
+        public For CheckTeam(NFLTeam team)
+        {
+            if (_player.Team != team)
+            {
+                // do not log if the team was undefined.
+                if (_player.Team != null)
+                {
+                    Console.WriteLine("TEAM-CHANGE: '{0}' is now on team '{1}'.  previously: '{2}'", _player.Name, team.TeamCode, _player.Team.TeamCode);
+                }
+                
+                _player.Team = team;
+            }
+            return this;
+        }
+
+        public void UpdateIfChanged()
+        {
         }
     }
 
@@ -601,11 +693,7 @@ namespace WaFFL.Evaluation
                 p.Name = name;
             });
 
-            if (player.Name != name)
-            {
-                Console.WriteLine("Updating players name '{0}' -> '{1}'.", player.Name, name);
-                player.Name = name;
-            }
+            For.Player(player).CheckName(name).UpdateIfChanged();
 
             return player;
         }
@@ -619,12 +707,7 @@ namespace WaFFL.Evaluation
             string teamcode = fields[1].Value;
 
             NFLTeam team = this._season.GetTeam(teamcode);
-            if (player.Team != team)
-            {
-                // if team has changed, we will update -- we only need to track the most recent
-                // team.  This is all that matters.
-                player.Team = team;
-            }
+            For.Player(player).CheckTeam(team).UpdateIfChanged();
         }
     }
 

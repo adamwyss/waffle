@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace WaFFL.Evaluation.Views.ViewModels
@@ -27,7 +28,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
 
         public IEnumerable<PlayerViewModel> GetViewModels()
         {
-            var results = this._season.GetAllPlayers().Where(p => p.IsRelevant()).Select(ConvertToViewModel);
+            var results = this._season.GetAllPlayers().Where(p => p.IsRelevant() && p.GetPositionOrBestGuess() != FanastyPosition.UNKNOWN).Select(ConvertToViewModel);
             return results;
         }
 
@@ -95,6 +96,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
 
                 avgScores.Add(avg);
             }
+
             return (int)avgScores.Average();
         }
 

@@ -133,6 +133,7 @@
                     <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Margin="0,0,0,15" TextWrapping="Wrap" MaxWidth="350" Text="Choose the week that you want to import. The requests will be throttled by the provider, so only sync the minimum weeks necessary." />
                         <ComboBox SelectedIndex="{Binding TargetSyncWeek}" Width="250">
+                            <ComboBoxItem>Injury Status</ComboBoxItem>
                             <ComboBoxItem>Week 1</ComboBoxItem>
                             <ComboBoxItem>Week 2</ComboBoxItem>
                             <ComboBoxItem>Week 3</ComboBoxItem>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
 
 namespace WaFFL.Evaluation
 {
@@ -162,7 +164,7 @@ namespace WaFFL.Evaluation
             Fumbles f = game.Fumbles;
             if (f != null)
             {
-                points -= f.FUM * 25;
+                points -= f.LOST * 25;
             }
 
             Kicking k = game.Kicking;
@@ -213,6 +215,258 @@ namespace WaFFL.Evaluation
             }
 
             return points;
+        }
+
+        private static void AppendGameYards(this StringBuilder sb, int yds, string type, int min, int step)
+        {
+            sb.Append(" ");
+            sb.AppendFormat("{0}{1}", yds, type);
+
+            int bonuses = CountYardageBonuses(yds, min, step);
+            if (bonuses > 1)
+            {
+                sb.AppendFormat("{{{0}b}} ", bonuses);
+            }
+            else if (bonuses > 0)
+            {
+                sb.Append("{b}");
+            }
+        }
+
+        private static void AppendScoringYards(this StringBuilder sb, int yds, string type)
+        {
+            sb.AppendFormat("{0}{1}", yds, type);
+            if (yds > 50)
+            {
+                sb.Append("{b}");
+            }
+        }
+
+        private static void AppendScoringCount(this StringBuilder sb, int count, string type)
+        {
+            if (count > 1)
+            {
+                sb.Append(count);
+            }
+            sb.Append(type);
+        }
+
+        public static string GetFanastyPointsDetails(this Game game)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var p = game.Passing;
+            if (p != null)
+            {
+                if (p.YDS != 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendGameYards(p.YDS, "p", 300, 100);
+                    sb.Append(",");
+                }
+
+                if (p.TD_YDS != null)
+                {
+                    foreach (int td in p.TD_YDS)
+                    {
+                        sb.Append(" ");
+                        sb.AppendScoringYards(td, "tdp");
+                        sb.Append(",");
+                    }
+                }
+
+                if (p.TWO_PT_CONV > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(p.TWO_PT_CONV, "twoptconvp");
+                    sb.Append(",");
+                }
+
+                if (p.INT > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendFormat("{0}int", p.INT);
+                    sb.Append(",");
+                }
+            }
+
+            var r = game.Rushing;
+            if (r != null)
+            {
+                if (r.YDS != 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendGameYards(r.YDS, "r", 100, 50);
+                    sb.Append(",");
+                }
+
+                if (r.TD_YDS != null)
+                {
+                    foreach (int td in r.TD_YDS)
+                    {
+                        sb.Append(" ");
+                        sb.AppendScoringYards(td, "tdr");
+                        sb.Append(",");
+                    }
+                }
+
+                if (r.TWO_PT_CONV > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(r.TWO_PT_CONV, "twoptconvr");
+                    sb.Append(",");
+                }
+            }
+
+            var c = game.Receiving;
+            if (c != null)
+            {
+                if (c.YDS != 0)
+                {
+                    sb.Append(" ");
+                    AppendGameYards(sb, c.YDS, "c", 100, 50);
+                    sb.Append(",");
+                }
+
+                if (c.TD_YDS != null)
+                {
+                    foreach (int td in c.TD_YDS)
+                    {
+                        sb.Append(" ");
+                        AppendScoringYards(sb, td, "tdc");
+                        sb.Append(",");
+                    }
+                }
+
+                if (c.TWO_PT_CONV > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(c.TWO_PT_CONV, "twoptconvp");
+                    sb.Append(",");
+                }
+            }
+
+            var fum = game.Fumbles;
+            if (fum != null && fum.LOST > 0)
+            {
+                sb.Append(" ");
+                sb.AppendScoringCount(fum.LOST, "fum");
+                sb.Append(",");
+            }
+
+            var k = game.Kicking;
+            if (k != null)
+            {
+                if (k.XPM > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(k.XPM, "xp");
+                    sb.Append(",");
+                }
+
+                if (k.FG_YDS != null)
+                {
+                    foreach (int fg in k.FG_YDS)
+                    {
+                        sb.Append(" ");
+                        sb.AppendFormat("{0}fg", fg);
+
+                        int bonuses = CountScoringDistanceBonuses(new List<int> { fg }, 50, 67, 4);
+                        if (bonuses > 1)
+                        {
+                            sb.AppendFormat("{{{0}b}} ", bonuses);
+                        }
+                        else if (bonuses > 0)
+                        {
+                            sb.Append("{b}");
+                        }
+                        sb.Append(",");
+                    }
+                }
+
+                int missedXp = k.XPA - k.XPM;
+                if (missedXp > 0)
+                {
+                    sb.Append(" ");
+                    sb.Append("-");
+                    sb.AppendScoringCount(missedXp, "xp");
+                    sb.Append(",");
+                }
+
+                int missedFg = k.FGA - k.FGM;
+                if (missedFg > 0)
+                {
+                    for (int i = 0; i < missedFg; i++)
+                    {
+                        sb.Append(" ");
+                        sb.Append("-46fg");
+                    }
+                    sb.Append(",");
+                }
+            }
+
+            var dst = game.Defense;
+            if (dst != null)
+            {
+                if (dst.SACK > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendFormat("{0}s", dst.SACK);
+                    sb.Append(",");
+                }
+
+                if (dst.FUM > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendFormat("{0}fr", dst.FUM);
+                    sb.Append(",");
+                }
+
+                if (dst.INT > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendFormat("{0}int {1}yds", dst.INT, dst.YDS_INT);
+                    sb.Append(",");
+                }
+
+                if (dst.TD_YDS != null)
+                {
+                    foreach (int td in dst.TD_YDS)
+                    {
+                        sb.Append(" ");
+                        sb.AppendScoringYards(td, "td");
+                        sb.Append(",");
+                    }
+                }
+
+                if (dst.TD_ST_YDS != null)
+                {
+                    foreach (int td in dst.TD_ST_YDS)
+                    {
+                        sb.Append(" ");
+                        sb.AppendFormat("{0}tdst", td);
+                        sb.Append(",");
+                    }
+                }
+
+                if (dst.SAFETY > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(dst.SAFETY, "safety");
+                    sb.Append(",");
+                }
+            }
+            if (sb.Length > 0)
+            {
+            sb.Remove(0, 1);
+            sb.Length--;
+            }
+            else
+            {
+                sb.Append("DNP");
+            }
+
+            return sb.ToString();
         }
 
         /// <summary />
@@ -282,8 +536,7 @@ namespace WaFFL.Evaluation
             if (games == 0)
                 return false;            
 
-            int touches = player.GameLog.Sum(g => g.TotalTouches());
-            return touches / games >= 3;
+            return true;
         }
 
         /// <summary />

@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Controls.Ribbon;
+using Microsoft.Win32;
 
 namespace WaFFL.Evaluation
 {
@@ -62,7 +63,10 @@ namespace WaFFL.Evaluation
 
         /// <summary />
         private FanastySeason season;
-        
+
+        private ApplicationState appState;
+        private ActiveDocumentManager documentManager;
+
         /// <summary />
         private Collection<Action<FanastySeason>> subscribers = new Collection<Action<FanastySeason>>();
 
@@ -71,6 +75,17 @@ namespace WaFFL.Evaluation
         {
             InitializeComponent();
             this.DataContext = this;
+
+            appState = new ApplicationState();
+            documentManager = new ActiveDocumentManager();
+            documentManager.StateChanged += (s, e) => {
+                this.CurrentSeason = this.season = documentManager.Season;
+                MarkedPlayers.Players = documentManager.MarkedPlayers;
+                if (appState.LastOpenedFilePath != null)
+                    this.Title = $"WaFFL - {appState.LastOpenedFilePath}";
+                else
+                    this.Title = "WaFFL";
+            };
 
             this.refreshDelegate = new ThreadStart(this.RefreshAndParse);
 
@@ -211,63 +226,37 @@ namespace WaFFL.Evaluation
         /// <summary />
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            bool success = WaFFLPersister.TryLoadSeason(out this.season);
+            this.appState.Load();
 
-            if (!success)
+            if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift))
             {
-                MessageBoxResult result = MessageBox.Show("Would you like to create a new season?",
-                                            "Create Data Store",
-                                            MessageBoxButton.YesNo,
-                                            MessageBoxImage.Information);
+                // if shift is down, do not auto open.
+                return;
+            }
 
-                if (result == MessageBoxResult.No)
+            if (appState.LastOpenedFilePath != null)
+            {
+                documentManager.Open(appState.LastOpenedFilePath);
+                if (!documentManager.IsOpen)
                 {
-                    // bail out and don't save
-                    Application.Current.Shutdown();
-                    Environment.Exit(0);
+                    // there was a failure somewhere
+                    appState.LastOpenedFilePath = null;
                 }
-
-                this.season = new FanastySeason();
-                this.season.Year = YEAR;
-                this.CurrentSeason = season;
             }
-            else if (this.season.Year != YEAR)
-            {
-                MessageBoxResult result = MessageBox.Show("Your cache is for a different season.  Would you like to reset?",
-                                                            "Reset Data Store",
-                                                            MessageBoxButton.YesNo,
-                                                            MessageBoxImage.Warning);
-                if (result == MessageBoxResult.No)
-                {
-                    // bail out and don't save
-                    Application.Current.Shutdown();
-                    Environment.Exit(0);
-                }
-
-                // year mismatch... we need to update.
-                this.season.Year = YEAR;
-                this.season.ClearAllPlayerGameLogs();
-            }
-
-            this.CurrentSeason = this.season;
-
-            List<string> markedPlayers = null;
-            success = MarkedPlayerPersister.TryLoadPlayers(out markedPlayers);
-            if (!success)
-            {
-                markedPlayers = new List<string>();
-            }
-            MarkedPlayers.Players = markedPlayers;
-
         }
 
         /// <summary />
         private void OnWindowClosing(object sender, CancelEventArgs e)
         {
+            this.appState.Save();
+
             // when the window closes, save the current season data
             // to disk, so we don't have to requery the server the
             // next time we open.
-            WhenSaveClicked(sender, null);
+            if (this.appState.LastOpenedFilePath != null)
+            {
+                WhenSaveClicked(sender, null);
+            }
         }
 
         private void RefreshOptionsExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -352,10 +341,89 @@ namespace WaFFL.Evaluation
             }
         }
 
+        private void WhenNewClicked(object sender, RoutedEventArgs e)
+        {
+            this.appState.LastOpenedFilePath = null;
+            this.documentManager.New(new FanastySeason() { Year = YEAR }, new List<string>());
+
+            // reload the ui
+            if (this.subscribers != null)
+            {
+                foreach (var subscriber in this.subscribers)
+                {
+                    subscriber(this.season);
+                }
+            }
+        }
+
+        private void WhenOpenClicked(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Filter = "Fanasty Season|*.fanastyseason2025"
+            };
+
+            if (true == ofd.ShowDialog(this))
+            {
+                this.appState.LastOpenedFilePath = ofd.FileName;
+                documentManager.Open(this.appState.LastOpenedFilePath);
+
+                var success = documentManager.IsOpen;
+                if (!success)
+                {
+                    MessageBox.Show("The file you tried to open is for a different season. Only the 2025 season is supported.",
+                                    "File Not Recognized",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                    return;
+                }
+                else if (this.season.Year != YEAR)
+                {
+                    MessageBox.Show("Error!  You tried to load an older season.  Only 2025 season is supported.",
+                                    "Season Mismatch",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                    this.season = null;
+                    return;
+                }
+
+                // reload the ui
+                if (this.subscribers != null)
+                {
+                    foreach (var subscriber in this.subscribers)
+                    {
+                        subscriber(this.season);
+                    }
+                }
+            }
+        }
+
         private void WhenSaveClicked(object sender, RoutedEventArgs e)
         {
-            WaFFLPersister.SaveSeason(this.season);
-            MarkedPlayerPersister.SavePlayers(MarkedPlayers.Players);
+            if (this.appState.LastOpenedFilePath == null)
+            {
+                WhenSaveAsClicked(sender, e);
+            }
+
+            documentManager.Save(this.appState.LastOpenedFilePath); 
+        }
+
+        private void WhenSaveAsClicked(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "Fanasty Season|*.fanastyseason2025"
+            };
+
+            if (true == sfd.ShowDialog(this))
+            {
+                this.appState.LastOpenedFilePath = sfd.FileName;
+                documentManager.Save(this.appState.LastOpenedFilePath);
+            }
+        }
+
+        private void WhenSettingsClicked(object sender, RoutedEventArgs e)
+        {
         }
 
         private void WhenExitClicked(object sender, RoutedEventArgs e)

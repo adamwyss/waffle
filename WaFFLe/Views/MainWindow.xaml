@@ -41,22 +41,29 @@
                 <RibbonContextualTabGroup x:Name="playerSearchTools" Header="Search Tools" Background="Orange" Visibility="Visible" />
             </Ribbon.ContextualTabGroups>
             <Ribbon.ApplicationMenu>
-                <RibbonApplicationMenu>
-                    <RibbonApplicationMenuItem Header="Save State" Click="WhenSaveClicked" />
+                <RibbonApplicationMenu SmallImageSource="/Views/Assets/football-16.png">
+                    <RibbonApplicationMenuItem Header="New" ImageSource="/Views/Assets/new-32.png" Click="WhenNewClicked" />
+                    <RibbonApplicationMenuItem Header="Open" ImageSource="/Views/Assets/open-32.png" Click="WhenOpenClicked" />
+                    <RibbonApplicationMenuItem Header="Save" ImageSource="/Views/Assets/save-32.png" Click="WhenSaveClicked" />
+                    <RibbonApplicationMenuItem Header="Save As..." ImageSource="/Views/Assets/saveas-32.png" Click="WhenSaveAsClicked" />
+                    <RibbonSeparator />
+                    <RibbonApplicationMenuItem Header="Settings..." ImageSource="/Views/Assets/settings-32.png" Click="WhenSettingsClicked" />
+                    <RibbonSeparator />
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/Views/Assets/quit-32.png" Click="WhenExitClicked" />
                     <RibbonApplicationMenu.FooterPaneContent>
-                        <RibbonButton Label="Exit" Click="WhenExitClicked" />
+                        <RibbonButton Label="Exit" SmallImageSource="/Views/Assets/quit-16.png" Click="WhenExitClicked" HorizontalAlignment="Right" MinWidth="75" />
                     </RibbonApplicationMenu.FooterPaneContent>
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
-                <RibbonGroup Header="ESPN">
-                    <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" Command="local:ApplicationCommands.RefreshOptions" />
-                    <RibbonButton Label="View" LargeImageSource="/Views/Assets/espn32.png" Command="local:ApplicationCommands.GoTo" />
+                <RibbonGroup Header="ESPN" LargeImageSource="/Views/Assets/import32.png">
+                    <RibbonButton Label="Import" LargeImageSource="/Views/Assets/import32.png" SmallImageSource="/Views/Assets/import16.png" Command="local:ApplicationCommands.RefreshOptions" />
+                    <RibbonButton Label="View" LargeImageSource="/Views/Assets/espn32.png" SmallImageSource="/Views/Assets/espn16.png" Command="local:ApplicationCommands.GoTo" />
                 </RibbonGroup>
-                <RibbonGroup Header="Player">
+                <RibbonGroup Header="Player" LargeImageSource="/Views/Assets/remember32.png">
                     <RibbonButton Label="Favorite" LargeImageSource="/Views/Assets/remember32.png" Command="local:ApplicationCommands.Flag" />
                 </RibbonGroup>
-                <RibbonGroup Header="Filter">
+                <RibbonGroup Header="Filter" LargeImageSource="/Views/Assets/saved-32.png">
                     <RibbonControlGroup Margin="0,0,5,0">
                         <RibbonToggleButton Label="QB" LargeImageSource="/Views/Assets/qb-32.png" SmallImageSource="/Views/Assets/qb-16.png" IsChecked="{Binding IsScopeQB, ElementName=playerView}" />
                         <RibbonToggleButton Label="RB" LargeImageSource="/Views/Assets/rb-32.png" SmallImageSource="/Views/Assets/rb-16.png" IsChecked="{Binding IsScopeRB, ElementName=playerView}" />
@@ -67,7 +74,7 @@
                     <RibbonToggleButton Label="Available" LargeImageSource="/Views/Assets/available-32.png" SmallImageSource="/Views/Assets/available-16.png" IsChecked="{Binding IsScopeAvailable, ElementName=playerView}" />
                     <RibbonToggleButton Label="Favorites" LargeImageSource="/Views/Assets/saved-32.png" SmallImageSource="/Views/Assets/saved-16.png" IsChecked="{Binding IsScopeHighlighted, ElementName=playerView}" />
                 </RibbonGroup>
-                <RibbonGroup Header="Replacement Value">
+                <RibbonGroup Header="Replacement Value" LargeImageSource="/Views/Assets/starting-32.png">
                     <StackPanel Orientation="Horizontal" TextBlock.FontSize="10">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,2,5,0">
                             <StackPanel Orientation="Horizontal">
@@ -97,7 +104,7 @@
                         </StackPanel>
                     </StackPanel>
                 </RibbonGroup>
-                <RibbonGroup Header="View">
+                <RibbonGroup Header="View" LargeImageSource="/Views/Assets/players-32.png">
                     <RibbonControlGroup>
                         <RibbonRadioButton Label="Players" LargeImageSource="/Views/Assets/players-32.png" SmallImageSource="/Views/Assets/players-16.png" IsChecked="True" Checked="WhenPlayerViewChecked" Unchecked="WhenPlayerViewUnchecked" />
                         <RibbonRadioButton Label="Teams" LargeImageSource="/Views/Assets/dst-32.png" SmallImageSource="/Views/Assets/dst-16.png" Checked="WhenDSTViewChecked" Unchecked="WhenDSTViewUnchecked" />

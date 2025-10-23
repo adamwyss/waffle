@@ -144,8 +144,8 @@
     <Compile Include="Parsers\Roster\ESPNRoster.cs" />
     <Compile Include="Parsers\Roster\WaFFLTeam.cs" />
     <Compile Include="Views\Components\ApplicationCommands.cs" />
-    <Compile Include="Views\Components\WaFFLPersister.cs" />
-    <Compile Include="Views\Components\MarkedPlayerPersister.cs" />
+    <Compile Include="Views\Components\ActiveDocumentManager.cs" />
+    <Compile Include="Views\Components\ApplicationState.cs" />
     <Compile Include="Views\Controls\DataGridWaFFLRosterColumn.xaml.cs">
       <DependentUpon>DataGridWaFFLRosterColumn.xaml</DependentUpon>
     </Compile>
@@ -261,6 +261,46 @@
   <ItemGroup>
     <Resource Include="Views\Assets\available-16.png" />
     <Resource Include="Views\Assets\saved-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\starting-16.png" />
+    <Resource Include="Views\Assets\starting-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\open-16.png" />
+    <Resource Include="Views\Assets\open-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\save-16.png" />
+    <Resource Include="Views\Assets\save-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\settings-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\settings-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\saveas-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\saveas-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\football-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\football-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\new-16.png" />
+    <Resource Include="Views\Assets\new-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\quit-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Assets\quit-16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

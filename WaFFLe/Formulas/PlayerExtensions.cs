@@ -458,8 +458,8 @@ namespace WaFFL.Evaluation
             }
             if (sb.Length > 0)
             {
-            sb.Remove(0, 1);
-            sb.Length--;
+                sb.Remove(0, 1);
+                sb.Length--;
             }
             else
             {
@@ -534,7 +534,7 @@ namespace WaFFL.Evaluation
         {
             int games = player.GameLog.Count(g => !g.IsDNP());
             if (games == 0)
-                return false;            
+                return false;
 
             return true;
         }
@@ -582,15 +582,15 @@ namespace WaFFL.Evaluation
             int recievingAttempts = p.GameLog.Sum(g => g.Receiving != null ? g.Receiving.REC : 0);
             int kickAttempts = p.GameLog.Sum(g => g.Kicking != null ? g.Kicking.XPA + g.Kicking.FGA : 0);
 
-            if (passAttempts > rushAttempts && recievingAttempts < 2 && kickAttempts == 0)
+            if (passAttempts > 0 && passAttempts > rushAttempts && passAttempts > recievingAttempts && kickAttempts == 0)
             {
                 return FanastyPosition.QB;
             }
-            else if (passAttempts == 0 && recievingAttempts > rushAttempts && kickAttempts == 0)
+            else if (recievingAttempts > 0 && recievingAttempts > passAttempts && recievingAttempts > rushAttempts && kickAttempts == 0)
             {
                 return FanastyPosition.WR;
             }
-            else if (passAttempts == 0 && rushAttempts > 0 && recievingAttempts < rushAttempts && kickAttempts == 0)
+            else if (rushAttempts > 0 && rushAttempts > passAttempts && rushAttempts > recievingAttempts && kickAttempts == 0)
             {
                 return FanastyPosition.RB;
             }

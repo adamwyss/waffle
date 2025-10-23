@@ -5,20 +5,16 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WaFFL.Evaluation
 {
-    /// <summary />
-    internal class WaFFLPersister
+    public class ApplicationState
     {
-        /// <summary />
         private const string DataFolder = "WaFFL";
+        private const string ApplicationData = "Application.state";
 
-        /// <summary />
-        private const string DataFile = "WaFFLSeasonV2.data";
+        public ApplicationState() { }
 
-        /// <summary />
-        private const string OldDataFile = "WaFFLSeason.data";
+        public string LastOpenedFilePath { get; set; }
 
-        /// <summary />
-        public static void SaveSeason(FanastySeason data)
+        public void Save()
         {
             string root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string folderpath = Path.Combine(root, DataFolder);
@@ -28,34 +24,32 @@ namespace WaFFL.Evaluation
                 Directory.CreateDirectory(folderpath);
             }
 
-            string filepath = Path.Combine(folderpath, DataFile);
+            string filepath = Path.Combine(folderpath, ApplicationData);
 
             using (FileStream stream = new FileStream(filepath, FileMode.Create, FileAccess.Write))
             {
+                var stateData = new AppState()
+                {
+                    LastOpenedFile = LastOpenedFilePath
+                };
+
                 IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, data);
+                formatter.Serialize(stream, stateData);
             }
         }
 
-        /// <summary />
-        public static bool TryLoadSeason(out FanastySeason data)
+        public void Load()
         {
             string root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string folderpath = Path.Combine(root, DataFolder);
 
+            LastOpenedFilePath = null;
+
             if (Directory.Exists(folderpath))
             {
-                string filepathToDelete = Path.Combine(folderpath, OldDataFile);
-                try
-                {
-                    File.Delete(filepathToDelete);
-                }
-                catch(IOException)
-                {
-                    // eat any delete exception -- if we can't delete it, then that's fine; we will move on
-                }
+                CleanupLegacyFiles(folderpath);
 
-                string filepath = Path.Combine(folderpath, DataFile);
+                string filepath = Path.Combine(folderpath, ApplicationData);
                 try
                 {
                     using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
@@ -63,8 +57,8 @@ namespace WaFFL.Evaluation
                         IFormatter formatter = new BinaryFormatter();
                         try
                         {
-                            data = (FanastySeason)formatter.Deserialize(stream);
-                            return true;
+                            var stateData = (AppState)formatter.Deserialize(stream);
+                            LastOpenedFilePath = stateData.LastOpenedFile;
                         }
                         catch (SerializationException)
                         {
@@ -86,9 +80,41 @@ namespace WaFFL.Evaluation
                     // nothign was found, we will return false
                 }
             }
-
-            data = null;
-            return false;
         }
+
+        private void CleanupLegacyFiles(string folderpath)
+        {
+            var filesToDelete = new[]
+            {
+                "WaFFLSeasonV2.data",
+                "WaFFLSeason.data",
+                "MarkedPlayer.data"
+            };
+
+            foreach (var file in filesToDelete)
+            {
+                var filePathToDelete = Path.Combine(folderpath, file);
+                if (!File.Exists(filePathToDelete))
+                    continue;
+
+                try
+                {
+                    File.Delete(filePathToDelete);
+                }
+                catch (IOException)
+                {
+                    // eat any delete exception -- if we can't delete it, then that's fine; we will move on
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public class AppState
+    {
+        /// <summary>
+        /// Gets or sets the name and path of the last file opened by the app.
+        /// </summary>
+        public string LastOpenedFile { get; set; }
     }
 }

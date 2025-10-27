@@ -532,6 +532,11 @@ namespace WaFFL.Evaluation
         /// <summary />
         public static bool IsRelevant(this NFLPlayer player)
         {
+            if (Global.ACTIVE_TEAM_SET && WaFFLTeam.IsRosteredOn(player.Name) == Global.ACTIVE_TEAM)
+            {
+                return true;
+            }
+
             int games = player.GameLog.Count(g => !g.IsDNP());
             if (games == 0)
                 return false;

@@ -54,7 +54,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         public bool IsHighlighted
         {
-            get { return MarkedPlayers.IsMarked(this.PlayerData.Name); }
+            get { return MarkedPlayers.IsMarked(this.PlayerData.Name) || (Global.ACTIVE_TEAM_SET && this.rosteredTeamCode == Global.ACTIVE_TEAM); }
         }
 
         /// <summary />

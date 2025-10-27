@@ -107,7 +107,7 @@ namespace WaFFL.Evaluation
         /// <summary />
         public bool IsHighlighted
         {
-            get { return MarkedPlayers.IsMarked(this.displayName); }
+            get { return MarkedPlayers.IsMarked(this.displayName) || (Global.ACTIVE_TEAM_SET && this.rosteredTeamCode == Global.ACTIVE_TEAM); }
         }
 
         public string TeamName

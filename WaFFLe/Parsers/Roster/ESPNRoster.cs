@@ -49,15 +49,16 @@ namespace WaFFL.Evaluation
             { "Travis Etienne", "Travis Etienne Jr." },
             { "D.K. Metcalf", "DK Metcalf" },
             { "Darrell Henderson", "Darrell Henderson Jr." },
-            //2025
             { "James Cook", "James Cook III" },
         };
 
         /// <summary />
-        private const string WaFFLRosterUri = @"https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2025/segments/0/leagues/69765935?view=mSettings&view=mRoster&view=mTeam&view=modular&view=mNav";
-
-        /// <summary />
         private Dictionary<string, string> playerLookup;
+
+        private static string GetWaFFLRosterUri()
+        {
+            return string.Format("https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/{0}/segments/0/leagues/69765935?view=mSettings&view=mRoster&view=mTeam&view=modular&view=mNav", Global.YEAR);
+        }
 
         /// <summary />
         public ESPNRoster()
@@ -65,7 +66,7 @@ namespace WaFFL.Evaluation
             this.playerLookup = new Dictionary<string, string>();
 
             WebClient client = new WebClient();
-            string json = client.DownloadString(WaFFLRosterUri);
+            string json = client.DownloadString(GetWaFFLRosterUri());
 
             JObject doc = JObject.Parse(json);
             foreach (var team in doc["teams"])
@@ -79,7 +80,6 @@ namespace WaFFL.Evaluation
                     this.playerLookup.Add(name, teamCode);
                 }
             }
-
         }
 
         /// <summary />

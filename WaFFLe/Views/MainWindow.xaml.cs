@@ -17,11 +17,6 @@ namespace WaFFL.Evaluation
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        /// <summary>
-        /// The year we want stats.
-        /// </summary>
-        const int YEAR = 2025;
-
         /// <summary />
         public static readonly DependencyProperty IsRefreshingDataProperty = DependencyProperty.Register(
             "IsRefreshingData",
@@ -344,7 +339,7 @@ namespace WaFFL.Evaluation
         private void WhenNewClicked(object sender, RoutedEventArgs e)
         {
             this.appState.LastOpenedFilePath = null;
-            this.documentManager.New(new FanastySeason() { Year = YEAR }, new List<string>());
+            this.documentManager.New(new FanastySeason() { Year = Global.YEAR }, new List<string>());
 
             // reload the ui
             if (this.subscribers != null)
@@ -360,7 +355,7 @@ namespace WaFFL.Evaluation
         {
             OpenFileDialog ofd = new OpenFileDialog()
             {
-                Filter = "Fanasty Season|*.fanastyseason2025"
+                Filter = string.Format("Fanasty Season|*.fanastyseason{0}", Global.YEAR)
             };
 
             if (true == ofd.ShowDialog(this))
@@ -371,15 +366,15 @@ namespace WaFFL.Evaluation
                 var success = documentManager.IsOpen;
                 if (!success)
                 {
-                    MessageBox.Show("The file you tried to open is for a different season. Only the 2025 season is supported.",
+                    MessageBox.Show(string.Format("The file you tried to open is for a different season. Only the {0} season is supported.", Global.YEAR),
                                     "File Not Recognized",
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Error);
                     return;
                 }
-                else if (this.season.Year != YEAR)
+                else if (this.season.Year != Global.YEAR)
                 {
-                    MessageBox.Show("Error!  You tried to load an older season.  Only 2025 season is supported.",
+                    MessageBox.Show(string.Format("Error!  You tried to load an older season.  Only the {0} season is supported.", Global.YEAR),
                                     "Season Mismatch",
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Error);
@@ -412,7 +407,7 @@ namespace WaFFL.Evaluation
         {
             SaveFileDialog sfd = new SaveFileDialog()
             {
-                Filter = "Fanasty Season|*.fanastyseason2025"
+                Filter = string.Format("Fanasty Season|*.fanastyseason{0}", Global.YEAR)
             };
 
             if (true == sfd.ShowDialog(this))

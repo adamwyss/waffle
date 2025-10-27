@@ -136,6 +136,7 @@
     <Compile Include="Entities\NFLTeam.cs" />
     <Compile Include="Entities\PositionBaseline.cs" />
     <Compile Include="Formulas\MathExtensions.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Parsers\ByeWeeks.cs" />
     <Compile Include="Parsers\TeamConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />

@@ -75,26 +75,22 @@ namespace WaFFL.Evaluation.Views.ViewModels
         private int GetRunningAverageOfGamePoints(NFLPlayer player)
         {
             var games = player.GameLog.OrderBy(g => g.Week).ToList();
-            List<int> avgScores = new List<int>();
-            for (int i = 0; i < games.Count; i++)
+            if (games.Count < 3)
             {
-                int avg = 0;
-                if (i == 0)
-                {
-                    avg = games[i].GetFanastyPoints();
-                }
-                else if (i == 1)
-                {
-                    avg = (games[i].GetFanastyPoints() + games[i - 1].GetFanastyPoints());
-                    avg /= 2;
-                }
-                else if (i >= 2)
-                {
-                    avg = games[i].GetFanastyPoints() + games[i - 1].GetFanastyPoints() + games[i - 2].GetFanastyPoints();
-                    avg /= 3;
-                }
+                return (int)games.Average(g => g.GetFanastyPoints());
+            }
 
-                avgScores.Add(avg);
+            var points = games.Select(g => g.GetFanastyPoints()).ToList();
+            int count = points.Count;
+            int lastIndex = count - 1;
+            List<double> avgScores = new List<double>();
+            for (int i = 0; i < count; i++)
+            {
+                int before = i == 0 ? lastIndex : i - 1;
+                int after = i == lastIndex ? 0 : i + 1;
+
+                int sum = points[before] + points[i] + points[after];
+                avgScores.Add(sum / 3);
             }
 
             return (int)avgScores.Average();

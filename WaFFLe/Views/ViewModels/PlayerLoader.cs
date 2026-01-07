@@ -1,10 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Markup;
+using System.Windows.Shapes;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace WaFFL.Evaluation.Views.ViewModels
 {
@@ -53,7 +60,7 @@ namespace WaFFL.Evaluation.Views.ViewModels
 
                 por = (points / games) - replacementScore;
                 wpor = (player.FanastyPointsInRecentGames(3) / 3) - replacementScore;
-                cpor = GetRunningAverageOfGamePoints(player) - replacementScore;
+                cpor = PredictNextValue(player) - replacementScore;
 
                 mean = player.FanastyPointsPerGame().Mean();
                 standardDeviation = player.FanastyPointsPerGame().StandardDeviation();
@@ -70,6 +77,52 @@ namespace WaFFL.Evaluation.Views.ViewModels
             vm.StandardDeviation = RoundToInt(standardDeviation);
             vm.CoefficientOfVariation = RoundToInt(variationCoefficient * 100);
             return vm;
+        }
+
+        private double ExponentialMovingAverage(List<int> data, double alpha = 0.3)
+        {
+            // Smooths data while responding quickly to change.
+            // Where alpha is a smoothing factor(0 < alpha ≤ 1).
+            // Higher alpha → reacts faster
+            // Lower alpha → smoother, slower reaction
+            // This EMA value will track your trend and should be close to the next data point, even when the series is noisy.
+            if (data.Count == 0) return 0;
+            double ema = data[0];
+            for (int i = 1; i < data.Count; i++)
+                ema = alpha * data[i] + (1 - alpha) * ema;
+            return ema;
+        }
+
+        private int PredictNextValue(NFLPlayer player)
+        {
+            var games = player.GameLog.OrderBy(g => g.Week).ToList();
+            if (games.Count < 3)
+            {
+                return (int)games.Average(g => g.GetFanastyPoints());
+            }
+
+            var points = games.Select(g => g.GetFanastyPoints()).ToList();
+            double shortTerm = ExponentialMovingAverage(points, 0.5);
+            double longTerm = ExponentialMovingAverage(points, 0.2);
+
+            // This “dual EMA” smooths the noise but still follows direction changes —
+            // similar to what’s used in financial trend analysis(MACD - like smoothing).
+            double ema = (shortTerm * 0.3) + (longTerm * 0.7);
+            return RoundToInt(ema);
+        }
+
+        double WeightedMovingAverage(NFLPlayer player)
+        {
+            var games = player.GameLog.OrderBy(g => g.Week).ToList();
+            if (games.Count < 3)
+            {
+                return (int)games.Average(g => g.GetFanastyPoints());
+            }
+
+            var last3 = games.Skip(games.Count - 3).Select(g => g.GetFanastyPoints()).ToList();
+            double w1 = 1, w2 = 2, w3 = 3;
+            var wma = (last3[0] * w1 + last3[1] * w2 + last3[2] * w3) / (w1 + w2 + w3);
+            return RoundToInt(wma);
         }
 
         private int GetRunningAverageOfGamePoints(NFLPlayer player)

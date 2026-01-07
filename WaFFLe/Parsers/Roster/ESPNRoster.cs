@@ -50,6 +50,7 @@ namespace WaFFL.Evaluation
             { "D.K. Metcalf", "DK Metcalf" },
             { "Darrell Henderson", "Darrell Henderson Jr." },
             { "James Cook", "James Cook III" },
+            { "Aaron Jones", "Aaron Jones Sr." },
         };
 
         /// <summary />

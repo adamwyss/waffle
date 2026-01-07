@@ -138,6 +138,7 @@
     <Compile Include="Formulas\MathExtensions.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Parsers\ByeWeeks.cs" />
+    <Compile Include="Parsers\HttpClient.cs" />
     <Compile Include="Parsers\TeamConverter.cs" />
     <Compile Include="Parsers\MarkedPlayers.cs" />
     <Compile Include="Parsers\ProFootballReferenceParser.cs" />

@@ -212,6 +212,9 @@ namespace WaFFL.Evaluation
 
                 // Special Teams TD = 1 point per yard(NO Bonus for 50 + yds)
                 points += dst.TD_ST_YDS?.Sum() ?? 0;
+
+                // Not in WaFFL rules, but scored as 25 points in week 13, 2025 for Miami.
+                points += 25 * dst.XP;
             }
 
             return points;
@@ -453,6 +456,13 @@ namespace WaFFL.Evaluation
                 {
                     sb.Append(" ");
                     sb.AppendScoringCount(dst.SAFETY, "safety");
+                    sb.Append(",");
+                }
+
+                if (dst.XP > 0)
+                {
+                    sb.Append(" ");
+                    sb.AppendScoringCount(dst.XP, "twoptconvst");
                     sb.Append(",");
                 }
             }

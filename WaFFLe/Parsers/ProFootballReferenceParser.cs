@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Numerics;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -24,7 +20,7 @@ namespace WaFFL.Evaluation
         private readonly string[] Delimiters = new string[] { "\n" };
 
         /// <summary />
-        private WebClient httpClient;
+        private IHttpClient httpClient;
 
         /// <summary />
         private FanastySeason context;
@@ -33,15 +29,11 @@ namespace WaFFL.Evaluation
         private Action<string> callback;
 
         /// <summary />
-        private int webRequests;
-
-        /// <summary />
         public ProFootballReferenceParser(FanastySeason season, Action<string> callback)
         {
             this.context = season;
             this.callback = callback;
-            this.httpClient = new WebClient();
-            this.webRequests = 0;
+            this.httpClient = new HttpCache(new HttpDelay(new HttpClient()));
         }
 
         /// <summary />
@@ -81,7 +73,7 @@ namespace WaFFL.Evaluation
 
         private void ParseGames(string uri, int targetWeek)
         {
-            string xhtml = this.ClientDownloadString(uri);
+            string xhtml = httpClient.DownloadString(uri);
             var games = this.ExtractRawGames(xhtml);
             foreach (var game in games)
             {
@@ -123,7 +115,7 @@ namespace WaFFL.Evaluation
             {
                 string uri = boxscore.Element("a").Attribute("href").Value;
                 string boxscoreUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
-                string xhtml = this.ClientDownloadString(boxscoreUri);
+                string xhtml = httpClient.DownloadString(boxscoreUri);
 
                 var players = ExtractPlayerOffense(xhtml);
                 var kickers = ExtractPlayerKicking(xhtml);
@@ -253,7 +245,7 @@ namespace WaFFL.Evaluation
             ClearPlayerInjuries();
 
             // fetch injury status.
-            string xhtml = this.ClientDownloadString(InjuryReportUri);
+            string xhtml = httpClient.DownloadString(InjuryReportUri);
             var injuries = ExtractInjuryReport(xhtml);
             foreach (var injury in injuries)
             {
@@ -349,63 +341,6 @@ namespace WaFFL.Evaluation
             var injuries = parsedElement.Elements("tr")
                                      .ToList();
             return injuries;
-        }
-
-        private string ClientDownloadString(string uri)
-        {
-            string filePath = null;
-
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                string cacheDirectory = "cache";
-
-                if (!Directory.Exists(cacheDirectory))
-                { 
-                    Directory.CreateDirectory(cacheDirectory);
-                }
-
-                string hash = ComputeSha256Hash(uri);
-                filePath = Path.Combine(cacheDirectory, $"{hash}.html");
-
-                DateTime lastWrite = File.GetLastWriteTimeUtc(filePath);
-                bool oneHourCache = (uri.EndsWith("games.htm") || uri == InjuryReportUri);
-                bool cacheExpired = (DateTime.UtcNow - lastWrite) > TimeSpan.FromHours(1);
-                if (File.Exists(filePath) && (!oneHourCache || (oneHourCache && !cacheExpired)))
-                {
-                    Console.WriteLine("Using Cache {0} - {1}", ++this.webRequests, uri);
-                    return File.ReadAllText(filePath);
-                }
-                else if (oneHourCache && cacheExpired)
-                    Console.WriteLine("Cache Expired - {0}", lastWrite);
-            }
-            
-            // we are somewhat restricted on our web requests.
-            System.Threading.Thread.Sleep(new Random().Next(2000, 5000));
-            string data = this.httpClient.DownloadString(uri);
-            
-            Console.WriteLine("Web Requests {0} - {1}", ++this.webRequests, uri);
-
-
-            if (System.Diagnostics.Debugger.IsAttached && filePath != null)
-            {
-                File.WriteAllText(filePath, data);
-            }
-
-            return data;
-        }
-
-        private static string ComputeSha256Hash(string rawData)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-                StringBuilder builder = new StringBuilder();
-
-                foreach (var b in bytes)
-                    builder.Append(b.ToString("x2"));
-
-                return builder.ToString();
-            }
         }
 
         private XElement ExtractRawData(string xhtml, string startingline, string endingline, string[] exclude, bool optional = false, Func<string, string> cleanupDelegate = null)
@@ -879,6 +814,8 @@ namespace WaFFL.Evaluation
             { new Regex(@"Safety, ([\.\w- ']*) tackled in end zone by ([\w ']*)", RegexOptions.Compiled), ScoringPlayHandler.Safety },
             { new Regex(@"Safety, ([\.\w- ']*) sacked in end zone by ([\w ']*)", RegexOptions.Compiled), ScoringPlayHandler.Safety },
             { new Regex(@"Safety, ([\.\w- ']*) offensive holding in end zone", RegexOptions.Compiled), ScoringPlayHandler.Safety },
+
+            { new Regex(@"([\.\w- ']*) defensive extra point return", RegexOptions.Compiled), ScoringPlayHandler.DefensiveExtraPoint },
         };
 
         private readonly FanastySeason _season;
@@ -968,6 +905,7 @@ namespace WaFFL.Evaluation
         public static ScoringPlayParser.ParseHandler TouchdownSpecialTeams = new ScoringPlayParser.ParseHandler(HandleTouchdownSpecialTeams);
         public static ScoringPlayParser.ParseHandler Safety = new ScoringPlayParser.ParseHandler(HandleSafety);
         public static ScoringPlayParser.ParseHandler EndzoneRecovery = new ScoringPlayParser.ParseHandler(HandleEndzoneRecovery);
+        public static ScoringPlayParser.ParseHandler DefensiveExtraPoint = new ScoringPlayParser.ParseHandler(HandleDefensiveExtraPoint);
 
         private static void HandleTouchdownPass(FanastySeason season, int week, NFLPlayer scoringTeam, string[] values)
         {
@@ -1069,6 +1007,11 @@ namespace WaFFL.Evaluation
         {
             var d = GetOrCreateGameDefense(scoringTeam, week);
             AddSpecialTeamsTouchdownYards(d, 1);
+        }
+        private static void HandleDefensiveExtraPoint(FanastySeason season, int week, NFLPlayer scoringTeam, string[] values)
+        {
+            var d = GetOrCreateGameDefense(scoringTeam, week);
+            d.XP++;
         }
 
         private static NFLPlayer FindPlayerByName(FanastySeason season, string name)

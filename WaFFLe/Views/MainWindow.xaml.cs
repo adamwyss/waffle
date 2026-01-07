@@ -229,7 +229,7 @@ namespace WaFFL.Evaluation
                 return;
             }
 
-            if (appState.LastOpenedFilePath != null)
+            if (appState.LastOpenedFilePath != null && appState.LastOpenedFilePath.EndsWith(Global.YEAR.ToString()))
             {
                 documentManager.Open(appState.LastOpenedFilePath);
                 if (!documentManager.IsOpen)

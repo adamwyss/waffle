@@ -241,6 +241,11 @@ namespace WaFFL.Evaluation
         public List<int> TD_ST_YDS { get; set; }
 
         /// <summary>
+        /// The number of extra points scored by the defense (this can happen with a fumble recovery, interception, blocked kick) 
+        /// </summary>
+        public int XP { get; set; }
+
+        /// <summary>
         /// Total safeties
         /// </summary>
         public int SAFETY { get; set; }
